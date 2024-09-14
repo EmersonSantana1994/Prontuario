@@ -216,7 +216,7 @@ export default function Pronturario(props) {
             dataField: 'descricao',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoColuna'>
+            text: <p className='corpadraoColuna2'>
                 Descrição
             </p>,
             formatter: (cell, row) => {
@@ -259,7 +259,7 @@ export default function Pronturario(props) {
             dataField: 'data',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoColuna'>
+            text: <p className='corpadraoColuna1'>
                 Data e hora do envio
             </p>,
             formatter: (cell, row) => {

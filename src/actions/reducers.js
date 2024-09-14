@@ -18,7 +18,9 @@ const initialState = {
   rotaPreferencia:false,
   rotaJornada:false,
   rotaPagamento:false,
-  rotaDirecionar:false
+  rotaDirecionar:false,
+  consultorio:false,
+  seguirAgendamento:false,
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -33,6 +35,16 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             fixarUsuario: action.payload
+        }
+    } else if (action.type === 'CONSULTORIO_SELECIONADO') {
+        return {
+            ...state, 
+            consultorio: action.payload
+        }
+    }else if (action.type === 'SEGUIR_AGENDAMENTO') {
+        return {
+            ...state, 
+            seguirAgendamento: action.payload
         }
     }
     else if (action.type === 'ROTA_DIRECIONAR') {

@@ -1,6 +1,16 @@
 // actions/exampleActions.js
 export const IDIOMA = 'IDIOMA';
 
+export const consultorio = (data) => ({
+  type: "CONSULTORIO_SELECIONADO",
+  payload: data,
+});
+
+export const seguirAgendamento = (data) => ({
+  type: "SEGUIR_AGENDAMENTO",
+  payload: data,
+});
+
 export const idioma = (data) => ({
   type: IDIOMA,
   payload: data,

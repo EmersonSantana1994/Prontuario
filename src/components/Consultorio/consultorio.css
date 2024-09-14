@@ -1,0 +1,49 @@
+.botao-consultorio {
+    width: 30%;
+    height: 191px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #eeece3;
+}
+.tituloConsultorio{
+    margin-left: 25vw;
+}
+.tituloConsultorio2{
+
+}
+.irAgenda{
+    width: 30%;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #47568d;
+    color: #ffffee;
+}
+.irAgenda:hover{
+    width: 30%;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #7491ff;
+    color: #ffffee;
+  }
+  
+.irAgendaDesabilitado{
+    width: 30%;
+}
+
+.botao-consultorio:hover{
+    background-color: #d8c5e7;
+  }
+
+  .botao-consultorio:hover{
+    background-color: #d8c5e7;
+  }
+
+  .botao-consultorio-selecionado{
+    width: 30%;
+    height: 191px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #d8c5e7;
+  }

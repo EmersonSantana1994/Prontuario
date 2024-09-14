@@ -11,7 +11,7 @@ import {
   Modal
 } from "react-agenda";
 
-import '../../components/Agenda/styles.css';
+import './styles.css';
 
 let now = new Date();
 

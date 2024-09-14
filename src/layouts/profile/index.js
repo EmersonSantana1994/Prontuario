@@ -32,7 +32,8 @@ import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import Prontuario from "../../layouts/profile/components/Prontuario/prontuario";
 // import Agendamento from "../../layouts/profile/components/Agendamento/agendamento";
-import Agendamento from "../../../src/components/Agenda/agendamento";
+import Agendamento from "../../components/Agendamento/agendamento";
+import Consultorio from "../../components/Consultorio/consultorio";
 import ProfilesList from "examples/Lists/ProfilesList";
 import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
 import PlaceholderCard from "examples/Cards/PlaceholderCard";
@@ -62,6 +63,7 @@ import TimeLine from "./components/TimeLine/timeLine";
 function Overview() {
   const idUsuario = useSelector(state => state.reduxH.fixarUsuario);
   const direcionar = useSelector(state => state.reduxH.rotaDirecionar);
+  const seguirAgendamento = useSelector(state => state.reduxH.seguirAgendamento);
   const [itens, setItens] = useState([]);
   let contador = 0
   let itensVar = []
@@ -70,7 +72,7 @@ function Overview() {
   console.log("direcionar", direcionar)
   useEffect(() => {
 
-console.log("mudou", direcionar)
+    console.log("mudou", direcionar)
   }, [direcionar])
 
   useEffect(() => {
@@ -113,9 +115,9 @@ console.log("mudou", direcionar)
       <Header />
       <SoftBox mt={5} mb={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} xl={4}>
+          {/* <Grid item xs={12} md={6} xl={4}>
             <PlatformSettings />
-          </Grid>
+          </Grid> */}
 
           {direcionar == "cadastro" &&
             <Grid item xs={12} md={6} xl={4}>
@@ -170,33 +172,41 @@ console.log("mudou", direcionar)
               />
             </Grid>
           }
- {direcionar == "prontuario" &&
+          {direcionar == "prontuario" &&
 
-<Grid item xs={12} md={6} xl={8}>
+            <Grid item xs={12} md={6} xl={8}>
+              <Prontuario></Prontuario>
+            </Grid>
+          }
 
- <Prontuario></Prontuario>
-</Grid>
+
+          {direcionar == "timeline" &&
+            <Grid item xs={12} md={6} xl={8}>
+              <TimeLine></TimeLine>
+            </Grid>
+          }
+
+          
+         
+         { !seguirAgendamento &&
+
+<div className='tituloConsultorio2'>
+            <h1 className='tituloConsultorio'>Escolha o consultorio</h1>
+          </div>
+
+         }
+          {!seguirAgendamento &&
+            <Grid item xs={12} md={6} xl={16}>
+            <Consultorio></Consultorio>
+          </Grid>
+          }
+         
+          
+{ seguirAgendamento &&
+  <Grid item xs={12} md={6} xl={16}>
+            <Agendamento></Agendamento>
+          </Grid>
 }
-
-
-{direcionar == "timeline" &&
-
-<Grid item xs={12} md={6} xl={8}>
-
- <TimeLine></TimeLine>
-</Grid>
-}
-
-
-{direcionar == "agendamento" &&
-
-<Grid item xs={12} md={6} xl={8}>
-
-<Agendamento></Agendamento>
-</Grid>
-}
-
-
 
           {/* <Grid item xs={12} xl={4}>
             <ProfilesList title="conversations" profiles={profilesListData} />

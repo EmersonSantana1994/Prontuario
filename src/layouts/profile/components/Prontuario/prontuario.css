@@ -99,6 +99,16 @@ table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
     margin-left: -48px;
   }
 
+  .corpadraoColuna1{
+    font-size: 13px;
+    margin-left: -21px;
+  }
+
+  .corpadraoColuna2{
+    font-size: 13px;
+    margin-left: -179px;
+  }
+
   .corpadrãoTabela{
     font-size: 13px;
   }
