@@ -1,0 +1,25 @@
+.css-5fzm53 {
+    width: 4rem;
+    opacity: 1;
+    background: transparent;
+    color: #344767;
+    border-radius: none;
+    margin-left: -1vw;
+}
+
+.css-ixyk52-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.02857em;
+    opacity: 1;
+    text-transform: none;
+    vertical-align: unset;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #39527e;
+    font-weight: 500;
+}

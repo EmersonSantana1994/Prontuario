@@ -55,15 +55,17 @@ import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 import kal from "assets/images/kal-visuals-square.jpg";
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 import { apiC } from "../../conexoes/api";
 import TimeLine from "./components/TimeLine/timeLine";
-
+import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { seguirAgendamento } from '../../actions/actions';
 function Overview() {
   const idUsuario = useSelector(state => state.reduxH.fixarUsuario);
   const direcionar = useSelector(state => state.reduxH.rotaDirecionar);
-  const seguirAgendamento = useSelector(state => state.reduxH.seguirAgendamento);
+  const seguirAgend = useSelector(state => state.reduxH.seguirAgendamento);
+  const despacho = useDispatch();
   const [itens, setItens] = useState([]);
   let contador = 0
   let itensVar = []
@@ -91,6 +93,10 @@ function Overview() {
     }
     pesquisa()
   }, [idUsuario])
+
+  async function voltar(params) {
+    despacho(seguirAgendamento(false))
+  }
 
   function inserirData(data) {
     itensVar = []
@@ -186,27 +192,40 @@ function Overview() {
             </Grid>
           }
 
-          
-         
-         { !seguirAgendamento &&
 
-<div className='tituloConsultorio2'>
-            <h1 className='tituloConsultorio'>Escolha o consultorio</h1>
-          </div>
 
-         }
-          {!seguirAgendamento &&
-            <Grid item xs={12} md={6} xl={16}>
-            <Consultorio></Consultorio>
-          </Grid>
+          {!seguirAgend &&
+
+            <div className='tituloConsultorio2'>
+              <h1 className='tituloConsultorio'>Escolha o consultorio</h1>
+            </div>
+
           }
-         
-          
-{ seguirAgendamento &&
-  <Grid item xs={12} md={6} xl={16}>
-            <Agendamento></Agendamento>
-          </Grid>
-}
+
+          {seguirAgend &&
+            <div>
+                
+              < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+              <i className="fas fa-arrow-circle-left fsi"  ></i>
+                <h3 className="voltar-titulo">
+                   VOLTAR
+                </h3>
+              </Button>
+            
+            </div>
+          }
+          {!seguirAgend &&
+            <Grid item xs={12} md={6} xl={16}>
+              <Consultorio></Consultorio>
+            </Grid>
+          }
+
+
+          {seguirAgend &&
+            <Grid item xs={12} md={6} xl={16}>
+              <Agendamento></Agendamento>
+            </Grid>
+          }
 
           {/* <Grid item xs={12} xl={4}>
             <ProfilesList title="conversations" profiles={profilesListData} />

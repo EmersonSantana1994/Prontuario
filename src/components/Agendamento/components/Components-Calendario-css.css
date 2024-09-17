@@ -1,6 +1,7 @@
 .tela{
     display: flex;
-    background-color: #2c3a52e3;
+    /* background-color: #0b42a0f0; */
+    background-color: #3960a1f0;
 }
 
 .calendario{
@@ -13,7 +14,7 @@
     width: 20%;
     min-width: 300px;
     color: #ffffff;
-    background-color: #1a1a1a;
+    background-color: #fbfbfb;
     border-right: 1px solid #bbb;
 }
 /*HEADER MOD*/
@@ -63,14 +64,14 @@
 /*Header e botoes*/
 .rbc-toolbar{
     height: 10vh;
-    color: #bbb;
+    color: #ffffff;
     font-size: 25px;
 }
 .rbc-btn-group > button{
     border: 0;
 }
 .rbc-toolbar button{
-    color: #cecece;
+    color: #ffffff;
     border: 1px solid #cccccc4f;
 }
 .rbc-toolbar button:active,
@@ -88,7 +89,7 @@
     border-color: #dddddd73;
 }
 .rbc-day-bg + .rbc-day-bg {
-    border-color: #dddddd73;
+    border-color: #dddddd;
 }
 /*Mes*/
 .rbc-header{
@@ -102,15 +103,15 @@
     border-color: #dddddd73;
 }
 .rbc-off-range-bg{
-    background-color: #313131;
+    background-color: #2f2d0d78;
 }
 .rbc-today{
-    background-color: #1a1a1a;
+    background-color: #28555761;
 }
 .rbc-button-link{
     margin: 5px;
-    font-size: 15px;
-    color: #eeeeeee5;
+    font-size: 19px;
+    color: #ffffffe5;
 }
 .rbc-off-range .rbc-button-link{
     color: #eeeeee37;
@@ -124,13 +125,16 @@
     margin: 5px;
     font-size: 16px;
 }
+.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event {
+    background-color: #ffffff;
+}
 .rbc-event, .rbc-day-slot .rbc-background-event {
     border: none;
     box-sizing: border-box;
     box-shadow: none;
     margin: 0;
     padding: 2px 5px;
-    background-color: #3174ad;
+    background-color: #ffffff;
     border-radius: 5px;
     color: #000000;
     cursor: pointer;
@@ -146,7 +150,7 @@
 }
 /*Agenda*/
 .rbc-agenda-content, .rbc-agenda-view{
-    color: #aaa;
+    color: #ffffff;
 }
 .rbc-agenda-date-cell, .rbc-agenda-time-cell{
     background-color: #262626;
@@ -154,5 +158,5 @@
 .rbc-agenda-event-cell{
     border-radius: 20px;
     font-weight: bold;
-    color: #e0e0e0;
+    color: #000000;
 }

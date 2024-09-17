@@ -21,6 +21,7 @@ const initialState = {
   rotaDirecionar:false,
   consultorio:false,
   seguirAgendamento:false,
+  nomeConsultorio:false,
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -41,6 +42,13 @@ export const reduxH = (state = initialState, action) => {
             ...state, 
             consultorio: action.payload
         }
+        
+    }else if (action.type === 'NOME_CONSULTORIO') {
+        return {
+            ...state, 
+            nomeConsultorio: action.payload
+        }
+        
     }else if (action.type === 'SEGUIR_AGENDAMENTO') {
         return {
             ...state, 

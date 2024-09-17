@@ -22,6 +22,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
+import "./../src/app.css"
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -47,7 +48,7 @@ import routes from "routes";
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brand from "assets/images/logo-ct.png";
+import brand from "assets/images/YU-15-09-2024.gif";
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
@@ -166,7 +167,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={brand}
-            brandName="Soft UI Dashboard"
+            brandName="YOU UNIVERSITY"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

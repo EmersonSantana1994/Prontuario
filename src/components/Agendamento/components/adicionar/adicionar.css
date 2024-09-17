@@ -1,0 +1,43 @@
+.tituloAgenda{
+    height: 30px;
+    border-radius: 8px;
+}
+.startend{
+    height: 26px;
+    border-radius: 9px;
+    margin: 9px;
+}
+.tipdesc{
+    border-radius: 5px;
+    margin: 6px;
+}
+.butt{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 85px;
+    background-color: #2314a3;
+    color: white;
+    font-size: 17px;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-left: 110px;
+}
+.form-field {
+    margin: 10px 0 10px 0;
+    padding: 15px;
+    font-size: 16px;
+    border: 0;
+    font-family: "Roboto", sans-serif;
+    border-radius: .25rem;
+  }
+.buttDesabilitado{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 85px;
+    background-color: #d3d1e030;
+    color: #ccc4c4;
+    font-size: 17px;
+    border-radius: 14px;
+    /* cursor: pointer; */
+    margin-left: 110px;
+}

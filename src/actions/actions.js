@@ -6,6 +6,11 @@ export const consultorio = (data) => ({
   payload: data,
 });
 
+export const nomeConsultorio = (data) => ({
+  type: "NOME_CONSULTORIO",
+  payload: data,
+});
+
 export const seguirAgendamento = (data) => ({
   type: "SEGUIR_AGENDAMENTO",
   payload: data,

@@ -12,13 +12,19 @@ import Adicionar from './components/adicionar/adicionar.jsx';
 import CustomTollbar from './components/CustomCalendar/CustomTollbar.jsx';
 import FiltroAtividades from './components/filtro/FiltroAtividades.jsx';
 import { format, parseISO } from 'date-fns';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { seguirAgendamento } from '../../actions/actions';
+import Modal from 'react-modal';
+import { FaTimes } from 'react-icons/fa'; // Ícone de X
+import 'moment/locale/pt-br'; // Importar locale para português do Brasil
 const DragAndDropCalendar = withDragAndDrop(Calendar);
+moment.locale('pt-br');
 const localizer = momentLocalizer(moment);
 
 
+
 function Calendario() {
+    const despacho = useDispatch();
     console.log("eventosPadrao", eventosPadrao)
     const idConsultorio = useSelector(state => state.reduxH.consultorio);
     // const [eventos, setEventos] = useState(eventosPadrao);
@@ -26,60 +32,62 @@ function Calendario() {
     const [eventoSelecionado, SeteventoSelecionado] = useState(null);
     // const [eventosFiltrados, setEventosFiltrados] = useState(eventosPadrao);
     const [eventosFiltrados, setEventosFiltrados] = useState([]);
+    const [isModalOpenSucesso, setIsModalOpenSucesso] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     let contador = 0
     let itensVar = []
     let array = []
 
     useEffect(() => {
-console.log("pqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
-     async function getAgendamento() {
-        const novoEventoPadrao = []
-         await apiC.post("agenda/buscartudo", {  
-            "id_consultorio": idConsultorio,
-             "id_medico": 1  
+
+        async function getAgendamento() {
+            const novoEventoPadrao = []
+            await apiC.post("agenda/buscartudo", {
+                "id_consultorio": idConsultorio,
+                "id_medico": 1
             }).then(response => {
 
                 if (response.status === 200) {
-console.log("responseeee", response.data)
+                    console.log("responseeee", response.data)
 
-for (let i = 0; i <  response.data.length; i++) {
+                    for (let i = 0; i < response.data.length; i++) {
 
 
-    if (contador == i) {
-        let k = i
-        for (let j = 0; j < response.data.length; j++) {
-            itensVar[k] = response.data[j]
-            k++
-        }
-    }
-    array = JSON.parse(JSON.stringify(itensVar))
-    
-    array.forEach(obj => {
-        obj.start = new Date(obj.start);
-        obj.end = new Date(obj.end);
-      });
-}
+                        if (contador == i) {
+                            let k = i
+                            for (let j = 0; j < response.data.length; j++) {
+                                itensVar[k] = response.data[j]
+                                k++
+                            }
+                        }
+                        array = JSON.parse(JSON.stringify(itensVar))
 
-console.log("fffffffffff",array )
-setEventos(array)
-setEventosFiltrados(array)
+                        array.forEach(obj => {
+                            obj.start = new Date(obj.start);
+                            obj.end = new Date(obj.end);
+                        });
+                    }
+
+                    console.log("fffffffffff", array)
+                    setEventos(array)
+                    setEventosFiltrados(array)
 
                 }
             })
-            .catch((error) => {
+                .catch((error) => {
 
-                alert("erro ao adicionar data", error)
-                console.log("error", error)
+                    alert("erro ao adicionar data", error)
+                    console.log("error", error)
 
-            });
-        
-     }   
-     getAgendamento()
+                });
+
+        }
+        getAgendamento()
     }, [])
 
     function converterDataISOParaMySQL(dataISO) {
-        const data = parseISO(dataISO);
-        return format(data, 'yyyy-MM-dd HH:mm:ss');
+        const jsDate = new Date(dataISO);
+return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     }
 
     const eventStyle = (event) => ({
@@ -119,6 +127,17 @@ setEventosFiltrados(array)
         setEventos(updatedEvents);
         SeteventoSelecionado(null);
     };
+    const messages = {
+        today: 'Hoje',
+        previous: 'Anterior',
+        next: 'Próximo',
+        month: 'Mês',
+        week: 'Semana',
+        day: 'Dia',
+        agenda: 'Agenda',
+        noEventsInRange: 'Nenhum evento neste intervalo',
+        // showMore: (total) => `+ Mais ${total} ${total === 1 ? 'evento' : 'eventos'}`,
+    };
 
     const handleEventUpdate = (updatedEvent) => {
         //Logica do banco
@@ -154,22 +173,35 @@ setEventosFiltrados(array)
             .then(response => {
 
                 if (response.status === 200) {
-                    alert("agendado")
+                    setIsModalOpenSucesso(true)
                     setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
                 }
             })
             .catch((error) => {
-                if(error.response.data){
-                    alert(error.response.data)
+                if (error.response.data) {
+                    if(error.response.data == '112'){
+                        setIsModalOpen(true)
+                    }
+                    
+                  
+                    
                 }
-                alert("não foi possível agendar")
 
             });
-        //Logica do banco
-        
+
+
+
+
     };
 
+    console.log("yyyyyyyyy22",isModalOpenSucesso )
+    // Função para abrir o modal
+    const openModal = () => setIsModalOpen(true);
 
+    // Função para fechar o modal
+    const closeModal = () => setIsModalOpen(false);
+
+    const closeModalSucesso = () => setIsModalOpenSucesso(false);
     return (
         <div className='tela ' >
             <div className='toolbar p-4' style={{ maxHeight: '100vh', overflowY: 'auto' }}>
@@ -191,15 +223,139 @@ setEventosFiltrados(array)
                     // components={{
                     //     toolbar: CustomTollbar,
                     // }}
+                    messages={messages}
                     className='calendar'
+
                 />
             </div>
             {eventoSelecionado && (
                 <EventModal evento={eventoSelecionado} onClose={handleEventClose} onDelete={handleEventDelete} onUpdate={handleEventUpdate}></EventModal>
             )}
+           
+            {isModalOpen &&
+                  <Modal
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Mensagem de Aviso"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgb(0 0 0 / 17%)',
+                    },
+                    content: {
+                      color: 'black',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      maxWidth: '500px',
+                      margin: 'auto',
+                      position: 'relative',
+                    },
+                  }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '435px' }}>
+                    <FaTimes
+                      onClick={closeModal}
+                      style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    
+                    <h2 style={{ flex: 1, textAlign: 'center' }}>
+                    <i class="fa fa-times-circle" aria-hidden="true" style={{ fontSize:'52px', color: 'red' }}></i>
+                    </h2>
+                    
+                  </div>
+                  <h2 style={{ flex: 1, textAlign: 'center' }}>
+                    Não foi possível enviar
+                    </h2>
+                  <p style={{ textAlign: 'center' }}>
+                    A data e hora selecionadas já estão registradas na agenda.
+                  </p>
+                </Modal>
+            }
+            {isModalOpenSucesso &&
+                console.log("foiiiiii simmmmmm", isModalOpenSucesso)
+            }
+
+           
+            {isModalOpenSucesso &&
+            
+                  <Modal
+                  isOpen={isModalOpenSucesso}
+                  onRequestClose={closeModalSucesso}
+                  contentLabel="Mensagem de Aviso"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgb(0 0 0 / 17%)',
+                    },
+                    content: {
+                      color: 'black',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      maxWidth: '500px',
+                      margin: 'auto',
+                      position: 'relative',
+                    },
+                  }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '435px' }}>
+                    <FaTimes
+                      onClick={closeModalSucesso}
+                      style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    
+                    <h2 style={{ flex: 1, textAlign: 'center' }}>
+                    <i class="fa fa-check-circle" aria-hidden="true" style={{ fontSize:'52px', color: 'green' }}></i>
+                    </h2>
+                    
+                  </div>
+                  <h2 style={{ flex: 1, textAlign: 'center' }}>
+                  Agendado com sucesso
+                    </h2>
+                 
+                </Modal>
+            }
         </div>
+        
     );
 }
 
 
 export default Calendario;
+
+
+{/* <Modal
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModalSucesso}
+                  contentLabel="Mensagem de Aviso"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgb(0 0 0 / 17%)',
+                    },
+                    content: {
+                      color: 'black',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      maxWidth: '500px',
+                      margin: 'auto',
+                      position: 'relative',
+                    },
+                  }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '435px' }}>
+                    <FaTimes
+                      onClick={closeModalSucesso}
+                      style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    
+                    <h2 style={{ flex: 1, textAlign: 'center' }}>
+                    <i class="fa fa fa-check-circle" aria-hidden="true" style={{ fontSize:'52px', color: 'green' }}></i>
+                    </h2>
+                  </div>
+                  <h2 style={{ flex: 1, textAlign: 'center' }}>
+                    Agendado com sucesso
+                    </h2>
+                </Modal> */}

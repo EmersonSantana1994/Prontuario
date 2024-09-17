@@ -4,13 +4,31 @@
     margin: 10px;
     cursor: pointer;
     border-radius: 20px;
-    background-color: #eeece3;
+    background-color: #6c95c412;
+    border: outset;
 }
 .tituloConsultorio{
     margin-left: 25vw;
 }
-.tituloConsultorio2{
+.voltar-consultorio{
+  display: ruby;
+  cursor: pointer;
+  background-color: #fff2e8;
+  width: 120px;
+  height: 36px;
+  border-radius: 26px;
+}
+.fsi{
+  font-size: 19px;
+}
+.voltar-consultorio:hover{
+  display: ruby;
+  cursor: pointer;
+  background-color: #f6dae6;
+}
 
+.voltar-titulo{
+  margin-left: 10px
 }
 .irAgenda{
     width: 30%;
@@ -32,12 +50,9 @@
 }
 
 .botao-consultorio:hover{
-    background-color: #d8c5e7;
+  background-color: #c5cee7;
   }
 
-  .botao-consultorio:hover{
-    background-color: #d8c5e7;
-  }
 
   .botao-consultorio-selecionado{
     width: 30%;
@@ -45,5 +60,5 @@
     margin: 10px;
     cursor: pointer;
     border-radius: 20px;
-    background-color: #d8c5e7;
+    background-color: #c5cee7;
   }

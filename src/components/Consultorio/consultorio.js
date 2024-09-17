@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { Button, Image, Form, InputGroup, FormControl, Col, Carousel } from 'react-bootstrap';
 import { apiC } from "../../conexoes/api";
 import '../../components/Consultorio/consultorio.css';
-import { consultorio } from '../../actions/actions';
+import { consultorio, nomeConsultorio } from '../../actions/actions';
 import { seguirAgendamento } from '../../actions/actions';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -61,12 +61,11 @@ function Consultorio() {
     }, [])
 
     async function selecao(params1, params2) {
-        console.log("params", params1)
         despacho(consultorio(params1))
         setSelecionado(true)
         setNomeSelecionado(params2)
         setClicado(params1)
-        
+        despacho(nomeConsultorio(params2))
     }
 
     async function seguir(){

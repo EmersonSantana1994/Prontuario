@@ -41,7 +41,7 @@ import Settings from "examples/Icons/Settings";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import burceMars from "assets/images/bruce-mars.jpg";
+import nelsonAkamine from "assets/images/nelson-akamine.jpg";
 import curved0 from "assets/images/curved-images/curved0.jpg";
 import {rotaDirecionar, rotaCadastro, rotaAgendamento, rotaProntuario, rotaTimeline, rotaPreferencia,
   rotaJornada, rotaPagamento
@@ -126,7 +126,7 @@ console.log("ffffff", direcionar)
         <Grid container spacing={3} alignItems="center">
           <Grid item>
             <SoftAvatar
-              src={burceMars}
+              src={nelsonAkamine}
               alt="profile-image"
               variant="rounded"
               size="xl"
@@ -136,10 +136,10 @@ console.log("ffffff", direcionar)
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-                Alex Thompson
+                Nelson Akamine
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
+                Médico / Professor
               </SoftTypography>
             </SoftBox>
           </Grid>
