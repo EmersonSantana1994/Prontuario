@@ -50,7 +50,7 @@ const EventModal = ({evento, onClose, onDelete, onUpdate}) =>{
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formTitle">
-                        <Form.Label>Título</Form.Label>
+                        <Form.Label>Especialidade</Form.Label>
                         <Form.Control type="text" name='title' value={editedEvent.title} onChange={handleInputChange}/>
                     </Form.Group>
                     <Form.Group controlId="formDesc">

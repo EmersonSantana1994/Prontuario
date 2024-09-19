@@ -571,6 +571,19 @@
     transform: translate(822.4px, 20.8px);
 }
 
+.react-datepicker {
+    font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+    font-size: 0.8rem;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #aeaeae;
+    border-radius: 0.3rem;
+    display: inline-block;
+    position: relative;
+    line-height: initial;
+    margin-left: -29px;
+}
+
 .custom-datepicker .react-datepicker {
 
     position: absolute;

@@ -31,11 +31,12 @@
   margin-left: 10px
 }
 .irAgenda{
-    width: 30%;
-    cursor: pointer;
-    border-radius: 20px;
-    background-color: #47568d;
-    color: #ffffee;
+  width: 30%;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: #47568d;
+  color: #ffffee;
+  height: 6vh;
 }
 .irAgenda:hover{
     width: 30%;

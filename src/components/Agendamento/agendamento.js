@@ -155,39 +155,44 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
         setEventosFiltrados(atividadesSelecionadas);
     }
     const handleAdicionar = (novoEvento) => {
-        console.log("novoEvento do hadler", novoEvento)
-        console.log("eventos do hadler", eventos)
-        const start = converterDataISOParaMySQL(novoEvento.start);
-        const end = converterDataISOParaMySQL(novoEvento.end);
+        if(novoEvento.repetir){
 
-        apiC.post("agenda/reservarAgendaMedica", {
-            "title": novoEvento.title,
-            "start": start,
-            "end": end,
-            "desc": novoEvento.desc,
-            "color": novoEvento.color,
-            "tipo": novoEvento.tipo,
-            "id_consultorio": idConsultorio,
-            "id_medico": 1
-        })
-            .then(response => {
-
-                if (response.status === 200) {
-                    setIsModalOpenSucesso(true)
-                    setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
-                }
+        }else{
+            console.log("novoEvento do hadler", novoEvento)
+            const start = converterDataISOParaMySQL(novoEvento.start);
+            const end = converterDataISOParaMySQL(novoEvento.end);
+    
+            apiC.post("agenda/reservarAgendaMedica", {
+                "title": novoEvento.title,
+                "start": start,
+                "end": end,
+                "desc": novoEvento.desc,
+                "color": novoEvento.color,
+                "tipo": novoEvento.tipo,
+                "id_consultorio": idConsultorio,
+                "id_medico": 1
             })
-            .catch((error) => {
-                if (error.response.data) {
-                    if(error.response.data == '112'){
-                        setIsModalOpen(true)
+                .then(response => {
+    
+                    if (response.status === 200) {
+                        setIsModalOpenSucesso(true)
+                        setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
+                        
                     }
-                    
-                  
-                    
-                }
+                })
+                .catch((error) => {
+                    if (error.response.data) {
+                        if(error.response.data == '112'){
+                            setIsModalOpen(true)
+                        }
+                        
+                      
+                        
+                    }
+    
+                });
+        }
 
-            });
 
 
 
@@ -311,7 +316,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                     
                   </div>
                   <h2 style={{ flex: 1, textAlign: 'center' }}>
-                  Agendado com sucesso
+                  Disponibilidade adicionada com Sucesso!
                     </h2>
                  
                 </Modal>
