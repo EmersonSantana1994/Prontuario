@@ -17,6 +17,7 @@ import { seguirAgendamento } from '../../actions/actions';
 import Modal from 'react-modal';
 import { FaTimes } from 'react-icons/fa'; // Ícone de X
 import 'moment/locale/pt-br'; // Importar locale para português do Brasil
+import { LteMobiledataSharp } from '@mui/icons-material';
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 moment.locale('pt-br');
 const localizer = momentLocalizer(moment);
@@ -155,29 +156,69 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
         setEventosFiltrados(atividadesSelecionadas);
     }
     const handleAdicionar = (novoEvento) => {
+       console.log("como assimmmmmmmmmmmmm", novoEvento)
         if(novoEvento.repetir){
+            
+            let startArray = []
+            let endArray = []
+            for (let j = 0; j < novoEvento.start.length; j++) {
+                startArray.push(converterDataISOParaMySQL(novoEvento.start[j])) 
+                endArray.push(converterDataISOParaMySQL(novoEvento.end[j])) 
+            }
+            apiC.post("agenda/repetir", {
+                "title": novoEvento.title,
+                "start": startArray,
+                "end": endArray,
+                "desc": novoEvento.desc,
+                "color": novoEvento.color,
+                "tipo": novoEvento.tipo,
+                "id_consultorio": idConsultorio,
+                "id_medico": 1,
+                "tamanho": novoEvento.start.length,
+                "comeco": novoEvento.comeco,
+                "fim": novoEvento.fim,
+            })
+                .then(response => {
+    
+                    if (response.status === 200) {
+                        setIsModalOpenSucesso(true)
+                        setEventos([...eventos, { ...novoEvento, id: eventos.length + startArray.length }]);
+                        
+                    }
+                })
+                .catch((error) => {
+                    if (error.response.data) {
+                        if(error.response.data == '112'){
+                            setIsModalOpen(true)
+                        }
+                        
+                      
+                        
+                    }
+    
+                });
 
         }else{
-            console.log("novoEvento do hadler", novoEvento)
+
             const start = converterDataISOParaMySQL(novoEvento.start);
             const end = converterDataISOParaMySQL(novoEvento.end);
     
             apiC.post("agenda/reservarAgendaMedica", {
-                "title": novoEvento.title,
+                "title": novoEvento.especialidade,
                 "start": start,
                 "end": end,
                 "desc": novoEvento.desc,
                 "color": novoEvento.color,
                 "tipo": novoEvento.tipo,
                 "id_consultorio": idConsultorio,
-                "id_medico": 1
+                "id_medico": 1,
+                "repetir":6
             })
                 .then(response => {
     
                     if (response.status === 200) {
                         setIsModalOpenSucesso(true)
                         setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
-                        
                     }
                 })
                 .catch((error) => {

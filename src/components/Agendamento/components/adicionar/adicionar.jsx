@@ -14,6 +14,7 @@ import diariamente from './../../diariamente'
 import semanalmente from '../semanalmente'
 import mensal from './../../mensal'
 import DiasDaSemana from '../selecaoDiasdaSemana';
+import { apiC } from "../../../../conexoes/api";
 
 
 
@@ -26,6 +27,7 @@ function Adicionar({ onAdicionar }) {
         desc: '',
         color: '',
         tipo: '',
+        especialidade:''
     });
     const [selectedColor, setSelectedColor] = useState('');
     const [expanded, setExpanded] = useState(false);
@@ -45,15 +47,21 @@ function Adicionar({ onAdicionar }) {
     const [mostrarDiasSemana, setMostrarDiasSemana] = useState(false);
     const [showDataFixa, setShowDataFixa] = useState(false);
     const [diaEscolhido, setDiaEscolhido] = useState(null);
-    const [novoEventoRepetir, setNovoEventoRepetir] = useState({
+    const [dados, setDados] = useState([]); // Para armazenar os dados do banco
+    const [selectedId, setSelectedId] = useState(''); // Para armazenar o id selecionado
+    const [error, setError] = useState('');
+
+    let novoEventoRepetir = {
         start: [],
         desc: '',
         title: [],
         end: [],
         color: '',
         tipo: '',
-        repetir:true
-    });
+        repetir: true,
+        comeco: '',
+        fim: ''
+    }
 
     const [novoEventoRepetirEx, setNovoEventoRepetirEx] = useState({
         desc: '',
@@ -61,6 +69,35 @@ function Adicionar({ onAdicionar }) {
         color: '',
         tipo: '',
     });
+
+    useEffect(() => {
+        // Simulação de fetch dos dados do banco
+        const fetchData = async () => {
+            let contador = 0
+           let itensVar = []
+            // Substitua pela sua chamada real à API
+            const response = await apiC.post('agenda/especialidade');
+            console.log("agenda/especialidade", response)
+            for (let i = 0; i < response.data.length; i++) {
+
+
+                if (contador == i) {
+                    let k = i
+                    for (let j = 0; j < response.data.length; j++) {
+                        itensVar[k] = response.data[j]
+                        k++
+                    }
+                }
+                setDados(JSON.parse(JSON.stringify(itensVar)))
+    
+    
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    console.log("da dosssssss", dados)
 
     const handleDia = (event) => {
         setDiaEscolhido(Number(event.target.value));
@@ -83,71 +120,133 @@ function Adicionar({ onAdicionar }) {
     }
 
     async function salvarEventRepetcao() {
-       
-if(repeat == "weekly"){
-    const resulSemanalment = semanalmente(startDat, endDate, diaEscolhido);
-    console.log("qual foi ele mesmo emersonnnnnn", resulSemanalment)
 
-    const novaHora = startTime; // sua variável com o valor da hora
-    const [horas, minutos] = novaHora.split(':').map(Number); // Divide e converte para números
-
-    const comeco = resulSemanalment.map(data => {
-        const novaData = new Date(data);
-
-        // Define a nova hora e minutos com base na variável
-        novaData.setHours(horas);
-        novaData.setMinutes(minutos);
-
-        return novaData;
-    });
-
-    const novaHoraF = fimTime; // sua variável com o valor da hora
-    const [horasF, minutosF] = novaHoraF.split(':').map(Number); // Divide e converte para números
-
-    const fim = resulSemanalment.map(data => {
-        const novaDataF = new Date(data);
-
-        // Define a nova hora e minutos com base na variável
-        novaDataF.setHours(horasF);
-        novaDataF.setMinutes(minutosF);
-
-        return novaDataF;
-    });
-
-    const objetosStart = comeco.map(data => ({
-        nome: "start",
-        value: data,
-        desc: novoEventoRepetirEx.title
-      }));
-
-      const objetosEnd = fim.map(data => ({
-        nome: "end",
-        value: data,
-      }));
-      
-        const novosStarts = objetosStart.map(obj => obj.value);
-        const novosTitles = objetosStart.map(obj => obj.desc);
-        setNovoEventoRepetir(prev => ({
-            ...prev,
-            start: novosStarts,
-            title: novosTitles
-        }));
-    
-        const novosEnds = objetosEnd.map(obj => obj.value);
-        setNovoEventoRepetir(prev => ({
-            ...prev,
-            end: novosEnds,
-        }));
-
-        adicionaArray()
-}
+        if (repeat == "weekly") {
+            const resulSemanalment = semanalmente(startDat, endDate, diaEscolhido);
 
 
-async function adicionaArray() {
-    console.log("NovoEventoRepetir", novoEventoRepetir)
-    onAdicionar(novoEventoRepetir);
-}
-        
+            const novaHora = startTime; // sua variável com o valor da hora
+            const [horas, minutos] = novaHora.split(':').map(Number); // Divide e converte para números
+
+            const comeco = resulSemanalment.map(data => {
+                const novaData = new Date(data);
+
+                // Define a nova hora e minutos com base na variável
+                novaData.setHours(horas);
+                novaData.setMinutes(minutos);
+
+                return novaData;
+            });
+
+            const novaHoraF = fimTime; // sua variável com o valor da hora
+            const [horasF, minutosF] = novaHoraF.split(':').map(Number); // Divide e converte para números
+
+            const fim = resulSemanalment.map(data => {
+                const novaDataF = new Date(data);
+
+                // Define a nova hora e minutos com base na variável
+                novaDataF.setHours(horasF);
+                novaDataF.setMinutes(minutosF);
+
+                return novaDataF;
+            });
+
+            const objetosStart = comeco.map(data => ({
+                nome: "start",
+                value: data,
+                desc: novoEventoRepetirEx.title
+            }));
+
+            const objetosEnd = fim.map(data => ({
+                nome: "end",
+                value: data,
+            }));
+
+            const novosStarts = objetosStart.map(obj => obj.value);
+            const novosTitles = objetosStart.map(obj => obj.desc);
+            // novoEventoRepetir(prev => ({
+            //     ...prev,
+            //     start: novosStarts,
+            //     title: novosTitles,
+            //     comeco: startDat, 
+            //     fim: endDate
+            // }));
+            const novosEnds = objetosEnd.map(obj => obj.value);
+            // setNovoEventoRepetir(prev => ({
+            //     ...prev,
+            //     end: novosEnds,
+            // }));
+            novoEventoRepetir = {
+                start: novosStarts,
+                desc: '',
+                title: novosTitles,
+                end: novosEnds,
+                color: '',
+                tipo: '',
+                repetir: true,
+                comeco: startDat,
+                fim: endDate
+            }
+
+
+            onAdicionar(novoEventoRepetir);
+            novoEventoRepetir = {
+                start: [],
+                desc: '',
+                title: [],
+                end: [],
+                color: '',
+                tipo: '',
+                repetir: true,
+                comeco: '',
+                fim: ''
+            }
+            setNovoEventoRepetirEx({
+                desc: '',
+                title: [],
+                color: '',
+                tipo: '',
+            })
+
+            setStartDat(false)
+            setEndDate(false)
+            setDiaEscolhido(null)
+            setStartTime('')
+            setStartDate("")
+            setEndDateDate("")
+            adicionaArray()
+        }
+
+
+        async function adicionaArray() {
+
+            // onAdicionar(novoEventoRepetir);
+            // setNovoEventoRepetir({
+            //     start: [],
+            //     desc: '',
+            //     title: [],
+            //     end: [],
+            //     color: '',
+            //     tipo: '',
+            //     repetir:true,
+            //     comeco:'',
+            //     fim:''
+            // })
+            // setNovoEventoRepetirEx({
+            //     desc: '',
+            // title: [],
+            // color: '',
+            // tipo: '',
+            // })
+
+            // setStartDat(false)
+            // setEndDate(false)
+            // setDiaEscolhido(null)
+            // setStartTime('')
+            // setStartDate("")
+            // setEndDateDate("")
+        }
+
     }
 
     async function getMensal() {
@@ -178,6 +277,7 @@ async function adicionaArray() {
             const { name, value } = cor;
             setNovoEvento({ ...novoEvento, [name]: value });
         } else {
+            console.log("bbbbbbbbbbb", e.target)
             const { name, value } = e.target;
             setNovoEvento({ ...novoEvento, [name]: value });
         }
@@ -186,7 +286,7 @@ async function adicionaArray() {
     }
 
     const handleChangeDateStart = (e) => {
-console.log("emmmmmmmmm",e )
+        console.log("emmmmmmmmm", e)
         const objeto = { name: 'start', value: e }
         const { name, value } = objeto;
         setNovoEvento({ ...novoEvento, [name]: value });
@@ -263,7 +363,7 @@ console.log("emmmmmmmmm",e )
                 desc: '',
                 color: '',
                 tipo: '',
-                repetir:false
+                repetir: false
             })
             setStartDate("")
             setEndDateDate("")
@@ -286,10 +386,21 @@ console.log("emmmmmmmmm",e )
 
         }
     };
+    const handleSelectChangeEspecialidade = (event) => {
+        const idSelecionado = event.target.value;
+        const nomeSelecionado = dados.find(item => item.id_especialidade == idSelecionado ? item.especialidade : '');
+        const objeto = { name: 'especialidade', especialidade: nomeSelecionado.especialidade, title:'title'}
+        setSelectedId(event.target.value)
+        if( nomeSelecionado != 'undefined' && nomeSelecionado != undefined ){
+            const {name} = objeto;
+            const {title} = objeto;
+        const {value} = event.target;
+        setNovoEvento({ ...novoEvento, [name]: value, [title]: nomeSelecionado.especialidade });
+        }
+    };
 
     async function handleSelectChange(e) {
         const selectedValue = e.target.value;
-        console.log("meuuuu ta aquiiiiiiii???????", selectedValue)
         if (selectedValue == 'weekly') {
             setMostrarDiasSemana(true)
             setShowDataFixa(false)
@@ -304,9 +415,39 @@ console.log("emmmmmmmmm",e )
     }
 
 
+    const generateTimeOptions = () => {
+        const options = [];
+        const start = 0; // 00:00
+        const end = 24 * 60; // 24:00 em minutos
 
+        for (let i = start; i < end; i += 30) {
+            const hours = String(Math.floor(i / 60)).padStart(2, '0');
+            const minutes = String(i % 60).padStart(2, '0');
+            options.push(`${hours}:${minutes}`);
+        }
 
+        return options;
+    };  
 
+    const handleTimeChange = (e) => {
+        const value = e.target.value;
+        setStartTime(e.target.value);
+        validateTimes(value, fimTime);
+    };
+
+    const handleEndChange = (e) => {
+        const value = e.target.value;
+        setFimTime(value);
+        validateTimes(startTime, value);
+    };
+
+    const validateTimes = (start, end) => {
+        if (start && end && start > end) {
+            setError('A hora de início não pode ser maior que a hora de término.');
+        } else {
+            setError('');
+        }
+    };
 
     return (
         <div className="adicionar p-3 rounded border border-white" style={{ backgroundColor: '#e9ecef', color: '#212529' }}>
@@ -364,21 +505,31 @@ console.log("emmmmmmmmm",e )
                                 >
                                     <option value="selecione">Selecione</option>
                                     <option value="none">Não se repete</option>
-                                    <option value="days">Todos os dias da semana, Seg a Sex</option>
-                                    <option value="daily">Diariamente</option>
+                                    {/* <option value="days">Todos os dias da semana, Seg a Sex</option>
+                                    <option value="daily">Diariamente</option> */}
                                     <option value="weekly" >Semanalmente</option>
-                                    <option value="monthly">Mensalmente</option>
+                                    {/* <option value="monthly">Mensalmente</option> */}
                                 </select>
                             </label>
                         </div>
-                        {console.log("startDat", startDat)}
+
                         {repeat !== 'none' && repeat !== 'selecione' && (
-                        <Form.Group controlId='formBasicTitle'>
-                        <Form.Label className='titulo'>Especialidade Médica</Form.Label>
-                        <Form.Control className='tituloAgenda' type="text" placeholder="Digite a especialidade" name="title" value={novoEventoRepetirEx.title} onChange={handleChangeRepeticao} />
-                    </Form.Group>
-                     )}
-                        {repeat !== 'none' && repeat !== 'selecione' && (
+                            //     <Form.Group controlId='formBasicTitle'>
+                            //     <Form.Label className='titulo'>Especialidade Médica</Form.Label>
+                            //     <Form.Control className='tituloAgenda' type="text" placeholder="Digite a especialidade" name="title" value={novoEventoRepetirEx.title} onChange={handleChangeRepeticao} />
+                            // </Form.Group>
+                            <div>
+                                <select onChange={handleSelectChangeEspecialidade} value={selectedId}>
+                                    <option value="">Selecione uma especialidade</option>
+                                    {dados.map((item) => (
+                                        <option key={item.id_especialidade} value={item.id_especialidade} name="title">
+                                            {item.especialidade}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+                         {repeat !== 'none' && repeat !== 'selecione' && (
                             <label>
                                 Data do Início:
                                 <input
@@ -389,33 +540,42 @@ console.log("emmmmmmmmm",e )
                                 />
                             </label>
                         )}
+                        {repeat !== 'none' && repeat !== 'selecione' && (
+                            <label>
+                            Hora do início:
+                            <select value={startTime} onChange={handleTimeChange} required className='selectTime' title="Selecione um horário de início">
+                                <option value="" disabled>
+                                    Selecione um horário
+                                </option>
+                                {generateTimeOptions().map((time) => (
+                                    <option key={time} value={time}>
+                                        {time}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        )}
                     </div>
 
+                    
+
                     <div>
+                    
                         {repeat !== 'none' && repeat !== 'selecione' && (
                             <label>
-                                Hora do início:
-                                <input
-                                    type="time"
-                                    value={startTime}
-                                    onChange={(e) => setStartTime(e.target.value)}
-                                    required
-                                />
-                            </label>
-                            
+                            Hora do término:
+                            <select value={fimTime} onChange={handleEndChange} required className='selectTime' title="Selecione um horário de término">
+                                <option value="" disabled>Selecione um horário</option>
+                                {generateTimeOptions().map((time) => (
+                                    <option key={time} value={time}>
+                                        {time}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
                         )}
-                        {repeat !== 'none' && repeat !== 'selecione' && (
-                            <label>
-                                Hora do término:
-                                <input
-                                    type="time"
-                                    value={fimTime}
-                                    onChange={(e) => setFimTime(e.target.value)}
-                                    required
-                                />
-                            </label>
-                            
-                        )}
+                        {error && <p style={{ color: 'red' }}>{error}</p>}
                     </div>
                     <div>
                         {mostrarDiasSemana &&
@@ -510,10 +670,16 @@ console.log("emmmmmmmmm",e )
                     )}
                 </Form.Group>
                 {showDataFixa &&
-                    <Form.Group controlId='formBasicTitle'>
-                        <Form.Label className='titulo'>Especialidade Médica</Form.Label>
-                        <Form.Control className='tituloAgenda' type="text" placeholder="Digite a especialidade" name="title" value={novoEvento.title} onChange={handleChange} />
-                    </Form.Group>
+                   <div>
+                   <select onChange={handleSelectChangeEspecialidade} value={selectedId}>
+                       <option value="">Selecione uma especialidade</option>
+                       {dados.map((item) => (
+                           <option key={item.id_especialidade} value={item.id_especialidade}>
+                               {item.especialidade}
+                           </option>
+                       ))}
+                   </select>
+               </div>
                 }
 
                 {showDataFixa &&
@@ -616,6 +782,7 @@ console.log("emmmmmmmmm",e )
                                     </Form.Group>
                                 </Col>
                             }
+                            {console.log("oooooo meuuuuuuuuu", novoEvento )}
                             {showDataFixa &&
                                 <Button
                                     variant='success'
