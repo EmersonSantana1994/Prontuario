@@ -50,6 +50,10 @@ function Adicionar({ onAdicionar }) {
     const [dados, setDados] = useState([]); // Para armazenar os dados do banco
     const [selectedId, setSelectedId] = useState(''); // Para armazenar o id selecionado
     const [error, setError] = useState('');
+    const [errorData, setErrorData] = useState('');
+    const [selecao, setSelecao] = useState('Selecione uma especialidade');
+    const [checkEspecialidade, setCheckEspecialidade] = useState(false);
+    const [checkErro, setCheckErro] = useState(true);
 
     let novoEventoRepetir = {
         start: [],
@@ -60,7 +64,8 @@ function Adicionar({ onAdicionar }) {
         tipo: '',
         repetir: true,
         comeco: '',
-        fim: ''
+        fim: '',
+        especialidade: ''
     }
 
     const [novoEventoRepetirEx, setNovoEventoRepetirEx] = useState({
@@ -70,6 +75,27 @@ function Adicionar({ onAdicionar }) {
         tipo: '',
     });
 
+    const fetchDataAtualiza = async () => {
+        let contador = 0
+       let itensVar = []
+        // Substitua pela sua chamada real à API
+        const response = await apiC.post('agenda/especialidade');
+        for (let i = 0; i < response.data.length; i++) {
+
+
+            if (contador == i) {
+                let k = i
+                for (let j = 0; j < response.data.length; j++) {
+                    itensVar[k] = response.data[j]
+                    k++
+                }
+            }
+            setDados(JSON.parse(JSON.stringify(itensVar)))
+
+
+        }
+    };
+
     useEffect(() => {
         // Simulação de fetch dos dados do banco
         const fetchData = async () => {
@@ -77,7 +103,6 @@ function Adicionar({ onAdicionar }) {
            let itensVar = []
             // Substitua pela sua chamada real à API
             const response = await apiC.post('agenda/especialidade');
-            console.log("agenda/especialidade", response)
             for (let i = 0; i < response.data.length; i++) {
 
 
@@ -97,7 +122,6 @@ function Adicionar({ onAdicionar }) {
         fetchData();
     }, []);
 
-    console.log("da dosssssss", dados)
 
     const handleDia = (event) => {
         setDiaEscolhido(Number(event.target.value));
@@ -124,7 +148,7 @@ function Adicionar({ onAdicionar }) {
         if (repeat == "weekly") {
             const resulSemanalment = semanalmente(startDat, endDate, diaEscolhido);
 
-
+            
             const novaHora = startTime; // sua variável com o valor da hora
             const [horas, minutos] = novaHora.split(':').map(Number); // Divide e converte para números
 
@@ -154,7 +178,8 @@ function Adicionar({ onAdicionar }) {
             const objetosStart = comeco.map(data => ({
                 nome: "start",
                 value: data,
-                desc: novoEventoRepetirEx.title
+                desc: novoEventoRepetirEx.title,
+                especialidade: novoEventoRepetirEx.especialidade
             }));
 
             const objetosEnd = fim.map(data => ({
@@ -164,6 +189,8 @@ function Adicionar({ onAdicionar }) {
 
             const novosStarts = objetosStart.map(obj => obj.value);
             const novosTitles = objetosStart.map(obj => obj.desc);
+            const novosEspecialidade = objetosStart.map(obj => obj.especialidade);
+            console.log("llllllllllllll", novosTitles)
             // novoEventoRepetir(prev => ({
             //     ...prev,
             //     start: novosStarts,
@@ -178,14 +205,15 @@ function Adicionar({ onAdicionar }) {
             // }));
             novoEventoRepetir = {
                 start: novosStarts,
-                desc: '',
+                desc: novoEvento.desc,
                 title: novosTitles,
                 end: novosEnds,
-                color: '',
-                tipo: '',
+                color: novoEvento.color,
+                tipo: novoEvento.tipo,
                 repetir: true,
                 comeco: startDat,
-                fim: endDate
+                fim: endDate,
+                especialidade: novosEspecialidade
             }
 
 
@@ -199,13 +227,24 @@ function Adicionar({ onAdicionar }) {
                 tipo: '',
                 repetir: true,
                 comeco: '',
-                fim: ''
+                fim: '',
+                especialidade: ''
             }
             setNovoEventoRepetirEx({
                 desc: '',
                 title: [],
                 color: '',
                 tipo: '',
+            })
+            setNovoEvento({
+                title: '',
+                start: '',
+                end: '',
+                desc: '',
+                color: '',
+                tipo: '',
+                repetir: false,
+                especialidade:''
             })
 
             setStartDat(false)
@@ -214,7 +253,9 @@ function Adicionar({ onAdicionar }) {
             setStartTime('')
             setStartDate("")
             setEndDateDate("")
-            adicionaArray()
+            setSelectedId("");
+            setMostrarCorSelecionada(false)
+            setCheckEspecialidade(false)
         }
 
 
@@ -277,7 +318,6 @@ function Adicionar({ onAdicionar }) {
             const { name, value } = cor;
             setNovoEvento({ ...novoEvento, [name]: value });
         } else {
-            console.log("bbbbbbbbbbb", e.target)
             const { name, value } = e.target;
             setNovoEvento({ ...novoEvento, [name]: value });
         }
@@ -286,7 +326,6 @@ function Adicionar({ onAdicionar }) {
     }
 
     const handleChangeDateStart = (e) => {
-        console.log("emmmmmmmmm", e)
         const objeto = { name: 'start', value: e }
         const { name, value } = objeto;
         setNovoEvento({ ...novoEvento, [name]: value });
@@ -302,7 +341,6 @@ function Adicionar({ onAdicionar }) {
 
 
     function converterDataISOParaMySQL(dataISO) {
-        console.log("")
         const data = parseISO(dataISO);
         return format(data, 'yyyy-MM-dd HH:mm:ss');
     }
@@ -339,11 +377,11 @@ function Adicionar({ onAdicionar }) {
             repeat,
             endDate: repeat !== 'none' && repeat !== 'selecione' ? endDate : null,
         };
-        console.log("eventDetails", eventDetails)
+
 
 
         e.preventDefault();
-        console.log("ssssss", salvar)
+
         if (salvar && novoEvento.title && novoEvento.start && novoEvento.end) {
             const startDate = new Date(novoEvento.start);
             const endDate = new Date(novoEvento.end);
@@ -353,7 +391,7 @@ function Adicionar({ onAdicionar }) {
                 setIsModalOpen(true)
                 return;
             }
-            console.log("novoEvento", novoEvento)
+
             onAdicionar(novoEvento);
             setSalvar(false)
             setNovoEvento({
@@ -363,14 +401,17 @@ function Adicionar({ onAdicionar }) {
                 desc: '',
                 color: '',
                 tipo: '',
-                repetir: false
+                repetir: false,
+                especialidade:''
             })
             setStartDate("")
             setEndDateDate("")
+            setSelectedId("");
+            setMostrarCorSelecionada(false)
         }
 
     }
-    console.log("")
+
 
     const handleColorChange = (color) => {
         setMostrarCorSelecionada(true)
@@ -386,21 +427,46 @@ function Adicionar({ onAdicionar }) {
 
         }
     };
+    const handleSelectChangeEspecialidadeRepetir = (event) => {
+        
+        const idSelecionado = event.target.value;
+        console.log("jjjjjjjjjjj2", idSelecionado)
+        if(idSelecionado != ""){
+            const nomeSelecionado = dados.find(item => item.id_especialidade == idSelecionado ? item.especialidade : '');
+            console.log("hhhhhhhhhh", nomeSelecionado)
+            const objeto = { name: 'especialidade', especialidade: nomeSelecionado.especialidade, title:'title'}
+            setSelectedId(event.target.value)
+            if( nomeSelecionado != 'undefined' && nomeSelecionado != undefined ){
+                const {name} = objeto;
+                const {title} = objeto;
+            const {value} = event.target;
+            setNovoEventoRepetirEx({ ...novoEventoRepetirEx, [name]: value, [title]: nomeSelecionado.especialidade });
+            setCheckEspecialidade(true)
+            }
+        }
+        
+    };
     const handleSelectChangeEspecialidade = (event) => {
         const idSelecionado = event.target.value;
-        const nomeSelecionado = dados.find(item => item.id_especialidade == idSelecionado ? item.especialidade : '');
-        const objeto = { name: 'especialidade', especialidade: nomeSelecionado.especialidade, title:'title'}
-        setSelectedId(event.target.value)
-        if( nomeSelecionado != 'undefined' && nomeSelecionado != undefined ){
-            const {name} = objeto;
-            const {title} = objeto;
-        const {value} = event.target;
-        setNovoEvento({ ...novoEvento, [name]: value, [title]: nomeSelecionado.especialidade });
+        if(idSelecionado != ""){
+            const nomeSelecionado = dados.find(item => item.id_especialidade == idSelecionado ? item.especialidade : '');
+            const objeto = { name: 'especialidade', especialidade: nomeSelecionado.especialidade, title:'title'}
+            setSelectedId(event.target.value)
+            if( nomeSelecionado != 'undefined' && nomeSelecionado != undefined ){
+                const {name} = objeto;
+                const {title} = objeto;
+            const {value} = event.target;
+            setNovoEvento({ ...novoEvento, [name]: value, [title]: nomeSelecionado.especialidade });
+            setCheckEspecialidade(true)
+            }
         }
+       
     };
 
     async function handleSelectChange(e) {
         const selectedValue = e.target.value;
+        setSelectedId("");
+        setCheckEspecialidade(false)
         if (selectedValue == 'weekly') {
             setMostrarDiasSemana(true)
             setShowDataFixa(false)
@@ -417,8 +483,8 @@ function Adicionar({ onAdicionar }) {
 
     const generateTimeOptions = () => {
         const options = [];
-        const start = 0; // 00:00
-        const end = 24 * 60; // 24:00 em minutos
+        const start = 420; // 00:00
+        const end = 20 * 60; // 24:00 em minutos
 
         for (let i = start; i < end; i += 30) {
             const hours = String(Math.floor(i / 60)).padStart(2, '0');
@@ -428,6 +494,28 @@ function Adicionar({ onAdicionar }) {
 
         return options;
     };  
+
+    const validateDate = (start, end) => {
+        if (start && end && start > end) {
+            setErrorData('A data de início não pode ser maior que a data de término.');
+            setCheckErro(false)
+        } else {
+            setErrorData('');
+            setCheckErro(true)
+        }
+    };
+
+    const handleStartDataChange = (e) => {
+        const value = e.target.value;
+        setStartDat(value);
+        validateDate(value, endDate);
+    };
+
+    const handleEndDataChange = (e) => {
+        const value = e.target.value;
+        setEndDate(value);
+        validateDate(startDat, value);
+    };
 
     const handleTimeChange = (e) => {
         const value = e.target.value;
@@ -444,8 +532,10 @@ function Adicionar({ onAdicionar }) {
     const validateTimes = (start, end) => {
         if (start && end && start > end) {
             setError('A hora de início não pode ser maior que a hora de término.');
+            setCheckErro(false)
         } else {
             setError('');
+            setCheckErro(true)
         }
     };
 
@@ -519,8 +609,8 @@ function Adicionar({ onAdicionar }) {
                             //     <Form.Control className='tituloAgenda' type="text" placeholder="Digite a especialidade" name="title" value={novoEventoRepetirEx.title} onChange={handleChangeRepeticao} />
                             // </Form.Group>
                             <div>
-                                <select onChange={handleSelectChangeEspecialidade} value={selectedId}>
-                                    <option value="">Selecione uma especialidade</option>
+                                <select onChange={handleSelectChangeEspecialidadeRepetir} value={selectedId}>
+                                    <option value="">{selecao}</option>
                                     {dados.map((item) => (
                                         <option key={item.id_especialidade} value={item.id_especialidade} name="title">
                                             {item.especialidade}
@@ -535,7 +625,7 @@ function Adicionar({ onAdicionar }) {
                                 <input
                                     type="date"
                                     value={startDat}
-                                    onChange={(e) => setStartDat(e.target.value)}
+                                    onChange={handleStartDataChange}
                                     required
                                 />
                             </label>
@@ -582,7 +672,7 @@ function Adicionar({ onAdicionar }) {
                             <div>
                                 <h4>Escolha um dia da semana:</h4>
                                 <div>
-                                    <label className='diassemana'>
+                                    {/* <label className='diassemana'>
                                         <input
                                             type="radio"
                                             value="0"
@@ -590,7 +680,7 @@ function Adicionar({ onAdicionar }) {
                                             onChange={handleDia}
                                         />
                                         Domingo
-                                    </label>
+                                    </label> */}
                                     <label className='diassemana'>
                                         <input
                                             type="radio"
@@ -651,7 +741,7 @@ function Adicionar({ onAdicionar }) {
                         }
 
                     </div>
-                    {console.log("fimmmmmmm", endDate)}
+                   
                     {repeat !== 'none' && repeat !== 'selecione' && (
                         <div>
                             <label>
@@ -659,14 +749,102 @@ function Adicionar({ onAdicionar }) {
                                 <input
                                     type="date"
                                     value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
+                                    onChange={handleEndDataChange}
                                     required
                                 />
                             </label>
                         </div>
                     )}
-                    {repeat !== 'none' && repeat !== 'selecione' && (
-                        <button type="submit" onClick={() => salvarEventRepetcao()}>Salvar Evento</button>
+                    {errorData && <p style={{ color: 'red' }}>{errorData}</p>}
+                     {repeat !== 'none' && repeat !== 'selecione' && (
+                     <div>
+                                <Form.Group controlId='formBasicDesc'>
+                                    <Form.Label>Descrição</Form.Label>
+                                    <Form.Control className='tipdesc' type='text' placeholder='Digite a Descrição' name='desc' value={novoEvento.desc} onChange={handleChange} />
+                                </Form.Group>
+                            </div>
+                            )}
+                            {repeat !== 'none' && repeat !== 'selecione' && (
+                             <Col xs={3}>
+                                    <Form.Group controlId='formBasicColor'>
+                                        <Form.Label>Escolha uma cor</Form.Label>
+                                        {/* <Form.Control type='color' name='color' value={'red'} onChange={handleChange} /> */}
+                                        <div style={{ textAlign: 'center' }}>
+                                            <button
+                                                style={buttonStyle('red')}
+                                                onClick={() => { handleChange('red'); handleColorChange('red') }}
+                                            >
+                                                Vermelho
+                                            </button>
+                                            <button
+                                                style={buttonStyle('yellow')}
+                                                onClick={() => { handleChange('yellow'); handleColorChange('yellow') }}
+                                            >
+                                                Amarelo
+                                            </button>
+                                            <button
+                                                style={buttonStyle('green')}
+                                                onClick={() => { handleChange('green'); handleColorChange('green') }}
+                                            >
+                                                Verde
+                                            </button>
+                                            {mostrarCorSelecionada &&
+                                                <div style={{ marginTop: '20px' }}>
+
+                                                    <p>Cor selecionada:  <button
+                                                        style={buttonStyleSelecionado(selectedColor)}
+                                                    ></button></p>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </Form.Group>
+                                </Col>
+                                )}
+                                {repeat !== 'none' && repeat !== 'selecione' && (
+                                 <Col xs={9}>
+                                    <Form.Group controlId='formBasicTipo'>
+                                        <Form.Label>Filtro</Form.Label>
+                                        <Form.Control className='tipdesc' type='text' placeholder='Digite o tipo de filtro' name='tipo' value={novoEvento.tipo} onChange={handleChange} onKeyDown={handleKeyPress} />
+                                    </Form.Group>
+                                </Col>
+                                )}
+                                <div>
+                                 {/* || !endDate || !diaEscolhido || !startTime|| !fimTime || !checkEspecialidade || !checkErro */}
+                               
+                                {repeat !== 'none' && repeat !== 'selecione' && !checkEspecialidade &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Selecione uma especialidade"}</p>
+                                }
+                                {repeat !== 'none' && repeat !== 'selecione' && !startDat &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a data de início"}</p>
+                                }
+                                 {repeat !== 'none' && repeat !== 'selecione' && !startTime &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a hora de início "}</p>
+                                }
+                                {repeat !== 'none' && repeat !== 'selecione' && !fimTime &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a hora de témino "}</p>
+                                }
+                                {repeat !== 'none' && repeat !== 'selecione' && !diaEscolhido &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira o dia da semana"}</p>
+                                }
+                                { repeat !== 'none' && repeat !== 'selecione' && !endDate &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a data de encerramento "}</p>
+                                }
+                                </div>
+                               
+                    {repeat !== 'none' && repeat !== 'selecione' &&  (
+                        // <button type="submit" onClick={() => salvarEventRepetcao()}>Salvar Evento</button>
+                        <Button
+                        variant='success'
+                        type='submit'
+                        className={!startDat || !endDate || !diaEscolhido || !startTime|| !fimTime || !checkEspecialidade || !checkErro ? 'buttDesabilitado' : 'butt'}
+                        onClick={() => salvarEventRepetcao()}
+                        style={{ marginTop: '10px', marginRight: '10px' }}
+                        disabled={!startDat || !endDate || !diaEscolhido || !startTime|| !fimTime || !checkEspecialidade || !checkErro}
+                        onKeyDown={handleKeyPress}
+                    >
+                        Salvar
+                    </Button>
                     )}
                 </Form.Group>
                 {showDataFixa &&
@@ -782,15 +960,29 @@ function Adicionar({ onAdicionar }) {
                                     </Form.Group>
                                 </Col>
                             }
-                            {console.log("oooooo meuuuuuuuuu", novoEvento )}
+
+                            <div>
+                                 {/* !novoEvento.title || !novoEvento.start || !novoEvento.end || !checkEspecialidade */}
+                               
+                                {showDataFixa && !checkEspecialidade &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Selecione uma especialidade"}</p>
+                                }
+                                {showDataFixa && !novoEvento.start &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a data de início"}</p>
+                                }
+
+                                { showDataFixa && !novoEvento.end &&
+                                     <p className='formtErro' style={{ color: 'red' }}>{"-Insira a data de témino "}</p>
+                                }
+                                </div>
                             {showDataFixa &&
                                 <Button
                                     variant='success'
                                     type='submit'
-                                    className={!novoEvento.title || !novoEvento.start || !novoEvento.end ? 'buttDesabilitado' : 'butt'}
+                                    className={!novoEvento.start || !novoEvento.end || !checkEspecialidade ? 'buttDesabilitado' : 'butt'}
                                     onClick={salve}
                                     style={{ marginTop: '10px', marginRight: '10px' }}
-                                    disabled={!novoEvento.title || !novoEvento.start || !novoEvento.end}
+                                    disabled={!novoEvento.start || !novoEvento.end || !checkEspecialidade}
                                     onKeyDown={handleKeyPress}
                                 >
                                     Salvar

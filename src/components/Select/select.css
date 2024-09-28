@@ -571,6 +571,16 @@
     transform: translate(822.4px, 20.8px);
 }
 
+.formtErro{
+    font-size: 10px;
+}
+
+.alinharErro{
+    color: red;
+    margin-left: 39px;
+    font-size: 14px;
+}
+
 .selectTime{
     width: 85px;
 }

@@ -86,6 +86,50 @@ function Calendario() {
         getAgendamento()
     }, [])
 
+    async function getAgendamentoAtualizar() {
+        const novoEventoPadrao = []
+        await apiC.post("agenda/buscartudo", {
+            "id_consultorio": idConsultorio,
+            "id_medico": 1
+        }).then(response => {
+
+            if (response.status === 200) {
+                console.log("responseeee", response.data)
+
+                for (let i = 0; i < response.data.length; i++) {
+
+
+                    if (contador == i) {
+                        let k = i
+                        for (let j = 0; j < response.data.length; j++) {
+                            itensVar[k] = response.data[j]
+                            k++
+                        }
+                    }
+                    array = JSON.parse(JSON.stringify(itensVar))
+
+                    array.forEach(obj => {
+                        obj.start = new Date(obj.start);
+                        obj.end = new Date(obj.end);
+                    });
+                }
+
+
+                setEventos(array)
+                setEventosFiltrados(array)
+
+            }
+        })
+            .catch((error) => {
+
+                alert("erro ao adicionar data", error)
+                console.log("error", error)
+
+            });
+
+    }
+    
+
     function converterDataISOParaMySQL(dataISO) {
         const jsDate = new Date(dataISO);
 return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
@@ -156,7 +200,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
         setEventosFiltrados(atividadesSelecionadas);
     }
     const handleAdicionar = (novoEvento) => {
-       console.log("como assimmmmmmmmmmmmm", novoEvento)
+        console.log("como assimmmmmmmmmmmmm 111111", novoEvento)
         if(novoEvento.repetir){
             
             let startArray = []
@@ -165,8 +209,9 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                 startArray.push(converterDataISOParaMySQL(novoEvento.start[j])) 
                 endArray.push(converterDataISOParaMySQL(novoEvento.end[j])) 
             }
+
             apiC.post("agenda/repetir", {
-                "title": novoEvento.title,
+                "title": novoEvento.especialidade,
                 "start": startArray,
                 "end": endArray,
                 "desc": novoEvento.desc,
@@ -182,7 +227,8 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     
                     if (response.status === 200) {
                         setIsModalOpenSucesso(true)
-                        setEventos([...eventos, { ...novoEvento, id: eventos.length + startArray.length }]);
+                        
+                        getAgendamentoAtualizar()
                         
                     }
                 })
