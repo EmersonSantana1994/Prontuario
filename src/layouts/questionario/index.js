@@ -33,11 +33,8 @@ import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import Prontuario from "../../layouts/profile/components/Prontuario/prontuario";
 // import Agendamento from "../../layouts/profile/components/Agendamento/agendamento";
 import Agendamento from "../../components/Agendamento/agendamento";
-import Consultorio from "../../components/Consultorio/consultorio";
 import Formulario from "../../components/Formulario/Formulario";
-import ProfilesList from "examples/Lists/ProfilesList";
-import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
-import PlaceholderCard from "examples/Cards/PlaceholderCard";
+
 
 
 // Overview page components
@@ -58,7 +55,7 @@ import team4 from "assets/images/team-4.jpg";
 import kal from "assets/images/kal-visuals-square.jpg";
 import { useEffect, useState } from "react";
 import { apiC } from "../../conexoes/api";
-import TimeLine from "./components/TimeLine/timeLine";
+
 import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { seguirAgendamento } from '../../actions/actions';
@@ -179,20 +176,10 @@ function Overview() {
               />
             </Grid>
           }
-          {direcionar == "prontuario" &&
-
-            <Grid item xs={12} md={6} xl={8}>
-              <Prontuario></Prontuario>
-            </Grid>
-          }
+        
 
 
-          {direcionar == "timeline" &&
-            <Grid item xs={12} md={6} xl={8}>
-              <TimeLine></TimeLine>
-            </Grid>
-          }
-
+        
 
 
           {!seguirAgend &&
@@ -215,12 +202,16 @@ function Overview() {
             
             </div>
           }
-          {!seguirAgend &&
+          {/* {!seguirAgend &&
             <Grid item xs={12} md={6} xl={16}>
               <Consultorio></Consultorio>
             </Grid>
+          } */}
+          {!seguirAgend &&
+            <Grid item xs={12} md={6} xl={16}>
+              <Formulario></Formulario>
+            </Grid>
           }
-          
 
 
           {seguirAgend &&
