@@ -111,7 +111,7 @@ function PlatformSettings() {
                                             <img className={revelarSelectGrupo ? "campo-select-icone-ativado nao-selecionavel" : "campo-select-icone-desativado-filtro-b nao-selecionavel"} />
                                         </Button>
                                     } */}
-                                    {console.log("revelarSelectGrupo", revelarSelectGrupo)}
+            
           {revelarSelectGrupo &&
 
             <SelectGrupo

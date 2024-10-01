@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './questionario.css';
 
 const FormField = ({ question, onChange, onDelete }) => {
     const handleTitleChange = (e) => {
@@ -38,6 +39,7 @@ const FormField = ({ question, onChange, onDelete }) => {
                 value={question.title}
                 onChange={handleTitleChange}
                 placeholder="Título da Pergunta"
+                className='tipdescQ'
             />
             {question.type !== 'text' && (
                 <input
@@ -45,37 +47,46 @@ const FormField = ({ question, onChange, onDelete }) => {
                     value={question.text}
                     onChange={handleTextChange}
                     placeholder="Pergunta"
+                    className='tipdescQ'
                 />
             )}
 
-            <select value={question.type} onChange={handleTypeChange}>
-                <option value="text">Texto</option>
-                <option value="select">Select</option>
-                <option value="radio">Radio</option>
-                <option value="checkbox">Checkbox</option>
+            <select value={question.type} onChange={handleTypeChange} className='campoSelect'>
+                <option value="text">Resposta em texto</option>
+                <option value="select">Campo de seleção</option>
+                <option value="radio">Escolha unica</option>
+                <option value="checkbox">Multpliescolha</option>
             </select>
             {question.type !== 'text' && (
                 <div>
                     {question.options.map((option, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                            <input
-                                type={question.type === 'radio' ? 'radio' : 'checkbox'}
-                                name={`question-${question.id}`} // Nome único para agrupar os radio buttons
-                                value={option}
-                            />
+                            { question.type === 'radio' || question.type === 'checkbox'  ? 
+                              <input
+                              type={question.type === 'radio' ? 'radio' : question.type === 'checkbox' ? 'checkbox' : ""}
+                              name={`question-${question.id}`} // Nome único para agrupar os radio buttons
+                              value={option}
+                          />
+                            : ""
+
+                            }
+                          
                             <input
                                 type="text"
                                 value={option}
                                 onChange={(e) => handleOptionChange(index, e.target.value)}
                                 placeholder={`Opção ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
+                                className='tipdescQ'
                             />
+                           
                         </div>
                     ))}
-                    <button onClick={addOption}>Adicionar Opção</button>
-                    <button onClick={removeLastOption}>Remover Última Opção</button>
+                    <button onClick={addOption} className='addButt'>Adicionar Opção</button>
+                    <button onClick={removeLastOption}className='remButt'>Remover Última Opção</button>
                 </div>
             )}
+            
             {question.type === 'text' && (
                 <div>
                     {question.options.map((option, index) => (
@@ -83,17 +94,21 @@ const FormField = ({ question, onChange, onDelete }) => {
                             <input
                                 type="text"
                                 value={option}
+                                className='tipdescQ'
                                 onChange={(e) => handleOptionChange(index, e.target.value)}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption}>Adicionar Pergunta</button>
-                    <button onClick={removeLastOption}>Remover Última Pergunta</button>
+                    <button onClick={addOption} className='addPergButt'>Adicionar Pergunta a este título</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover Última Pergunta</button>
+                    
                 </div>
+                
             )}
-            <button onClick={() => onDelete(question.id)}>Deletar todas as perguntas deste título</button>
+            <button onClick={() => onDelete(question.id)} className='remPergAllButt'>Deletar todas as perguntas deste título</button>
+            <div className="linha"></div>
         </div>
     );
 };

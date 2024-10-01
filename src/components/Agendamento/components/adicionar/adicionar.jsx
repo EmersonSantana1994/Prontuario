@@ -190,7 +190,7 @@ function Adicionar({ onAdicionar }) {
             const novosStarts = objetosStart.map(obj => obj.value);
             const novosTitles = objetosStart.map(obj => obj.desc);
             const novosEspecialidade = objetosStart.map(obj => obj.especialidade);
-            console.log("llllllllllllll", novosTitles)
+
             // novoEventoRepetir(prev => ({
             //     ...prev,
             //     start: novosStarts,
@@ -430,10 +430,10 @@ function Adicionar({ onAdicionar }) {
     const handleSelectChangeEspecialidadeRepetir = (event) => {
         
         const idSelecionado = event.target.value;
-        console.log("jjjjjjjjjjj2", idSelecionado)
+
         if(idSelecionado != ""){
             const nomeSelecionado = dados.find(item => item.id_especialidade == idSelecionado ? item.especialidade : '');
-            console.log("hhhhhhhhhh", nomeSelecionado)
+
             const objeto = { name: 'especialidade', especialidade: nomeSelecionado.especialidade, title:'title'}
             setSelectedId(event.target.value)
             if( nomeSelecionado != 'undefined' && nomeSelecionado != undefined ){

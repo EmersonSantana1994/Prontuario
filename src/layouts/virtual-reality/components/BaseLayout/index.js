@@ -74,6 +74,8 @@ function BaseLayout({ children }) {
     setTransparentSidenav(dispatch, false);
   }, [pathname]);
 
+  console.log("nnnnnnnnnnnnnn", routes )
+
   return (
     <SoftBox sx={baseLayout}>
       <SoftBox mt={3} mx={3}>

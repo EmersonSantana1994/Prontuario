@@ -26,7 +26,6 @@ const localizer = momentLocalizer(moment);
 
 function Calendario() {
     const despacho = useDispatch();
-    console.log("eventosPadrao", eventosPadrao)
     const idConsultorio = useSelector(state => state.reduxH.consultorio);
     // const [eventos, setEventos] = useState(eventosPadrao);
     const [eventos, setEventos] = useState([]);
@@ -49,7 +48,7 @@ function Calendario() {
             }).then(response => {
 
                 if (response.status === 200) {
-                    console.log("responseeee", response.data)
+
 
                     for (let i = 0; i < response.data.length; i++) {
 
@@ -69,7 +68,7 @@ function Calendario() {
                         });
                     }
 
-                    console.log("fffffffffff", array)
+
                     setEventos(array)
                     setEventosFiltrados(array)
 
@@ -94,7 +93,7 @@ function Calendario() {
         }).then(response => {
 
             if (response.status === 200) {
-                console.log("responseeee", response.data)
+
 
                 for (let i = 0; i < response.data.length; i++) {
 
@@ -200,7 +199,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
         setEventosFiltrados(atividadesSelecionadas);
     }
     const handleAdicionar = (novoEvento) => {
-        console.log("como assimmmmmmmmmmmmm 111111", novoEvento)
+
         if(novoEvento.repetir){
             
             let startArray = []
@@ -286,7 +285,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
 
     };
 
-    console.log("yyyyyyyyy22",isModalOpenSucesso )
+
     // Função para abrir o modal
     const openModal = () => setIsModalOpen(true);
 
@@ -298,7 +297,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
         <div className='tela ' >
             <div className='toolbar p-4' style={{ maxHeight: '100vh', overflowY: 'auto' }}>
                 <Adicionar onAdicionar={handleAdicionar} />
-                {console.log("eventos", eventos)}
+
                 <FiltroAtividades atividades={eventos} onSelecionarAtividades={handleSelecionarAtividades} />
             </div>
             <div className='calendario'>
@@ -364,9 +363,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                   </p>
                 </Modal>
             }
-            {isModalOpenSucesso &&
-                console.log("foiiiiii simmmmmm", isModalOpenSucesso)
-            }
+
 
            
             {isModalOpenSucesso &&

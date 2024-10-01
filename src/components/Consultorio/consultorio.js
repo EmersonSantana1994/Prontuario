@@ -24,7 +24,7 @@ function Consultorio() {
             }).then(response => {
 
                 if (response.status === 200) {
-                    console.log("responseeee", response.data)
+
 
                     for (let i = 0; i < response.data.length; i++) {
 
@@ -37,20 +37,19 @@ function Consultorio() {
                             }
                         }
                         array = JSON.parse(JSON.stringify(itensVar))
-                        console.log("arrayvvvvvv", array)
+
                     }
 
-                    console.log("arrayoooooooo", array)
+
                     setEventos(array)
                     {
                         eventos.map((element) => {
-                            console.log("minhaaacaraaaaa", element.nomeConsultorio)
+
                         })
                     }
                 }
             })
                 .catch((error) => {
-                    console.log("errorrrrrrrrrr", error)
                     alert("erro ao adicionar dataaa", error)
 
 

@@ -106,7 +106,7 @@ export default function SelectGrupos(props) {
                     "nome": props.pesquisar,
                   })
             }
-            console.log("fff", data.data)    
+
             
             await data.data.map((item,i)=>{
                 todosGrupos.push(item);

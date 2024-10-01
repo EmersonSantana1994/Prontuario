@@ -125,7 +125,7 @@ const routes = [
   {
     type: "collapse",
     name: "Criar questionario",
-    key: "sign-up",
+    key: "quest",
     route: "/questionario",
     icon: <Document size="12px" />,
     component: <Questionario />,

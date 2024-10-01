@@ -72,14 +72,14 @@ function Overview() {
   let itensVar = []
 
 
-  console.log("direcionar", direcionar)
+
   useEffect(() => {
 
-    console.log("mudou", direcionar)
+
   }, [direcionar])
 
   useEffect(() => {
-    console.log("oooooooooooo")
+
     async function pesquisa() {
       await apiC.post("/cadastro/buscarUsuario", {
         "id": idUsuario,
@@ -109,7 +109,7 @@ function Overview() {
           k++
         }
       }
-      console.log("itensVar", itensVar)
+
       setItens(JSON.parse(JSON.stringify(itensVar)))
     }
   }
@@ -118,7 +118,7 @@ function Overview() {
   return (
 
     <DashboardLayout>
-      {console.log("hhhh", direcionar)}
+
       <Header />
       <SoftBox mt={5} mb={3}>
         <Grid container spacing={3}>

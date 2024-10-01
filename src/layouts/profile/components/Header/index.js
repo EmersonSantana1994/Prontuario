@@ -78,7 +78,7 @@ function Header() {
   const handleSetTabValue = (event, newValue) => { setTabValue(newValue) };
   const handleSetTabValue2 = (event, newValue) => { setTabValue2(newValue) };
 
-console.log("ffffff", direcionar)
+
 
   async function mudarRota(rota){
     if(rota == "cadastro"){  

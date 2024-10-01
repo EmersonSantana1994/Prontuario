@@ -1,0 +1,225 @@
+.buttQ {
+    /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 168px;
+    background-color: #37944e;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 37px;
+    margin: 15px;
+}
+
+.buttQ:hover {
+    /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 168px;
+    background-color: #036a1d;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 37px;
+    margin: 15px;
+}
+
+.tipdescQ {
+    border-radius: 5px;
+    margin: 6px;
+    border: groove;
+    width: 20%;
+    height: 30px;
+}
+
+.campoSelect{
+    height: 29px;
+    border: outset;
+}
+
+.addButt{
+       /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 168px;
+    background-color: #37944e;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 22px;
+}
+
+.addButt:hover {
+    background-color: #036a1d;
+    /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 168px;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 22px;
+}
+
+.addPergButt{
+    /* margin-top: 10px; */
+ /* margin-right: 10px; */
+ width: 267px;
+ background-color: #37944e;
+ color: white;
+ font-size: 16px;
+ border-radius: 14px;
+ cursor: pointer;
+ /* margin-left: 110px; */
+ height: 22px;
+}
+
+.addPergButt:hover {
+ width: 267px;
+ background-color: #036a1d;
+ color: white;
+ font-size: 16px;
+ border-radius: 14px;
+ cursor: pointer;
+ /* margin-left: 110px; */
+ height: 22px;
+}
+
+.remPergButt{
+    /* margin-top: 10px; */
+  /* margin-right: 10px; */
+  width: 210px;
+  background-color: #d0132b;
+  color: white;
+  font-size: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  /* margin-left: 110px; */
+  height: 22px;
+  margin: 12px;
+}
+
+.remPergButt:hover {
+      /* margin-top: 10px; */
+  /* margin-right: 10px; */
+  width: 210px;
+  background-color: #9e0d21;
+  color: white;
+  font-size: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  /* margin-left: 110px; */
+  height: 22px;
+  margin: 12px;
+}
+
+.remButt{
+      /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 191px;
+    background-color: #d0132b;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 22px;
+    margin: 12px;
+}
+
+.remButt:hover {
+        /* margin-top: 10px; */
+    /* margin-right: 10px; */
+    width: 191px;
+    background-color: #9e0d21;
+    color: white;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    /* margin-left: 110px; */
+    height: 22px;
+    margin: 12px;
+}
+
+.remPergAllButt{
+    /* margin-top: 10px; */
+  /* margin-right: 10px; */
+  width: 325px;
+  background-color: #d0132b;
+  color: white;
+  font-size: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  /* margin-left: 110px; */
+  height: 22px;
+}
+
+.remPergAllButt:hover {
+      /* margin-top: 10px; */
+  /* margin-right: 10px; */
+  width: 325px;
+  background-color: #9e0d21;
+  color: white;
+  font-size: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  /* margin-left: 110px; */
+  height: 22px;
+}
+
+.linha {
+    width: 100%; /* Largura da linha */
+    height: 2px; /* Espessura da linha */
+    background-color: black; /* Cor da linha */
+    margin: 20px 0; /* Margens em cima e embaixo */
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Espaçamento entre os itens */
+  }
+  
+  .radio-label {
+    flex: 1 1 calc(33.33% - 10px); /* 3 itens por linha, com espaço */
+    background-color: #f0f0f0; /* Cor de fundo */
+    padding: 10px; /* Padding interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Mudar o cursor ao passar o mouse */
+    transition: background-color 0.3s; /* Transição suave */
+  }
+  
+  .radio-label:hover {
+    background-color: #e0e0e0; /* Cor ao passar o mouse */
+  }
+  
+  input[type="radio"] {
+    margin-right: 5px; /* Espaço entre o input e o texto */
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Espaçamento entre os itens */
+  }
+  
+  .checkbox-label {
+    flex: 1 1 calc(33.33% - 10px); /* 3 itens por linha, com espaço */
+    background-color: #f0f0f0; /* Cor de fundo */
+    padding: 10px; /* Padding interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Mudar o cursor ao passar o mouse */
+    transition: background-color 0.3s; /* Transição suave */
+  }
+  
+  .checkbox-label:hover {
+    background-color: #e0e0e0; /* Cor ao passar o mouse */
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 5px; /* Espaço entre o input e o texto */
+  }

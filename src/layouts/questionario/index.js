@@ -76,7 +76,7 @@ function Overview() {
   }, [direcionar])
 
   useEffect(() => {
-    console.log("oooooooooooo")
+
     async function pesquisa() {
       await apiC.post("/cadastro/buscarUsuario", {
         "id": idUsuario,
@@ -106,7 +106,7 @@ function Overview() {
           k++
         }
       }
-      console.log("itensVar", itensVar)
+
       setItens(JSON.parse(JSON.stringify(itensVar)))
     }
   }
@@ -115,110 +115,15 @@ function Overview() {
   return (
 
     <DashboardLayout>
-      {console.log("hhhh", direcionar)}
+
       <Header />
       <SoftBox mt={5} mb={3}>
         <Grid container spacing={3}>
-          {/* <Grid item xs={12} md={6} xl={4}>
-            <PlatformSettings />
-          </Grid> */}
-
-          {direcionar == "cadastro" &&
-            <Grid item xs={12} md={6} xl={4}>
-
-              <ProfileInfoCard
-                title="Informações do cliente"
-                info={{
-                  nome: !itens[0] ? "" : itens[0].nome,
-                  telefone: !itens[0] ? "" : itens[0].telefone,
-                  data: !itens[0] ? "" : itens[0].dataNascimento,
-                  CPF: !itens[0] ? "" : itens[0].cpf,
-                  RG: !itens[0] ? "" : itens[0].rg,
-                }}
-                social={[
-                  {
-                    link: "https://www.facebook.com/CreativeTim/",
-                    icon: <FacebookIcon />,
-                    color: "facebook",
-                  },
-                  {
-                    link: "https://twitter.com/creativetim",
-                    icon: <TwitterIcon />,
-                    color: "twitter",
-                  },
-                  {
-                    link: "https://www.instagram.com/creativetimofficial/",
-                    icon: <InstagramIcon />,
-                    color: "instagram",
-                  },
-                ]}
-                action={{ route: "", tooltip: "Edit Profile" }}
-              />
-            </Grid>
-
-          }
-
-          {direcionar == "cadastro" &&
-
-            <Grid item xs={12} md={6} xl={4}>
-
-              <ProfileInfoCard
-                title="Endereço do cliente"
-                info={{
-                  Endereço: !itens[0] ? "" : itens[0].endereco,
-                  Cep: !itens[0] ? "" : itens[0].cep,
-                  Cidade: !itens[0] ? "" : itens[0].cidade,
-                  Pais: !itens[0] ? "" : itens[0].pais,
-                  Email: !itens[0] ? "" : itens[0].email
-                }}
-
-                action={{ route: "", tooltip: "Edit Profile" }}
-              />
-            </Grid>
-          }
+         
         
-
-
-        
-
-
-          {!seguirAgend &&
-
-            <div className='tituloConsultorio2'>
-              <h1 className='tituloConsultorio'>Escolha o consultorio</h1>
-            </div>
-
-          }
-
-          {seguirAgend &&
-            <div>
-                
-              < Button className="voltar-consultorio" onClick={e => { voltar() }}>
-              <i className="fas fa-arrow-circle-left fsi"  ></i>
-                <h3 className="voltar-titulo">
-                   VOLTAR
-                </h3>
-              </Button>
-            
-            </div>
-          }
-          {/* {!seguirAgend &&
-            <Grid item xs={12} md={6} xl={16}>
-              <Consultorio></Consultorio>
-            </Grid>
-          } */}
-          {!seguirAgend &&
             <Grid item xs={12} md={6} xl={16}>
               <Formulario></Formulario>
             </Grid>
-          }
-
-
-          {seguirAgend &&
-            <Grid item xs={12} md={6} xl={16}>
-              <Agendamento></Agendamento>
-            </Grid>
-          }
 
           {/* <Grid item xs={12} xl={4}>
             <ProfilesList title="conversations" profiles={profilesListData} />
