@@ -51,7 +51,7 @@ import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contex
 import brand from "assets/images/YU-15-09-2024.gif";
 
 export default function App() {
-  console.log("pppppppppp", routes)
+
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -105,8 +105,7 @@ export default function App() {
       }
 
       if (route.route) {
-        console.log("rrrrrrrrrrr22", route.route )
-        console.log("55555555555", route.component   )
+
         
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
@@ -156,7 +155,7 @@ export default function App() {
             {configsButton}
           </>
         )}
-        {console.log("ffffffffffff", routes)}
+
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}

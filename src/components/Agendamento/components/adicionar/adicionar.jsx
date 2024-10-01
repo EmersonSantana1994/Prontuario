@@ -907,9 +907,10 @@ function Adicionar({ onAdicionar }) {
                     <div>
                         {showDataFixa &&
                             <div>
-                                <Form.Group controlId='formBasicDesc'>
+                                <Form.Group controlId='formBasicDesc' >
                                     <Form.Label>Descrição</Form.Label>
-                                    <Form.Control className='tipdesc' type='text' placeholder='Digite a Descrição' name='desc' value={novoEvento.desc} onChange={handleChange} onKeyDown={handleKeyPress} />
+                                    <Form.Control className='tipdesc' type='text' placeholder='Digite a Descrição' 
+                                    name='desc' value={novoEvento.desc} onChange={handleChange} />
                                 </Form.Group>
                             </div>
                         }

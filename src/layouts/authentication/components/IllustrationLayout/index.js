@@ -34,7 +34,7 @@ import pageRoutes from "page.routes";
 import pattern from "assets/images/shapes/pattern-lines.svg";
 
 function IllustrationLayout({ color, header, title, description, illustration, children }) {
-  console.log("jjjjjjjjjjj", pageRoutes)
+
   return (
     <PageLayout background="white">
       <DefaultNavbar

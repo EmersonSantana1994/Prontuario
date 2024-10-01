@@ -69,10 +69,10 @@ function Overview() {
   let itensVar = []
 
 
-  console.log("direcionar", direcionar)
+
   useEffect(() => {
 
-    console.log("mudou", direcionar)
+
   }, [direcionar])
 
   useEffect(() => {

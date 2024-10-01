@@ -29,7 +29,7 @@ import SoftTypography from "components/SoftTypography";
 
 function Breadcrumbs({ icon, title, route, light }) {
   const routes = route.slice(0, -1);
-console.log("atitudeeeeeeeeeeeeee", routes)
+
   return (
     <SoftBox mr={{ xs: 0, xl: 8 }}>
       <MuiBreadcrumbs

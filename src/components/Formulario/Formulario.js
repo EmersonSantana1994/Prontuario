@@ -36,11 +36,17 @@ const Questionnaire = () => {
   return (
     
     <div>
+        {!simula &&
       <h1>Criador de Questionário</h1>
+}
+{simula &&
+      <h4>Veja abaixo como seu questionario esta ficando antes de salvar</h4>
+}
 
       {simula &&
-      <h2>Simulação</h2>
+      <h5>Questionario</h5>
 }
+
       {/* <h2>Modo de usar</h2>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p> */}
@@ -83,7 +89,7 @@ const Questionnaire = () => {
         :
         <button onClick={simulador} className='buttQ'>Voltar</button>
       }
-      
+      {console.log("como éeeeeeeee",questions )}
 
     </div>
   );

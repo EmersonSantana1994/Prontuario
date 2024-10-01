@@ -223,3 +223,121 @@
   input[type="checkbox"] {
     margin-right: 5px; /* Espaço entre o input e o texto */
   }
+
+  /* .form-group {
+    margin-bottom: 20px; /* Espaço entre os grupos de formulário */
+/* } */
+
+/* .form-label {
+    font-weight: bold; /* Deixar o texto mais destacado */
+    /* margin-bottom: 5px; Espaço entre a label e o input */
+    /* display: block; Garante que a label fique em linha própria */
+/* } */ 
+
+
+
+.tipresp {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    width: 40%;
+    height: 25px;
+}
+
+.tipresp:focus {
+    border-color: #80bdff; /* Cor da borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+.tipresp::placeholder {
+    color: #6c757d; /* Cor do texto placeholder */
+}
+
+.select-container {
+    position: relative;
+    width: 200px; /* Defina a largura conforme necessário */
+}
+
+.custom-select {
+    appearance: none; /* Remove o estilo padrão */
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #4a90e2; /* Cor da borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    background-color: #fff; /* Cor de fundo */
+    font-size: 16px;
+    color: #333; /* Cor do texto */
+    cursor: pointer;
+    transition: border-color 0.3s;
+    padding-right: 30px; /* Espaço para a seta */
+}
+
+.custom-select:focus {
+    border-color: #007bff; /* Cor da borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+.arrow-down {
+    position: absolute;
+    right: 10px; /* Distância do lado direito */
+    top: 50%; /* Alinhamento vertical */
+    transform: translateY(-50%);
+    pointer-events: none; /* Impede interação com a seta */
+    font-size: 16px; /* Tamanho da seta */
+    color: #333; /* Cor da seta */
+}
+
+.height-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    margin: 20px;
+  }
+  
+  .height-label {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .height-range {
+    -webkit-appearance: none; /* Para remover o estilo padrão no Chrome/Safari */
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  
+  .height-range:hover {
+    opacity: 1;
+  }
+  
+  .height-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .height-range::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .height-display {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
