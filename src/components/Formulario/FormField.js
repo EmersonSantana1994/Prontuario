@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './questionario.css';
 
 const FormField = ({ question, onChange, onDelete }) => {
+    const [valida, setValida] = useState({
+        tipo: [],
+    });
+
     const handleTitleChange = (e) => {
         onChange(question.id, { ...question, title: e.target.value });
     };
@@ -12,8 +16,11 @@ const FormField = ({ question, onChange, onDelete }) => {
     };
 
     const handleTypeChange = (e) => {
+        const typo = { name: 'tipo' }
         onChange(question.id, { ...question, type: e.target.value, options: [] });
+        setValida({ ...valida, [typo.name]: e.target.value });
     };
+    
 
     const handleOptionChange = (index, value) => {
         const options = [...question.options];
@@ -32,6 +39,25 @@ const FormField = ({ question, onChange, onDelete }) => {
         }
     };
 
+    const questionTypes = [
+        { value: 'text', label: 'Resposta em texto' },
+        { value: 'select', label: 'Campo de seleção' },
+        { value: 'radio', label: 'Escolha única' },
+        { value: 'checkbox', label: 'Múltipla escolha' },
+        { value: 'data', label: 'Data' },
+        { value: 'dataHora', label: 'Data e hora' },
+        { value: 'altura', label: 'Altura' },
+        { value: 'peso', label: 'Peso' },
+        { value: 'rg', label: 'RG' },
+        { value: 'cpf', label: 'CPF' }
+    ];
+
+    const filteredQuestionTypes = questionTypes.filter(type => type.value !== valida.tipo[0]);
+    
+
+    const availableTypes = questionTypes
+        .filter(type => !questionTypes.includes(type.value));
+
     return (
         <div>
             {question.type == 'altura' && (
@@ -43,70 +69,97 @@ const FormField = ({ question, onChange, onDelete }) => {
                     className='tipdescQ'
                 />
             )}
-             {question.type !== 'altura' && (
-            <input
-                type="text"
-                value={question.title}
-                onChange={handleTitleChange}
-                placeholder="Título da Pergunta"
-                className='tipdescQ'
-            />
-        )}
-            {question.type !== 'text' && question.type !== 'data' && 
-            question.type !== 'altura' && question.type !== 'peso' && question.type !== 'rg' && question.type !== 'cpf' &&(
+            {question.type == 'peso' && (
                 <input
                     type="text"
-                    value={question.text}
-                    onChange={handleTextChange}
-                    placeholder="Pergunta"
+                    value={"Peso"}
+                    onChange={handleTitleChange}
+                    placeholder="Título da Pergunta"
+                    className='tipdescQ'
+                />
+            )}
+             {question.type == 'cpf' && (
+                <input
+                    type="text"
+                    value={"CPF"}
+                    onChange={handleTitleChange}
+                    placeholder="Título da Pergunta"
+                    className='tipdescQ'
+                />
+            )}
+            {question.type == 'rg' && (
+                <input
+                    type="text"
+                    value={"RG"}
+                    onChange={handleTitleChange}
+                    placeholder="Título da Pergunta"
                     className='tipdescQ'
                 />
             )}
 
-            <select value={question.type} onChange={handleTypeChange} className='campoSelect'>
-                <option value="" disabled>
-                    Selecione um tipo de pergunta
-                </option>
-                <option value="text">Resposta em texto</option>
-                <option value="select">Campo de seleção</option>
-                <option value="radio">Escolha única</option>
-                <option value="checkbox">Múltipla escolha</option>
-                <option value="data">Data</option>
-                <option value="dataHora">Data e hora</option>
-                <option value="altura">Altura</option>
-                <option value="peso">Peso</option>
-                <option value="rg">RG</option>
-                <option value="cpf">CPF</option>
-            </select>
-            {question.type !== 'text' && question.type !== 'data' && question.type !== 'altura' && question.type !== 'peso' && question.type !== 'rg' && question.type !== 'cpf' && (
-                <div>
-                    {question.options.map((option, index) => (
-                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                            {question.type === 'radio' || question.type === 'checkbox' ?
-                                <input
-                                    type={question.type === 'radio' ? 'radio' : question.type === 'checkbox' ? 'checkbox' : ""}
-                                    name={`question-${question.id}`} // Nome único para agrupar os radio buttons
-                                    value={option}
-                                />
-                                : ""
-
-                            }
-
-                            <input
-                                type="text"
-                                value={option}
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
-                                placeholder={`Opção ${index + 1}`}
-                                style={{ marginLeft: '8px' }}
-                                className='tipdescQ'
-                            />
-
-                        </div>
-                    ))}
-                    <button onClick={addOption} className='addButt'>Adicionar Opção</button>
-                    <button onClick={removeLastOption} className='remButt'>Remover Última Opção</button>
-                </div>
+            {question.type !== 'altura' && question.type !== 'peso' && question.type !== 'cpf' && question.type !== 'rg' &&(
+                <input
+                    type="text"
+                    value={question.title}
+                    onChange={handleTitleChange}
+                    placeholder="Título da Pergunta"
+                    className='tipdescQ'
+                />
             )}
+
+            {question.type !== 'text' && question.type !== 'data' &&
+                question.type !== 'altura' && question.type !== 'peso' && question.type !== 'rg' && question.type !== 'cpf' &&
+                question.type !== 'dataHora' && (
+                    <input
+                        type="text"
+                        value={question.text}
+                        onChange={handleTextChange}
+                        placeholder="Pergunta"
+                        className='tipdescQ'
+                    />
+                )}
+            
+                <select value={question.type} onChange={handleTypeChange} className='campoSelect'>
+                    <option value="" disabled>
+                        Selecione um tipo de pergunta
+                    </option>
+                    {availableTypes.map(type => (
+                        <option key={type.value} value={type.value}>
+                            {type.label}
+                        </option>
+                    ))}
+                </select> 
+
+            {question.type !== 'text' && question.type !== 'data' && question.type !== 'altura'
+                && question.type !== 'peso' && question.type !== 'rg' && question.type !== 'cpf' && question.type !== 'dataHora' && (
+                    <div>
+                        {question.options.map((option, index) => (
+                            <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                                {question.type === 'radio' || question.type === 'checkbox' ?
+                                    <input
+                                        type={question.type === 'radio' ? 'radio' : question.type === 'checkbox' ? 'checkbox' : ""}
+                                        name={`question-${question.id}`} // Nome único para agrupar os radio buttons
+                                        value={option}
+                                    />
+                                    : ""
+
+                                }
+
+                                <input
+                                    type="text"
+                                    value={option}
+                                    onChange={(e) => handleOptionChange(index, e.target.value)}
+                                    placeholder={`Opção ${index + 1}`}
+                                    style={{ marginLeft: '8px' }}
+                                    className='tipdescQ'
+                                />
+
+                            </div>
+                        ))}
+                        <button onClick={addOption} className='addButt'>Adicionar Opção</button>
+                        <button onClick={removeLastOption} className='remButt'>Remover Última Opção</button>
+                    </div>
+                )}
 
             {question.type === 'text' && (
                 <div>
@@ -122,8 +175,88 @@ const FormField = ({ question, onChange, onDelete }) => {
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar Pergunta a este título</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover Última Pergunta</button>
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+
+                </div>
+
+            )}
+            {question.type === 'data' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                value={option}
+                                className='tipdescQ'
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                placeholder={`Pergunta ${index + 1}`}
+                                style={{ marginLeft: '8px' }}
+                            />
+                        </div>
+                    ))}
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+
+                </div>
+
+            )}
+             {question.type === 'cpf' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                value={option}
+                                className='tipdescQ'
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                placeholder={`Pergunta ${index + 1}`}
+                                style={{ marginLeft: '8px' }}
+                            />
+                        </div>
+                    ))}
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+
+                </div>
+
+            )}
+            {question.type === 'rg' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                value={option}
+                                className='tipdescQ'
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                placeholder={`Pergunta ${index + 1}`}
+                                style={{ marginLeft: '8px' }}
+                            />
+                        </div>
+                    ))}
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+
+                </div>
+
+            )}
+             {question.type === 'dataHora' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                value={option}
+                                className='tipdescQ'
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                placeholder={`Pergunta ${index + 1}`}
+                                style={{ marginLeft: '8px' }}
+                            />
+                        </div>
+                    ))}
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -142,8 +275,28 @@ const FormField = ({ question, onChange, onDelete }) => {
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar Pergunta a este título</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover Última Pergunta</button>
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+
+                </div>
+
+            )}
+            {question.type === 'peso' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                value={option}
+                                className='tipdescQ'
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                placeholder={`Pergunta ${index + 1}`}
+                                style={{ marginLeft: '8px' }}
+                            />
+                        </div>
+                    ))}
+                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
+                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
