@@ -52,5 +52,8 @@
 
 .diassemana{
     font-size: 16px;
-    margin: 5vw;
+}
+
+.form-semana{
+    display: grid;
 }

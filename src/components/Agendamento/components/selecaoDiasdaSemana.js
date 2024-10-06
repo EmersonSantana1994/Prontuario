@@ -8,7 +8,7 @@ const DiasDaSemana = () => {
   };
 
   return (
-    <div>
+    <div className='form-semana'>
       <h4>Escolha um dia da semana:</h4>
       <div>
         <label className='diassemana'>

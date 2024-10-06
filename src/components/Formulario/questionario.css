@@ -258,6 +258,7 @@ input[type="checkbox"] {
 
 
 
+
 .tipresp {
   border-radius: 5px;
   border: 1px solid #ced4da;
@@ -267,7 +268,7 @@ input[type="checkbox"] {
   font-weight: bold;
   margin-bottom: 20px;
   width: 40%;
-  height: 25px;
+  height: 35px;
 }
 
 .tipresp:focus {
@@ -358,8 +359,20 @@ input[type="checkbox"] {
   /* width: 100%; */
 }
 
+.react-datepicker {
+  font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+  font-size: 0.8rem;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #aeaeae;
+  border-radius: 0.3rem;
+  display: inline-block;
+  position: relative;
+  line-height: initial;
+}
+
 .height-label-data {
-  display: table;
+  display: inline-grid;
   /* flex-direction: column; */
   margin-bottom: 15px;
 }
@@ -434,7 +447,7 @@ input[type="checkbox"] {
 }
 
 .date-picker-input {
-  width: 110%;
+  width: 105%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -469,3 +482,515 @@ input[type="checkbox"] {
   font-size: 1rem; /* Tamanho da fonte do campo */
   width: 12%;
 }
+
+.error{
+  color: red;
+  margin-top: -9vh;
+  font-size: 1.5vw;
+
+}
+
+.h2-modal {
+     /* margin-bottom: 6vw; */
+     font-size: 2vw;
+     display: contents;
+}
+
+.input-modal {
+  margin-bottom: 10vh;
+  padding: 1vw;
+  width: 28vw;
+  border: 1px solid #000000;
+  border-radius: 1vw;
+  margin-top: 0vw;
+  height: 5vh;
+}
+
+.modal-pos{
+  display: grid;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 14vw;
+  margin-left: 7vw;
+  margin-top: 0vw;
+}
+
+.label-modal{
+  height: 30px;
+  border-radius: 8px;
+  margin-top: -26px;
+}
+
+.button-modal {
+  padding: 10px 20px; /* Espaçamento interno dos botões */
+  border: none; /* Sem borda */
+  border-radius: 4px; /* Cantos arredondados */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+.cancel {
+  background-color: #f44336; /* Cor de fundo do botão Cancelar */
+  color: white; /* Cor do texto do botão */
+  padding: 10px 20px; /* Espaçamento interno dos botões */
+  border: none; /* Sem borda */
+  border-radius: 4px; /* Cantos arredondados */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+.confirm {
+  background-color: #4CAF50; /* Cor de fundo do botão Confirmar */
+  color: white; /* Cor do texto do botão */
+  padding: 10px 20px; /* Espaçamento interno dos botões */
+  border: none; /* Sem borda */
+  border-radius: 4px; /* Cantos arredondados */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+.modal{
+  position: inherit;
+  inset: 0vw;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 13px;
+  outline: none;
+  padding: 2vh;
+  margin-top: 27vh;
+  margin-left: 38vw;
+  height: 16vw;
+  width: 35vw;
+  display: grid;
+}
+
+.fecharModal {
+  display: flex;
+  align-items: center;
+  margin-left: 30vw;
+  color: red;
+  cursor: pointer;
+}
+
+.modal-pos-sucess {
+  display: grid;
+    margin-left: 14vw;
+    margin-top: -17vh;
+}
+
+.msg {
+  font-size: 2.7vw;
+    margin-left: -144px;
+}
+
+.posicion{
+  display: flex;
+  align-items: center;
+  margin-left: 415px;
+  margin-top: -59px;
+  color: red;
+  cursor: pointer;
+  
+}
+
+.fechar{
+cursor: pointer;
+font-size: 24px; 
+color: 'red'
+}
+
+.posiItem{
+  display: 'flex';
+  align-items: 'center'
+}
+
+.posText{
+  flex: 1;
+   text-align: 'center'
+}
+
+.iconeModal{
+  font-size: '52px'; 
+  color: 'green'
+}
+
+
+.msg2 {
+  font-size: 0.999vw;
+  margin-left: -162px;
+}
+
+
+/* Adicionando responsividade para textos */
+@media (max-width: 608px) {
+  .msg {
+    font-size: 5.7vw;
+    margin-left: -91px;
+}
+.msg2 {
+  font-size: 2.1vw;
+  margin-left: -108px;
+}
+  .posicion{
+    display: flex;
+    align-items: center;
+    margin-left: 279px;
+    color: red;
+    margin-top: -62px;
+    cursor: pointer;
+  }
+  
+  .fechar{
+  cursor: pointer;
+  font-size: 24px; 
+  color: 'red'
+  }
+  
+  .posiItem{
+    display: 'flex';
+    align-items: 'center'
+  }
+  
+  .posText{
+    flex: 1;
+     text-align: 'center'
+  }
+  
+  .iconeModal{
+    font-size: '52px'; 
+    color: 'green'
+  }
+  .modal-pos-sucess {
+    display: grid;
+    margin-left: 25vw;
+    margin-top: -19vh;
+  }
+  .modal-pos {
+    display: grid;
+    margin-left: 9vw;
+    margin-top: -4vh;
+}
+.fecharModal {
+  display: flex;
+  align-items: center;
+  margin-left: 41vw;
+  color: red;
+  margin-top: -4vh;
+  cursor: pointer;
+  margin-left: 53vw;
+}
+
+  .h2-modal {
+    font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
+  }
+  .modal {
+    position: inherit;
+    inset: 0vw;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 13px;
+    outline: none;
+    padding: 2vh;
+    margin-top: 30vh;
+    margin-left: 15vw;
+    height: 43vw;
+    width: 65vw;
+    display: grid;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 48vw;
+  margin-left: -1vw;
+  margin-top: -6vw;
+}
+.input-modal {
+  margin-bottom: 10vh;
+  padding: 1vw;
+  width: 40vw;
+  border: 1px solid #000000;
+  border-radius: 1vw;
+  margin-top: 0vw;
+  height: 5vh;
+}
+}
+
+
+@media (max-width: 843px) and (min-width: 609px)  {
+  .msg {
+    font-size: 5.7vw;
+    margin-left: -131px;
+}
+.msg2 {
+  font-size: 2.1vw;
+  margin-left: -153px;
+}
+  .posicion{
+    display: flex;
+        align-items: center;
+        margin-left: 378px;
+        margin-top: -8vh;
+        color: red;
+        cursor: pointer;
+  }
+  
+  .fechar{
+  cursor: pointer;
+  font-size: 24px; 
+  color: 'red'
+  }
+  
+  .posiItem{
+    display: 'flex';
+    align-items: 'center'
+  }
+  
+  .posText{
+    flex: 1;
+     text-align: 'center'
+  }
+  
+  .iconeModal{
+    font-size: '52px'; 
+    color: 'green'
+  }
+  .modal-pos-sucess {
+    display: grid;
+    margin-left: 28vw;
+    margin-top: -20vh;
+  }
+  .fecharModal {
+    display: flex;
+    align-items: center;
+    margin-left: 41vw;
+    color: red;
+    margin-top: -9vh;
+    cursor: pointer;
+    margin-left: 53vw;
+}
+.modal-pos {
+  display: grid;
+  margin-left: 11vw;
+  margin-top: -17vh;
+}
+  .h2-modal {
+    font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
+  }
+  .modal {
+    position: inherit;
+    inset: 0vw;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 13px;
+    outline: none;
+    padding: 2vh;
+    margin-top: 27vh;
+    margin-left: 15vw;
+    height: 43vw;
+    width: 65vw;
+    display: grid;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 31vw;
+  margin-left: 4vw;
+  margin-top: -4vw;
+}
+.input-modal {
+  margin-bottom: 10vh;
+  padding: 1vw;
+  width: 40vw;
+  border: 1px solid #000000;
+  border-radius: 1vw;
+  margin-top: 0vw;
+  height: 5vh;
+}
+}
+
+@media (max-width: 978px) and (min-width: 844px)  {
+  .msg {
+    font-size: 5.7vw;
+    margin-left: -163px;
+}
+.msg2 {
+  font-size: 2.1vw;
+  margin-left: -184px;
+}
+  .posicion{
+    display: flex;
+        align-items: center;
+        margin-left: 480px;
+        margin-top: -21vh;
+        color: red;
+        cursor: pointer;
+  }
+  
+  .fechar{
+  cursor: pointer;
+  font-size: 24px; 
+  color: 'red'
+  }
+  
+  .posiItem{
+    display: 'flex';
+    align-items: 'center'
+  }
+  
+  .posText{
+    flex: 1;
+     text-align: 'center'
+  }
+  
+  .iconeModal{
+    font-size: '52px'; 
+    color: 'green'
+  }
+  .modal-pos-sucess {
+    display: grid;
+    margin-left: 25vw;
+    margin-top: -40vh;
+  }
+  .fecharModal {
+    display: flex;
+    align-items: center;
+    margin-left: 56vw;
+    color: red;
+    margin-top: -20vh;
+    cursor: pointer;
+}
+.modal-pos {
+  display: grid;
+  margin-left: 12vw;
+  margin-top: -32vh;
+}
+  .h2-modal {
+    font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
+  }
+  .modal {
+    position: inherit;
+    inset: 0vw;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 13px;
+    outline: none;
+    padding: 2vh;
+    margin-top: 27vh;
+    margin-left: 15vw;
+    height: 43vw;
+    width: 65vw;
+    display: grid;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 25vw;
+  margin-left: 7vw;
+  margin-top: -3vw;
+}
+.input-modal {
+  margin-bottom: 10vh;
+  padding: 1vw;
+  width: 40vw;
+  border: 1px solid #000000;
+  border-radius: 1vw;
+  margin-top: 0vw;
+  height: 5vh;
+}
+}
+
+@media (max-width: 1256px) and (min-width: 979px)  {
+  .msg {
+    font-size: 3.7vw;
+    margin-left: -117px;
+}
+  .posicion{
+    display: flex;
+        align-items: center;
+        margin-left: 435px;
+        color: red;
+        cursor: pointer;
+        margin-top: 12px;
+  }
+  
+  .fechar{
+  cursor: pointer;
+  font-size: 24px; 
+  color: 'red'
+  }
+  
+  .posiItem{
+    display: 'flex';
+    align-items: 'center'
+  }
+  
+  .posText{
+    flex: 1;
+     text-align: 'center'
+  }
+  .msg2 {
+    font-size: 1.7vw;
+    margin-left: -173px;
+}
+  
+  .iconeModal{
+    font-size: '52px'; 
+    color: 'green'
+  }
+  .modal-pos-sucess {
+    display: grid;
+    margin-left: 20vw;
+    margin-top: -4vh;
+  }
+  .fecharModal {
+    display: flex;
+    align-items: center;
+    margin-left: 45vw;
+    color: red;
+    margin-top: 0vh;
+    cursor: pointer;
+}
+  .h2-modal {
+    font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
+  }
+  .modal {
+    position: inherit;
+    inset: 0vw;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 13px;
+    outline: none;
+    padding: 2vh;
+    margin-top: 16vh;
+    margin-left: 34vw;
+    height: 23vw;
+    width: 53vw;
+    display: grid;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 25vw;
+  margin-left: 7vw;
+  margin-top: -2vw;
+}
+.input-modal {
+  margin-bottom: 10vh;
+  padding: 1vw;
+  width: 40vw;
+  border: 1px solid #000000;
+  border-radius: 1vw;
+  margin-top: 0vw;
+  height: 5vh;
+}
+}
+
+
+
+

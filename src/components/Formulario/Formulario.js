@@ -3,6 +3,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Question from './FormField';
 import Simulador from './SimuladorQuestionario';
 import './questionario.css';
+import { apiC } from "../../conexoes/api";
+import Modal from 'react-modal';
+import { FaTimes } from 'react-icons/fa'; // Ícone de X
 
 
 const Questionnaire = () => {
@@ -10,9 +13,35 @@ const Questionnaire = () => {
   const [simula, setSimula] = useState(false);
   const [error, setError] = useState('');
   const [duplicateTypes, setDuplicateTypes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [questionarioNome, setQuestionarioNome] = useState('');
+  const [isSucess, setIsSucess] = useState(false);
+  const [isFalhou, setIsFalhou] = useState(false);
+  const [isValidar, setIsValidar] = useState(false);
 
   const addQuestion = () => {
     setQuestions([...questions, { id: Date.now(), title: '', text: '', type: 'text', options: [] }]);
+  };
+
+  const handleSaveClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleInputChange = (e) => {
+    setQuestionarioNome(e.target.value);
+    if (e.target.value) {
+      setError('');
+    }
+  };
+
+  async function handleSave() {
+    if (!questionarioNome) {
+      setError('O nome do questionário é obrigatório!');
+      return;
+    }
+    setQuestionarioNome('');
+    await salvar()
+
   };
 
   const handleQuestionChange = (id, newQuestion) => {
@@ -36,6 +65,23 @@ const Questionnaire = () => {
   };
 
   useEffect(() => {
+    if(questions.length > 0){
+      if(questions[0].options.length > 0 ){
+        if(questions[0].options[0] != ''){
+          setIsValidar(true)
+        }else{
+          setIsValidar(false)
+        }
+      }else{
+        setIsValidar(false)
+      }
+    }else{
+      setIsValidar(false)
+    }
+
+  }, [questions]);
+
+  useEffect(() => {
     const typeCount = {};
 
     // Contar ocorrências de cada tipo
@@ -56,16 +102,43 @@ const Questionnaire = () => {
           return 'Escolha única';
         case 'dataHora':
           return 'Data e hora';
-          case 'text':
+        case 'text':
           return 'Resposta em texto';
-          case 'data':
+        case 'data':
           return 'Data';
         default:
           return elemento; // Retorna o elemento original se não houver correspondência
-      } });
+      }
+    });
 
     setDuplicateTypes(nomesAlterados);
   }, [questions]);
+
+  async function salvar() {
+
+    console.log("zzzzzzzzz", questionarioNome)
+    apiC.post("quationario/salvar", {
+      "questionario": questions,
+      "id_usuario": 1,
+      "questionarioNome": questionarioNome,
+    })
+      .then(response => {
+
+        if (response.status === 200) {
+
+          alert('questionario salvo')
+          setIsSucess(true)
+          setIsModalOpen(false)
+          setIsFalhou(false)
+        }
+      })
+      .catch((error) => {
+        alert('erro questionario não salvo')
+        setIsFalhou(true)
+        setIsModalOpen(false)
+        setIsSucess(false)
+      });
+  }
 
   return (
 
@@ -87,9 +160,7 @@ const Questionnaire = () => {
       {/* <h2>Modo de usar</h2>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p> */}
-      {!simula &&
-        <button onClick={addQuestion} className='buttQ'>Adicionar uma questão</button>
-      }
+
       {!simula ?
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="questions">
@@ -116,35 +187,115 @@ const Questionnaire = () => {
         : <Simulador questions={questions} />
       }
 
-     
-  <div>
-      {duplicateTypes.length > 0 && (
-        <div style={{ color: 'red' }}>
-          Não deve conter mais de um tipo de pergunta adicionado em títulos diferentes
-        </div>
-      ) }
-      {duplicateTypes.length > 0 && (
-        <div style={{ color: 'red' }}>
-          Tipos duplicados encontrados: {duplicateTypes.join(', ')}
-        </div>
-      ) }
-    </div>
 
-    {simula &&
-        <button onClick={addQuestion} className='buttQ'>Salvar</button>
+      <div>
+        {duplicateTypes.length > 0 && (
+          <div style={{ color: 'red' }}>
+            Não deve conter mais de um tipo de pergunta adicionado em títulos diferentes
+          </div>
+        )}
+        {duplicateTypes.length > 0 && (
+          <div style={{ color: 'red' }}>
+            Tipos duplicados encontrados: {duplicateTypes.join(', ')}
+          </div>
+        )}
+      </div>
+      {!simula &&
+        <button onClick={addQuestion} className='buttQ'>Adicionar uma questão</button>
       }
-      
+      {simula && !isValidar && 
+        <p style={{ color: 'red' }}>
+            A primeira questão deve ter uma pergunta ou opção descrita!
+          </p>
+      }
+      {simula && isValidar &&
+        <button onClick={handleSaveClick} className='buttQ'>Salvar</button>
+      }
+
       {!simula && duplicateTypes.length == 0 ?
         <button onClick={simulador} className='buttQ'>Simular questionario</button>
         :
         simula && duplicateTypes.length == 0 ?
-        <button onClick={simulador} className='buttQ'>Voltar</button>
-        :
-        ""
+          <button onClick={simulador} className='buttQ'>Voltar</button>
+          :
+          ""
       }
-      {console.log("como éeeeeeeee", duplicateTypes)}
 
+      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className='modal'>
+      <div className='fecharModal'>
+            <FaTimes
+              onClick={() => setIsModalOpen(false)}
+            />
+          </div>
+        <div className='modal-pos'>
+        
+          <p className='h2-modal'>Digite um nome ao questionário*</p>
+          <input
+            type="text"
+            value={questionarioNome}
+            onChange={handleInputChange}
+            className='input-modal'
+          />
+          {error && <p className='error' >{error}</p>}
+
+
+          <div className="buttons">
+            <button onClick={() => { handleSave() }} className='confirm'>
+              Confirmar
+            </button>
+            <button onClick={() => setIsModalOpen(false)} className='cancel'>Cancelar</button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={isSucess} onRequestClose={() => setIsSucess(false)} className='modal'>
+      <div className='posicion'>
+            <FaTimes
+              onClick={() => setIsSucess(false)}
+              className='fechar'
+            />
+          </div>
+        <div className='modal-pos-sucess'>
+         
+          <div className='posiItem'>
+
+            <h2 className='posText'>
+              <i className="fa fa-check-circle" aria-hidden="true" 
+              style={{ fontSize: '52px', color: 'green' }}></i>
+            </h2>
+
+          </div>
+          <p className='msg'>Questionário salvo!</p>
+          <h1 className='msg2'>Seu questionario se encontra no menu de Questionario!</h1>
+
+        </div>
+      </Modal>
+
+      <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
+      <div className='posicion'>
+            <FaTimes
+              onClick={() => setIsFalhou(false)}
+               className='fechar'
+            />
+          </div>
+          <div className='modal-pos-sucess'>
+          
+          <div className='posiItem'>
+
+          <h2 className='posText'>
+              <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
+            </h2>
+
+          </div>
+          <p className='msg'>Erro ao salvar!</p>
+          <h1 className='msg2'>Contate a equipe de suporte!</h1>
+
+
+  
+        </div>
+      </Modal>
     </div>
+    
   );
 };
 

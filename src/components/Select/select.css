@@ -595,7 +595,6 @@
     display: inline-block;
     position: relative;
     line-height: initial;
-    margin-left: -49px;
 }
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list {
     list-style: none;

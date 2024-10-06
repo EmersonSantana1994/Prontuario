@@ -24,3 +24,32 @@
     font-weight: 500;
 }
 
+.css-1eo601b-MuiDrawer-docked .MuiDrawer-paper {
+    box-shadow: 0rem 1.25rem 1.6875rem 0rem rgba(0, 0, 0, 0.05) !important;
+    border: none !important;
+    -webkit-transform: translateX(-20rem) !important;
+    -moz-transform: translateX(-20rem) !important;
+    -ms-transform: translateX(-20rem) !important;
+    transform: translateX(-20rem) !important;
+    -webkit-transition: -webkit-transform 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+}
+
+@media (min-width: 1200px) {
+    .css-1y936z7-MuiDrawer-docked .MuiDrawer-paper  {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        margin-bottom: 0 !important;
+        left: 0 !important;
+        width: 220px !important;
+        -webkit-transform: translateX(0) !important;
+        -moz-transform: translateX(0) !important;
+        -ms-transform: translateX(0) !important;
+        transform: translateX(0) !important;
+        -webkit-transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 
+        0ms, background-color 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+        transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, 
+        background-color 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+    }
+}
+
