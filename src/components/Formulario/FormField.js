@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './questionario.css';
+import './formulario.css';
+import { set } from 'date-fns';
 
 const FormField = ({ question, onChange, onDelete }) => {
+    const [questionAddedText, setQuestionAddedText] = useState(false);
+    const [questionAddedCpf, setQuestionAddedCpf] = useState(false);
+    const [questionAddedRg, setQuestionAddedRg] = useState(false);
+    const [questionAddedDataHora, setQuestionAddedDataHora] = useState(false);
+    const [questionAddedData, setQuestionAddedData] = useState(false);
+    const [questionAddedAltura, setQuestionAddedAltura] = useState(false);
+    const [questionAddedPeso, setQuestionAddedPeso] = useState(false);
+    const [text, setText] = useState(false);
+    const [data, setData] = useState(false);
+    const [cpf, setCpf] = useState(false);
+    const [rg, setRg] = useState(false);
+    const [dataHora, setDataHora] = useState(false);
+    const [altura, setAltura] = useState(false);
+    const [peso, setPeso] = useState(false);
     const [valida, setValida] = useState({
         tipo: [],
     });
@@ -14,6 +29,8 @@ const FormField = ({ question, onChange, onDelete }) => {
     const handleTextChange = (e) => {
         onChange(question.id, { ...question, text: e.target.value });
     };
+
+    console.log("quessss", question)
 
     const handleTypeChange = (e) => {
         const typo = { name: 'tipo' }
@@ -28,15 +45,47 @@ const FormField = ({ question, onChange, onDelete }) => {
         onChange(question.id, { ...question, options });
     };
 
-    const addOption = () => {
+    const addOption = (value) => {
         onChange(question.id, { ...question, options: [...question.options, ''] });
+        if(value == "1"){
+            setQuestionAddedText(true)
+        }else if(value == "2"){
+            setQuestionAddedData(true)
+        }else if(value == "3"){
+            setQuestionAddedCpf(true)
+        }else if(value == "4"){
+            setQuestionAddedRg(true)
+        }else if(value == "5"){
+            setQuestionAddedDataHora(true)
+        }else if(value == "6"){
+            setQuestionAddedAltura(true)
+        }else if(value == "7"){
+            setQuestionAddedPeso(true)
+        }
     };
 
-    const removeLastOption = () => {
+    const removeLastOption = (value) => {
+       
         if (question.options.length > 0) {
             const options = question.options.slice(0, -1);
             onChange(question.id, { ...question, options });
         }
+        if(value == "1"){
+            setQuestionAddedText(false)
+        }else if(value == "2"){
+            setQuestionAddedData(false)
+        }else if(value == "3"){
+            setQuestionAddedCpf(false)
+        }else if(value == "4"){
+            setQuestionAddedRg(false)
+        }else if(value == "5"){
+            setQuestionAddedDataHora(false)
+        }else if(value == "6"){
+            setQuestionAddedAltura(false)
+        }else if(value == "7"){
+            setQuestionAddedPeso(false)
+        }
+
     };
 
     const questionTypes = [
@@ -167,16 +216,20 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setText(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                   
+                    {!questionAddedText &&
+                        <button onClick={() => { addOption("1")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                       
+                    <button onClick={() => { removeLastOption("1")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -187,16 +240,18 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setData(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                    {!questionAddedData &&
+                        <button onClick={() => { addOption("2")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("2")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -207,16 +262,18 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setCpf(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                     {!questionAddedCpf &&
+                        <button onClick={() => { addOption("3")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("3")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -227,16 +284,18 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setRg(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                     {!questionAddedRg &&
+                        <button onClick={() => { addOption("4")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("4")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -247,16 +306,18 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setDataHora(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                     {!questionAddedDataHora &&
+                        <button onClick={() => { addOption("5")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("5")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -267,16 +328,18 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setAltura(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
+                    {!questionAddedAltura &&
+                        <button onClick={() => { addOption("6")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("6")}} className='remPergButt'>Remover última pergunta</button>
 
                 </div>
 
@@ -287,21 +350,24 @@ const FormField = ({ question, onChange, onDelete }) => {
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={option}
+                                value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                onChange={(e) => { handleTextChange(e); setPeso(e.target.value)}}
                                 placeholder={`Pergunta ${index + 1}`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
+                        
                     ))}
-                    <button onClick={addOption} className='addPergButt'>Adicionar pergunta</button>
-                    <button onClick={removeLastOption} className='remPergButt'>Remover última pergunta</button>
-
+                   {!questionAddedPeso &&
+                        <button onClick={() => { addOption("7")}} className='addPergButt'>Adicionar pergunta</button>
+                    }
+                    <button onClick={() => { removeLastOption("7")}} className='remPergButt'>Remover última pergunta</button>
+                    
                 </div>
 
             )}
-            <button onClick={() => onDelete(question.id)} className='remPergAllButt'>Deletar todas as perguntas deste título</button>
+            <button onClick={() => { onDelete(question.id)}} className='remPergAllButt'>Deletar todas as perguntas deste título</button>
             <div className="linha"></div>
         </div>
     );

@@ -483,6 +483,14 @@ input[type="checkbox"] {
   width: 12%;
 }
 
+.input-cpf-2 {
+  padding: 0.5rem; /* Adiciona um pouco de preenchimento ao campo */
+  border: 1px solid #ccc; /* Estilo da borda */
+  border-radius: 4px; /* Bordas arredondadas */
+  font-size: 1rem; /* Tamanho da fonte do campo */
+  width: 25%;
+}
+
 .error{
   color: red;
   margin-top: -9vh;

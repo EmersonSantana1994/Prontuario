@@ -33,8 +33,12 @@ import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import Prontuario from "../../layouts/profile/components/Prontuario/prontuario";
 // import Agendamento from "../../layouts/profile/components/Agendamento/agendamento";
 import Agendamento from "../../components/Agendamento/agendamento";
-import Formulario from "../../components/Formulario/Formulario";
-
+import Triagem from "../../components/Questionario/triagem";
+import Questionario from "../../components/Questionario/questionario";
+import Pesquisar from "../../components/Questionario/buscaPacliente";
+import Pacliente from "../../components/Questionario/pacliente";
+import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
+import PlaceholderCard from "examples/Cards/PlaceholderCard";
 
 
 // Overview page components
@@ -59,164 +63,136 @@ import { apiC } from "../../conexoes/api";
 import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { seguirAgendamento } from '../../actions/actions';
+import { seguirCliente } from '../../actions/actions';
 function Overview() {
-  const idUsuario = useSelector(state => state.reduxH.fixarUsuario);
-  const direcionar = useSelector(state => state.reduxH.rotaDirecionar);
-  const seguirAgend = useSelector(state => state.reduxH.seguirAgendamento);
-  const despacho = useDispatch();
-  const [itens, setItens] = useState([]);
-  let contador = 0
-  let itensVar = []
+    const idUsuario = useSelector(state => state.reduxH.fixarUsuario);
+    const direcionar = useSelector(state => state.reduxH.rotaDirecionar);
+    const seguirAgend = useSelector(state => state.reduxH.seguirAgendamento);
+    const seguirClienteRedux = useSelector(state => state.reduxH.seguirCliente);
+    const seguirPacliente = useSelector(state => state.reduxH.seguirPacliente);
+    const seguirTriagem = useSelector(state => state.reduxH.seguirTriagem);
+    const despacho = useDispatch();
+    const [itens, setItens] = useState([]);
+    let contador = 0
+    let itensVar = []
 
 
 
-  useEffect(() => {
+    useEffect(() => {
 
 
-  }, [direcionar])
+    }, [direcionar])
 
-  useEffect(() => {
+    useEffect(() => {
 
-    async function pesquisa() {
-      await apiC.post("/cadastro/buscarUsuario", {
-        "id": idUsuario,
-      })
-        .then(response => {
-          inserirData(response.data)
-        })
-        .catch((error) => {
-          alert("erro ao pesquisars")
-        })
+        async function pesquisa() {
+            await apiC.post("/cadastro/buscarUsuario", {
+                "id": idUsuario,
+            })
+                .then(response => {
+                    inserirData(response.data)
+                })
+                .catch((error) => {
+                    alert("erro ao pesquisars")
+                })
 
-    }
-    pesquisa()
-  }, [idUsuario])
-
-  async function voltar(params) {
-    despacho(seguirAgendamento(false))
-  }
-
-  function inserirData(data) {
-    itensVar = []
-    for (let i = 0; i < data.length; i++) {
-      if (contador == i) {
-        let k = i
-        for (let j = 0; j < data.length; j++) {
-          itensVar[k] = data[j]
-          k++
         }
-      }
+        pesquisa()
+    }, [idUsuario])
 
-      setItens(JSON.parse(JSON.stringify(itensVar)))
+    async function voltar(params) {
+        despacho(seguirAgendamento(false))
     }
-  }
+
+    function inserirData(data) {
+        itensVar = []
+        for (let i = 0; i < data.length; i++) {
+            if (contador == i) {
+                let k = i
+                for (let j = 0; j < data.length; j++) {
+                    itensVar[k] = data[j]
+                    k++
+                }
+            }
+
+            setItens(JSON.parse(JSON.stringify(itensVar)))
+        }
+    }
+
+    async function voltar(params) {
+        despacho(seguirCliente(false))
+    }
+
+    return (
+
+        <DashboardLayout>
+
+            <Header />
+            {!seguirClienteRedux && !seguirTriagem &&
+                <SoftBox mt={5} mb={3}>
+                    <Grid container spacing={3}>
+
+                        <Grid item xs={12} md={6} xl={16}>
+                            <Questionario></Questionario>
+                        </Grid>
+
+                    </Grid>
+                </SoftBox>
+            }
+
+            {seguirClienteRedux && !seguirTriagem &&
+                <SoftBox mb={3}>
+                    <Card>
+                        <SoftBox pt={2} px={2}>
+                            <SoftBox mb={0.5}>
+                                < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+                                    <i className="fas fa-arrow-circle-left fsi"  ></i>
+                                    <h3 className="voltar-titulo">
+                                        VOLTAR
+                                    </h3>
+                                </Button>
+                                <SoftTypography variant="h6" fontWeight="medium">
+                                    Pesquise o pacliente abaixo
+                                </SoftTypography>
+                            </SoftBox>
+                            <SoftBox mb={1}>
+                                <SoftTypography variant="button" fontWeight="regular" color="text">
+                                    para ser mais preciso, pesquise por cpf
+                                </SoftTypography>
+                            </SoftBox>
+                        </SoftBox>
+                        <SoftBox p={2}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} md={6} xl={6}>
+                                    <Pesquisar></Pesquisar>
+                                </Grid>
+                                <Grid item xs={12} md={6} xl={6}>
+                                    {seguirPacliente &&
+                                        <Pacliente></Pacliente>
+                                    }
+                                </Grid>
+                            </Grid>
+                        </SoftBox>
+                    </Card>
+                </SoftBox>
+            }
+
+            {seguirTriagem &&
+                <SoftBox mt={5} mb={3}>
+                    <Grid container spacing={3}>
+
+                        <Grid item xs={12} md={6} xl={16}>
+                            <Triagem></Triagem>
+                        </Grid>
+
+                    </Grid>
+                </SoftBox>
+            }
 
 
-  return (
-
-    <DashboardLayout>
-
-      <Header />
-      <SoftBox mt={5} mb={3}>
-        <Grid container spacing={3}>
-         
-        
-            <Grid item xs={12} md={6} xl={16}>
-              <Formulario></Formulario>
-            </Grid>
-
-          {/* <Grid item xs={12} xl={4}>
-            <ProfilesList title="conversations" profiles={profilesListData} />
-          </Grid> */}
-        </Grid>
-      </SoftBox>
-      {/* <SoftBox mb={3}>
-        <Card>
-          <SoftBox pt={2} px={2}>
-            <SoftBox mb={0.5}>
-              <SoftTypography variant="h6" fontWeight="medium">
-                Projects
-              </SoftTypography>
-            </SoftBox>
-            <SoftBox mb={1}>
-              <SoftTypography variant="button" fontWeight="regular" color="text">
-                Architects design houses
-              </SoftTypography>
-            </SoftBox>
-          </SoftBox>
-          <SoftBox p={2}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultProjectCard
-                  image={homeDecor1}
-                  label="project #2"
-                  title="modern"
-                  description="As Uber works through a huge amount of internal management turmoil."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "view project",
-                  }}
-                  authors={[
-                    { image: team1, name: "Elena Morison" },
-                    { image: team2, name: "Ryan Milly" },
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team4, name: "Peterson" },
-                  ]}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultProjectCard
-                  image={homeDecor2}
-                  label="project #1"
-                  title="scandinavian"
-                  description="Music is something that every person has his or her own specific opinion about."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "view project",
-                  }}
-                  authors={[
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team4, name: "Peterson" },
-                    { image: team1, name: "Elena Morison" },
-                    { image: team2, name: "Ryan Milly" },
-                  ]}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultProjectCard
-                  image={homeDecor3}
-                  label="project #3"
-                  title="minimalist"
-                  description="Different people have different taste, and various types of music."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "view project",
-                  }}
-                  authors={[
-                    { image: team4, name: "Peterson" },
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team2, name: "Ryan Milly" },
-                    { image: team1, name: "Elena Morison" },
-                  ]}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <PlaceholderCard title={{ variant: "h5", text: "New project" }} outlined />
-              </Grid>
-            </Grid>
-          </SoftBox>
-        </Card>
-      </SoftBox> */}
-
-      <Footer />
-    </DashboardLayout>
-  );
+            <Footer />
+        </DashboardLayout>
+    );
 }
 
 export default Overview;

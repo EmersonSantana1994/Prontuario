@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Question from './FormField';
 import Simulador from './SimuladorQuestionario';
-import './questionario.css';
+import './formulario.css';
 import { apiC } from "../../conexoes/api";
 import Modal from 'react-modal';
 import { FaTimes } from 'react-icons/fa'; // Ícone de X
@@ -161,6 +161,8 @@ const Questionnaire = () => {
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p> */}
 
+      {console.log("wwwwwwwwwww", questions)}
+
       {!simula ?
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="questions">
@@ -212,13 +214,14 @@ const Questionnaire = () => {
         <button onClick={handleSaveClick} className='buttQ'>Salvar</button>
       }
 
-      {!simula && duplicateTypes.length == 0 ?
+      {!simula  &&
         <button onClick={simulador} className='buttQ'>Simular questionario</button>
-        :
-        simula && duplicateTypes.length == 0 ?
+      }
+
+      {
+        simula && 
           <button onClick={simulador} className='buttQ'>Voltar</button>
-          :
-          ""
+         
       }
 
       <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className='modal'>

@@ -39,6 +39,7 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
+import CriarQuestionario from "layouts/criarQuestionario";
 import Questionario from "layouts/questionario";
 import VirtualReality from "layouts/virtual-reality";
 import RTL from "layouts/rtl";
@@ -115,6 +116,15 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Questionario",
+    key: "quest",
+    route: "/questionario",
+    icon: <Document size="12px" />,
+    component: <Questionario/>,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
     name: "Consulta",
     key: "sign-up",
     route: "/authentication/sign-up",
@@ -126,9 +136,9 @@ const routes = [
     type: "collapse",
     name: "Criar questionario",
     key: "quest",
-    route: "/questionario",
+    route: "/criarQuestionario",
     icon: <Document size="12px" />,
-    component: <Questionario />,
+    component: <CriarQuestionario />,
     noCollapse: true,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },

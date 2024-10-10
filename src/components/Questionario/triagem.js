@@ -1,56 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { apiC } from "../../conexoes/api";
 import PropTypes from 'prop-types';
 import { Button, Form, Row, Col, Collapse } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './formulario.css'; // Importando seu CSS
+import './../Formulario/formulario.css'; // Importando seu CSS
 import { ptBR } from 'date-fns/locale';
+import {seguirCliente, seguirPacliente, seguirTriagem } from '../../actions/actions';
 
-const SimuladorQuestionComponent = ({ questions }) => {
+
+
+export default function Triagem() {
+    const [questions, setQuestions] = useState([]);
     const [selectedOption, setSelectedOption] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedResposta, setSelectedResposta] = useState('');
     const [selectedOptionSel, setSelectedOptionSel] = useState('');
-    const [selectedRespostas, setSelectedRespostas] = useState(Array(questions.length).fill(''));
-    const [height, setHeight] = useState([170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170]); // Altura inicial em cm
-    const [peso, setPeso] = useState([50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]);
+    // const [selectedRespostas, setSelectedRespostas] = useState(Array(questions.length).fill(''));
+    const [selectedRespostas, setSelectedRespostas] = useState([]);
+    const [height, setHeight] = useState([170]); // Altura inicial em cm
+    const [peso, setPeso] = useState([50]);
     const [startDate, setStartDate] = useState([]);
     const [startDateH, setStartDateH] = useState([]);
     const [error, setError] = useState('');
     const [cpf, setCpf] = useState([]);
     const [rg, setRg] = useState([]);
+    const despacho = useDispatch();
+
+
+    const idQuestionarioo = useSelector(state => state.reduxH.idQuestionario);
+    const nomePaclientee = useSelector(state => state.reduxH.nomePacliente);
+
+
+    useEffect(() => {
+        async function listar(e) {
+            await apiC.post("/quationario/buscarPerguntas", {
+                "idQuestionario": idQuestionarioo,
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        setQuestions(response.data)
+                        // if (response.data.result.length == 0) {
+                        // } else {
+                        // }
+
+                    }
+                })
+                .catch((error) => {
+
+                    alert(error.response.data)
+
+                });
+        }
+        listar()
+
+    }, [])
 
     const handleChangeRg = (index, event) => {
         const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
         if (value.length <= 9) {
-          const formattedRg = formatRG(value);
-          const newRespostas = [...rg]; // Cria uma cópia do estado atual
-          newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
-          setRg(newRespostas);
+            const formattedRg = formatRG(value);
+            const newRespostas = [...rg]; // Cria uma cópia do estado atual
+            newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
+            setRg(newRespostas);
         }
-      };
+    };
 
-      const formatRG = (value) => {
+    const formatRG = (value) => {
         let formatted = '';
         if (value.length > 0) {
-          formatted += value.slice(0, 2); // Primeiro bloco: 00
+            formatted += value.slice(0, 2); // Primeiro bloco: 00
         }
         if (value.length > 2) {
-          formatted += '.' + value.slice(2, 5); // Segundo bloco: 000
+            formatted += '.' + value.slice(2, 5); // Segundo bloco: 000
         }
         if (value.length > 5) {
-          formatted += '.' + value.slice(5, 8); // Terceiro bloco: 000
+            formatted += '.' + value.slice(5, 8); // Terceiro bloco: 000
         }
         if (value.length > 8) {
-          formatted += '-' + value.slice(8, 9); // Dígito verificador: 0
+            formatted += '-' + value.slice(8, 9); // Dígito verificador: 0
         }
         return formatted;
-      };
+    };
 
-     
+
 
     const handleChangeCpf = (index, dado) => {
-        const  {value}  = dado;
+        const { value } = dado;
         // Remove tudo que não é número
         const onlyNumbers = value.replace(/\D/g, '');
 
@@ -60,9 +97,9 @@ const SimuladorQuestionComponent = ({ questions }) => {
             .replace(/(\d{3})(\d)/, '$1.$2')
             .replace(/(\d{3})(\d{2})$/, '$1-$2');
 
-            const newRespostas = [...cpf]; // Cria uma cópia do estado atual
-            newRespostas[index] = formattedCpf; // Atualiza a resposta para o índice correspondente
-            setCpf(newRespostas);
+        const newRespostas = [...cpf]; // Cria uma cópia do estado atual
+        newRespostas[index] = formattedCpf; // Atualiza a resposta para o índice correspondente
+        setCpf(newRespostas);
     };
 
     const validateCPF = (cpf) => {
@@ -127,15 +164,9 @@ const SimuladorQuestionComponent = ({ questions }) => {
         setSelectedRespostas(newRespostas); // Atualiza o estado com a nova array de respostas
     };
 
-    console.log("selectedRespostas", selectedRespostas )
-    
-
-    const handleChangeRa = (index, value) => {
-        const newRespostas = [...selectedOption]; // Cria uma cópia do estado atual
-        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
-        setSelectedOption(newRespostas); // Atualiza o estado com a nova array de respostas
+    const handleChange = (event) => {
+        setSelectedOption(event.target.value);
     };
-
 
     const handleChangeS = (event) => {
         setSelectedOptionSel(event.target.value);
@@ -148,16 +179,42 @@ const SimuladorQuestionComponent = ({ questions }) => {
         );
     };
 
+    const handleSaveClick = () => {
+
+console.log("selectedOption",selectedOption )
+console.log("selectedOptions",selectedOptions )
+console.log("selectedRespostas", selectedRespostas)
+console.log("height", height)
+console.log("peso", peso)
+console.log("startDate", startDate)
+console.log("startDateH",startDateH )
+console.log("cpf", cpf)
+console.log("rg", rg)
+      };
+
+      async function voltar() {
+        despacho(seguirTriagem(false))
+        despacho(seguirPacliente(false))
+        despacho(seguirCliente(true))
+    }
+
     return (
         <div>
-            {questions.map((question, indexQ) => {
+            < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+                                    <i className="fas fa-arrow-circle-left fsi"  ></i>
+                                    <h3 className="voltar-titulo">
+                                        VOLTAR
+                                    </h3>
+                                </Button>
+            <h2 className='nomePacliente'>{nomePaclientee}</h2>
+            {questions.map((question) => {
                 const { id, title, text, options, type } = question;
 
                 return (
                     <div key={id} style={{ marginBottom: '20px' }}>
 
                         {/* Exibe o título da pergunta */}
-                        {type !== 'altura' && type !== 'peso' && type !== 'cpf' && type !== 'rg' &&(
+                        {type !== 'altura' && type !== 'peso' && type !== 'cpf' && type !== 'rg' && (
                             <h3>{title}</h3>
                         )}
                         {type === 'altura' && (
@@ -166,7 +223,7 @@ const SimuladorQuestionComponent = ({ questions }) => {
                         {type === 'peso' && (
                             <h3>{"Peso"}</h3>
                         )}
-                         {type === 'cpf' && (
+                        {type === 'cpf' && (
                             <h3>{"CPF"}</h3>
                         )}
                         {type === 'rg' && (
@@ -284,9 +341,9 @@ const SimuladorQuestionComponent = ({ questions }) => {
                                             className='tipresp form-control'
                                             type='text'
                                             placeholder='Digite a sua resposta'
-                                            name={`desc-${indexQ}`}
-                                            value={selectedRespostas[indexQ] || ''} // Acesso às respostas se estiver usando um array
-                                            onChange={event => handleResposta(indexQ, event.target.value)}
+                                            name={`desc-${index}`}
+                                            value={selectedRespostas[index] || ''} // Acesso às respostas se estiver usando um array
+                                            onChange={event => handleResposta(index, event.target.value)}
                                         />
                                     </Form.Group>
                                 ))}
@@ -321,23 +378,23 @@ const SimuladorQuestionComponent = ({ questions }) => {
                                 ))} */}
                             </div>
                         )}
-                          {type === 'rg' && (
+                        {type === 'rg' && (
                             <div key={"rr"}>
                                 {options.map((option, index) => (
-                                   <form key={index} className='form-group-cpf'>
+                                    <form key={index} className='form-group-cpf'>
                                         <label htmlFor="rg" className='label-cpf' key={index}>
                                             {option}
                                             <input
-                                                 type="text"
-                                                 id="rg"
-                                                 value={rg[index]}
+                                                type="text"
+                                                id="rg"
+                                                value={rg[index]}
                                                 onChange={event => handleChangeRg(index, event)}
                                                 maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
                                                 placeholder="00.000.000-0"
                                                 className='input-cpf'
                                             />
                                         </label>
-                                   </form>
+                                    </form>
                                 ))}
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
@@ -347,13 +404,15 @@ const SimuladorQuestionComponent = ({ questions }) => {
                             </div>
                         )}
                         {type === 'radio' && (
+
                             <div className="radio-group">
                                 {options.map((option, index) => (
                                     <label key={index} className="radio-label">
                                         <input type="radio" name={title} value={option}
-                                            // checked={selectedOption[index] === option}
-                                            onChange={event => handleChangeRa(indexQ, event.target.value)} />
+                                            checked={selectedOption === option}
+                                            onChange={handleChange} />
                                         {option}
+
                                     </label>
                                 ))}
                             </div>
@@ -373,23 +432,28 @@ const SimuladorQuestionComponent = ({ questions }) => {
                                 ))}
                             </div>
                         )}
+                      
                     </div>
+                    
                 );
             })}
+              {
+                            <button onClick={handleSaveClick} className='buttQ'>Salvar</button>
+                        }
         </div>
     );
 };
 
-SimuladorQuestionComponent.propTypes = {
-    questions: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            options: PropTypes.arrayOf(PropTypes.string).isRequired,
-            text: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            type: PropTypes.oneOf(['select', 'radio', 'checkbox']).isRequired,
-        })
-    ).isRequired,
-};
+// SimuladorQuestionComponent.propTypes = {
+//     questions: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             id: PropTypes.number.isRequired,
+//             options: PropTypes.arrayOf(PropTypes.string).isRequired,
+//             text: PropTypes.string.isRequired,
+//             title: PropTypes.string.isRequired,
+//             type: PropTypes.oneOf(['select', 'radio', 'checkbox']).isRequired,
+//         })
+//     ).isRequired,
+// };
 
-export default SimuladorQuestionComponent;
+// export default SimuladorQuestionComponent;

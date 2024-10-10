@@ -1,0 +1,236 @@
+.corpadraoColuna{
+    color: #000;
+    font-size: 16px;
+  }
+  .iconeExpandiButton{
+    width: 34px;
+    margin-top: 9px;
+    border-radius: 9px;
+    background-color: #f1f0ff;
+  }
+  
+  .iconeExpandiButton:hover{
+    border: 3px solid #000000;
+      background: #beccee;
+      color: #000000;
+  }
+
+  .iconeExpandiButton{
+    width: 34px;
+    margin-top: 9px;
+    border-radius: 9px;
+    background-color: #f1f0ff;
+  }
+  
+  .iconeExpandiButton:hover{
+    border: 3px solid #000000;
+      background: #beccee;
+      color: #000000;
+  }
+  
+  .iconeExpandi{
+    width: 27px;
+    margin-top: 0px;
+    cursor: pointer;
+  }
+  .corpadrãoTabela{
+    color: #000;
+    font-size: 14px;
+  
+  }
+
+
+  
+.botaoBuscar{
+    width: 100px;
+      height: 28px;
+      border-radius: 15px;
+      color: white;
+      border-color: #000000;
+      background: rgb(52 74 177);
+      cursor: pointer;
+      margin: 10px;
+  }
+
+.teste{
+    width: 100px;
+      height: 28px;
+      border-radius: 15px;
+      color: white;
+      border-color: #000000;
+      background: rgb(52 74 177);
+      cursor: pointer;
+  }
+
+  .botaoBuscar:hover {
+    background: rgb(0,3,255);
+    background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
+  }
+
+  .tabela-coluna-primeira-header{/* CLASSE PADRAO PARA A PRIMEIRA COLUNA DAS TABELAS */
+    margin-left: 0.625em!important;
+  }
+
+  .campodepesquisa {
+    width: 222px;
+    height: 31px;
+    border-radius: 7px;
+    border: inset;
+    margin-left: 11px;
+}
+
+.iconeExpandi-2 {
+  width: 16px;
+  margin-top: 0px;
+  cursor: pointer;
+}
+
+.corpadraoNome {
+    color: #000;
+    font-size: 16px;
+    margin-left: -121px;
+}
+
+.corpadraoData {
+    color: #000;
+    font-size: 16px;
+    margin-left: -1px;
+}
+
+.botaoBuscar {
+    width: 85px;
+    height: 28px;
+    border-radius: 15px;
+    color: white;
+    border-color: #000000;
+    background: rgb(52 74 177);
+    cursor: pointer;
+    margin: 10px;
+}
+
+  .iconeBuscaModal{
+    margin-left: 367px;
+      margin-top: 155px;
+      color: #9aa0a6;
+  }
+
+
+  .tabela-coluna-primeira-header{/* CLASSE PADRAO PARA A PRIMEIRA COLUNA DAS TABELAS */
+    margin-left: 0.625em!important;
+  }
+
+  .expand-row-tabela-dispositivos-2 {
+    /* ALTERNA DE ACORDO COM UM ESTADO DE REDUX PARA TORNAR A EXPAND ROW RESPONSIVA */
+    margin-left: -0.58em;
+    max-width: 117.5vw !important;
+    -webkit-transition: 0.5s ease !important;
+    -moz-transition: 0.5s ease !important;
+    -o-transition: 0.5s ease !important;
+    transition: 0.5s ease !important;
+  }
+
+  .botao-expandir-row{
+    height: 1.875em!important;
+    width: 1.875em!important;
+    border-radius: 3.125em!important;
+    background-color: transparent!important;
+    border-color: transparent!important;
+    cursor: pointer;
+  }
+
+  /******************** TABELAS ********************/
+table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
+    border: 0!important;
+    border-collapse: separate!important;
+    border-spacing:0 0!important;
+  }
+  
+  td{/* REMOVE A BORDA BRANCA DO CORPO DAS TABELAS */
+    border: 0!important;
+  }
+  
+  th{/* REMOVE A BORDA BRANCA DO CABECALHO DAS TABELAS */
+    border: 0!important;
+  }
+  
+  .react-bootstrap-table thead tr th:first-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO SUPERIOR ESQUERDO DAS TABELAS */
+    border-top-left-radius: 0.4375em!important;
+  }
+  
+  .react-bootstrap-table thead tr th:last-child {/* CLASSE/ PADRAO PARA ARREDONDAR CANTO SUPERIOR DIREITO DAS TABELAS */
+    border-top-right-radius: 0.4375em!important;
+  }
+  
+  .react-bootstrap-table tr:last-child td:first-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO INFERIOR ESQUERDO DAS TABELAS */
+    border-bottom-left-radius: 0.4375em!important; 
+    border-style: solid!important;
+  }
+  
+  .react-bootstrap-table tr:last-child td:last-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO INFERIOR DIREITO DAS TABELAS */
+    border-bottom-right-radius: 0.4375em!important; 
+    border-style: solid!important;
+  }
+  
+  .tabela-coluna-primeira-header{/* CLASSE PADRAO PARA A PRIMEIRA COLUNA DAS TABELAS */
+    margin-left: 0.625em!important;
+  }
+  
+  .tabela-coluna-ultima-header .btn-toolbar{/* CLASSE PADRAO PARA A ULTIMA COLUNA DAS TABELAS */
+    display: flex!important;
+    justify-content: center!important;
+  }
+  
+  .table {
+    border-collapse: collapse !important;
+    width: 34% !important;
+    margin-bottom: 0em !important;
+}
+  
+  .tabela tr:nth-child(2n+1) {
+    background-color: rgb(243, 243, 243) !important;
+  }
+  
+  .react-bootstrap-table tr{/* REMOVE O ESPACO EM BRANCO QUE CERCA AS TABELAS */
+    white-space: nowrap!important;
+  }
+  
+  .react-bootstrap-table td{/* CLASS PADRAO PARA FORMATAR O ESPACO INTERNO DAS ROWS DAS TABELAS */
+    /* padding-top: -0.875em !important;
+    padding-left: -0.375em !important; */
+    vertical-align: middle !important;
+    text-align: initial !important;
+  }
+  
+  .react-bootstrap-table{/* REMOVE O ESPACO EM BRANCO QUE CERCA AS TABELAS */
+      overflow: scroll;
+      /* height: 396px; */
+      /* height: 99%!important; */
+  }
+
+  .nomePacliente{
+    margin: 10px;
+  }
+
+  .modalRegr {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    z-index: 1000; /* Z-index alto para sobrepor outros elementos */
+  }
+  
+  .modal-contentRegr {
+    background-color: white;
+    width: 200px;
+    padding: 20px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }

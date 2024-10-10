@@ -11,8 +11,52 @@ export const nomeConsultorio = (data) => ({
   payload: data,
 });
 
+export const idQuestionario = (data) => ({
+  type: "ID_QUESTIONARIO",
+  payload: data,
+});
+
+export const idPacliente = (data) => ({
+  type: "ID_PACLIENTE",
+  payload: data,
+});
+
+export const nomePacliente = (data) => ({
+  type: "NOME_PACLIENTE",
+  payload: data,
+});
+
 export const seguirAgendamento = (data) => ({
   type: "SEGUIR_AGENDAMENTO",
+  payload: data,
+});
+
+export const seguirCliente = (data) => ({
+  type: "SEGUIR_CLIENTE",
+  payload: data,
+});
+
+export const seguirTriagem = (data) => ({
+  type: "SEGUIR_TRIAGEM",
+  payload: data,
+});
+
+export const seguirPacliente = (data) => ({
+  type: "SEGUIR_PACLIENTE",
+  payload: data,
+});
+
+export const cpfRedux = (data) => ({
+  type: "CPF",
+  payload: data,
+});
+
+export const rgRedux = (data) => ({
+  type: "RG",
+  payload: data,
+});
+export const nomeRedux = (data) => ({
+  type: "NOME",
   payload: data,
 });
 

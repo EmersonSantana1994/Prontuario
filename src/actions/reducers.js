@@ -1,6 +1,6 @@
 // reducers/exampleReducer.js
 
-import { voltarProntuario } from './actions';
+import { idPacliente, idQuestionario, nomePacliente, seguirPacliente, voltarProntuario } from './actions';
 
 const initialState = {
   expandirNavegacao: true,
@@ -22,6 +22,15 @@ const initialState = {
   consultorio:false,
   seguirAgendamento:false,
   nomeConsultorio:false,
+  seguirCliente:false,
+  seguirPacliente:false,
+  cpfRedux:false,
+  rgRedux:false,
+  nomeRedux:false,
+  idQuestionario:false,
+  idPacliente:false,
+  seguirTriagem:false,
+  nomePacliente:false,
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -32,6 +41,42 @@ export const reduxH = (state = initialState, action) => {
             expandirNavegacao: action.payload
         }
     }
+    else if (action.type === 'SEGUIR_CLIENTE') {
+        return {
+            ...state, 
+            seguirCliente: action.payload
+        }
+    } 
+    else if (action.type === 'SEGUIR_TRIAGEM') {
+        return {
+            ...state, 
+            seguirTriagem: action.payload
+        }
+    } 
+    else if (action.type === 'SEGUIR_PACLIENTE') {
+        return {
+            ...state, 
+            seguirPacliente: action.payload
+        }
+    } 
+    else if (action.type === 'RG') {
+        return {
+            ...state, 
+            rgRedux: action.payload
+        }
+    } 
+    else if (action.type === 'CPF') {
+        return {
+            ...state, 
+            cpfRedux: action.payload
+        }
+    } 
+    else if (action.type === 'NOME') {
+        return {
+            ...state, 
+            nomeRedux: action.payload
+        }
+    } 
     else if (action.type === 'FIXAR_USUARIO') {
         return {
             ...state, 
@@ -53,6 +98,23 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             seguirAgendamento: action.payload
+        }
+    }else if (action.type === 'ID_QUESTIONARIO') {
+        return {
+            ...state, 
+            idQuestionario: action.payload
+        }
+    }
+    else if (action.type === 'ID_PACLIENTE') {
+        return {
+            ...state, 
+            idPacliente: action.payload
+        }
+    }
+    else if (action.type === 'NOME_PACLIENTE') {
+        return {
+            ...state, 
+            nomePacliente: action.payload
         }
     }
     else if (action.type === 'ROTA_DIRECIONAR') {
