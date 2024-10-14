@@ -6,6 +6,12 @@ export const consultorio = (data) => ({
   payload: data,
 });
 
+export const arrayText = (data) => ({
+  type: "ARRAY_TEXT",
+  payload: data,
+});
+
+
 export const nomeConsultorio = (data) => ({
   type: "NOME_CONSULTORIO",
   payload: data,

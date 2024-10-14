@@ -148,7 +148,7 @@
 .remPergAllButt {
   /* margin-top: 10px; */
   /* margin-right: 10px; */
-  width: 325px;
+  width: 170px;
   background-color: #d0132b;
   color: white;
   font-size: 16px;
@@ -183,7 +183,6 @@
 }
 
 .radio-group {
-  display: flex;
   flex-wrap: wrap;
   gap: 15px;
   /* Espaçamento entre os itens */
@@ -319,16 +318,11 @@ input[type="checkbox"] {
 .arrow-down {
   position: absolute;
   right: 10px;
-  /* Distância do lado direito */
-  top: 50%;
-  /* Alinhamento vertical */
+  top: 80%;
   transform: translateY(-50%);
   pointer-events: none;
-  /* Impede interação com a seta */
   font-size: 16px;
-  /* Tamanho da seta */
   color: #333;
-  /* Cor da seta */
 }
 
 .height-input-container {
@@ -997,6 +991,26 @@ color: 'red'
   margin-top: 0vw;
   height: 5vh;
 }
+}
+
+.radio-group {
+  margin: 20px 0;
+}
+
+.question {
+  margin-bottom: 10px;
+  width: 30vw;
+}
+
+.options-container {
+  display: flex;
+  flex-wrap: wrap; /* Para que as opções se ajustem em várias linhas, se necessário */
+}
+
+.radio-label {
+  margin-right: 20px; /* Espaço entre os labels */
+  display: flex;
+  align-items: center; /* Alinha o texto com o radio button */
 }
 
 

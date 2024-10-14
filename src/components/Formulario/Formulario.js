@@ -19,6 +19,7 @@ const Questionnaire = () => {
   const [isFalhou, setIsFalhou] = useState(false);
   const [isValidar, setIsValidar] = useState(false);
 
+
   const addQuestion = () => {
     setQuestions([...questions, { id: Date.now(), title: '', text: '', type: 'text', options: [] }]);
   };
@@ -66,7 +67,7 @@ const Questionnaire = () => {
 
   useEffect(() => {
     if(questions.length > 0){
-      if(questions[0].options.length > 0 ){
+      if(questions[0].text.length > 0 ){
         if(questions[0].options[0] != ''){
           setIsValidar(true)
         }else{
@@ -191,7 +192,7 @@ const Questionnaire = () => {
 
 
       <div>
-        {duplicateTypes.length > 0 && (
+        {/* {duplicateTypes.length > 0 && (
           <div style={{ color: 'red' }}>
             Não deve conter mais de um tipo de pergunta adicionado em títulos diferentes
           </div>
@@ -200,10 +201,10 @@ const Questionnaire = () => {
           <div style={{ color: 'red' }}>
             Tipos duplicados encontrados: {duplicateTypes.join(', ')}
           </div>
-        )}
+        )} */}
       </div>
       {!simula &&
-        <button onClick={addQuestion} className='buttQ'>Adicionar uma questão</button>
+        <button onClick={addQuestion} className='buttQ'>Adicionar pergunta</button>
       }
       {simula && !isValidar && 
         <p style={{ color: 'red' }}>

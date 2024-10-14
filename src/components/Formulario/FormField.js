@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './formulario.css';
 import { set } from 'date-fns';
+import {arrayText } from '../../actions/actions';
+import { useSelector, useDispatch } from 'react-redux';
 
 const FormField = ({ question, onChange, onDelete }) => {
+    const despacho = useDispatch();
     const [questionAddedText, setQuestionAddedText] = useState(false);
     const [questionAddedCpf, setQuestionAddedCpf] = useState(false);
     const [questionAddedRg, setQuestionAddedRg] = useState(false);
@@ -11,16 +14,19 @@ const FormField = ({ question, onChange, onDelete }) => {
     const [questionAddedData, setQuestionAddedData] = useState(false);
     const [questionAddedAltura, setQuestionAddedAltura] = useState(false);
     const [questionAddedPeso, setQuestionAddedPeso] = useState(false);
-    const [text, setText] = useState(false);
-    const [data, setData] = useState(false);
-    const [cpf, setCpf] = useState(false);
-    const [rg, setRg] = useState(false);
-    const [dataHora, setDataHora] = useState(false);
-    const [altura, setAltura] = useState(false);
-    const [peso, setPeso] = useState(false);
+    const textArray = useSelector(state => state.reduxH.arrayText);
+    const [text, setText] = useState(['']);
+    const [data, setData] = useState(['']);
+    const [cpf, setCpf] = useState(['']);
+    const [rg, setRg] = useState(['']);
+    const [dataHora, setDataHora] = useState(['']);
+    const [altura, setAltura] = useState(['']);
+    const [peso, setPeso] = useState(['']);
     const [valida, setValida] = useState({
         tipo: [],
     });
+
+
 
     const handleTitleChange = (e) => {
         onChange(question.id, { ...question, title: e.target.value });
@@ -88,6 +94,8 @@ const FormField = ({ question, onChange, onDelete }) => {
 
     };
 
+    console.log("texttttttttt", text)
+
     const questionTypes = [
         { value: 'text', label: 'Resposta em texto' },
         { value: 'select', label: 'Campo de seleção' },
@@ -102,7 +110,55 @@ const FormField = ({ question, onChange, onDelete }) => {
     ];
 
     const filteredQuestionTypes = questionTypes.filter(type => type.value !== valida.tipo[0]);
+
+    const handleDataChange = (index, value) => {
+        const newRespostas = [...data]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setData(newRespostas);
+    };
+
+    const handleDataHoraChange = (index, value) => {
+        const newRespostas = [...dataHora]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setDataHora(newRespostas);
+    };
+
+    const handleAlturaChange = (index, value) => {
+        const newRespostas = [...altura]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setAltura(newRespostas);
+    };
+
+    const handlePesoChange = (index, value) => {
+        const newRespostas = [...peso]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setPeso(newRespostas);
+    };
+
+    const handleCpfCharge = (index, value) => {
+        const newRespostas = [...cpf]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setCpf(newRespostas); // Atualiza o estado com a nova array de respostas
+    };
+
+    const handleRgCharge = (index, value) => {
+        const newRespostas = [...rg]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setRg(newRespostas); // Atualiza o estado com a nova array de respostas
+    };
+
     
+    const handleChangeText = (index, value) => {
+        const newRespostas = [...textArray]; // Cria uma cópia do estado atual
+        const newRespostas2 = [...textArray]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostas2[index] = value; // Atualiza a resposta para o índice correspondente
+        despacho(arrayText(newRespostas))
+        setText(newRespostas); // Atualiza o estado com a nova array de respostas
+    };
+
+    console.log("cococooc text", text)
+    console.log("cococooc textArray", textArray)
 
     const availableTypes = questionTypes
         .filter(type => !questionTypes.includes(type.value));
@@ -212,162 +268,135 @@ const FormField = ({ question, onChange, onDelete }) => {
 
             {question.type === 'text' && (
                 <div>
-                    {question.options.map((option, index) => (
+                   
+                    {text.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setText(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleChangeText(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
                    
-                    {!questionAddedText &&
-                        <button onClick={() => { addOption("1")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                       
-                    <button onClick={() => { removeLastOption("1")}} className='remPergButt'>Remover última pergunta</button>
+                ))}
+              
 
                 </div>
 
             )}
             {question.type === 'data' && (
                 <div>
-                    {question.options.map((option, index) => (
+               {data.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setData(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleDataChange(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
-                    {!questionAddedData &&
-                        <button onClick={() => { addOption("2")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("2")}} className='remPergButt'>Remover última pergunta</button>
-
+                
+            ))}
                 </div>
 
             )}
              {question.type === 'cpf' && (
                 <div>
-                    {question.options.map((option, index) => (
+                {cpf.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setCpf(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleCpfCharge(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
-                     {!questionAddedCpf &&
-                        <button onClick={() => { addOption("3")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("3")}} className='remPergButt'>Remover última pergunta</button>
-
+                  
+                ))}
                 </div>
 
             )}
             {question.type === 'rg' && (
                 <div>
-                    {question.options.map((option, index) => (
+              {rg.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setRg(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleRgCharge(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
-                     {!questionAddedRg &&
-                        <button onClick={() => { addOption("4")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("4")}} className='remPergButt'>Remover última pergunta</button>
-
+                  
+                ))}
                 </div>
 
             )}
              {question.type === 'dataHora' && (
                 <div>
-                    {question.options.map((option, index) => (
+                  {dataHora.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setDataHora(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleDataHoraChange(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
-                     {!questionAddedDataHora &&
-                        <button onClick={() => { addOption("5")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("5")}} className='remPergButt'>Remover última pergunta</button>
-
+                 ))}
+                   
                 </div>
 
             )}
             {question.type === 'altura' && (
                 <div>
-                    {question.options.map((option, index) => (
+                    {altura.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setAltura(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handleAlturaChange(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
-                    ))}
-                    {!questionAddedAltura &&
-                        <button onClick={() => { addOption("6")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("6")}} className='remPergButt'>Remover última pergunta</button>
-
+                   ))}
+                   
                 </div>
 
             )}
             {question.type === 'peso' && (
                 <div>
-                    {question.options.map((option, index) => (
+                    {peso.map((value, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={question.text}
                                 className='tipdescQ'
-                                onChange={(e) => { handleTextChange(e); setPeso(e.target.value)}}
-                                placeholder={`Pergunta ${index + 1}`}
+                                onChange={(e) => { handleTextChange(e); handlePesoChange(index, e.target.value)}}
+                                placeholder={`Pergunta`}
                                 style={{ marginLeft: '8px' }}
                             />
                         </div>
                         
                     ))}
-                   {!questionAddedPeso &&
-                        <button onClick={() => { addOption("7")}} className='addPergButt'>Adicionar pergunta</button>
-                    }
-                    <button onClick={() => { removeLastOption("7")}} className='remPergButt'>Remover última pergunta</button>
-                    
+                 
                 </div>
 
             )}
-            <button onClick={() => { onDelete(question.id)}} className='remPergAllButt'>Deletar todas as perguntas deste título</button>
+            <button onClick={() => { onDelete(question.id)}} className='remPergAllButt'>Deletar pergunta</button>
             <div className="linha"></div>
         </div>
     );

@@ -31,6 +31,7 @@ const initialState = {
   idPacliente:false,
   seguirTriagem:false,
   nomePacliente:false,
+  arrayText:[''],
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -87,6 +88,12 @@ export const reduxH = (state = initialState, action) => {
             ...state, 
             consultorio: action.payload
         }
+    }
+        else if (action.type === 'ARRAY_TEXT') {
+            return {
+                ...state, 
+                arrayText: action.payload
+            }
         
     }else if (action.type === 'NOME_CONSULTORIO') {
         return {

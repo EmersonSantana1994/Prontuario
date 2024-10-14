@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiC } from "../../conexoes/api";
 import PropTypes from 'prop-types';
@@ -9,13 +9,15 @@ import './../Formulario/formulario.css'; // Importando seu CSS
 import { ptBR } from 'date-fns/locale';
 import {seguirCliente, seguirPacliente, seguirTriagem } from '../../actions/actions';
 
+
+
 export default function Triagem() {
     const [questions, setQuestions] = useState([]);
-    const despacho = useDispatch();
     const [selectedOption, setSelectedOption] = useState([]);
-    const [selectedOptions, setSelectedOptions] = useState(['']);
+    const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedResposta, setSelectedResposta] = useState('');
-    const [selectedOptionSel, setSelectedOptionSel] = useState([]);
+    const [selectedOptionSel, setSelectedOptionSel] = useState('');
+    // const [selectedRespostas, setSelectedRespostas] = useState(Array(questions.length).fill(''));
     const [selectedRespostas, setSelectedRespostas] = useState([]);
     const [height, setHeight] = useState([170]); // Altura inicial em cm
     const [peso, setPeso] = useState([50]);
@@ -24,22 +26,13 @@ export default function Triagem() {
     const [error, setError] = useState('');
     const [cpf, setCpf] = useState([]);
     const [rg, setRg] = useState([]);
-    
+    const despacho = useDispatch();
+
 
     const idQuestionarioo = useSelector(state => state.reduxH.idQuestionario);
     const nomePaclientee = useSelector(state => state.reduxH.nomePacliente);
 
-    const handleChangeRg = (index, event) => {
-        const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-        if (value.length <= 9) {
-            const formattedRg = formatRG(value);
-            const newRespostas = [...rg]; // Cria uma cópia do estado atual
-            newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
-            setRg(newRespostas);
-        }
-    };
 
-    
     useEffect(() => {
         async function listar(e) {
             await apiC.post("/quationario/buscarPerguntas", {
@@ -63,6 +56,16 @@ export default function Triagem() {
         listar()
 
     }, [])
+
+    const handleChangeRg = (index, event) => {
+        const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        if (value.length <= 9) {
+            const formattedRg = formatRG(value);
+            const newRespostas = [...rg]; // Cria uma cópia do estado atual
+            newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
+            setRg(newRespostas);
+        }
+    };
 
     const formatRG = (value) => {
         let formatted = '';
@@ -142,25 +145,6 @@ export default function Triagem() {
         }
     };
 
-    const handleSaveClick = () => {
-
-        console.log("selectedOption",selectedOption )
-        console.log("selectedOptions",selectedOptions )
-        console.log("selectedOptionSel",selectedOptionSel )
-        console.log("selectedRespostas", selectedRespostas)
-        console.log("height", height)
-        console.log("peso", peso)
-        console.log("startDate", startDate)
-        console.log("startDateH",startDateH )
-        console.log("cpf", cpf)
-        console.log("rg", rg)
-              };
-
-              async function voltar() {
-                despacho(seguirTriagem(false))
-                despacho(seguirPacliente(false))
-                despacho(seguirCliente(true))
-            }
 
     const handleHeightChange = (index, value) => {
         const newRespostas = [...height]; // Cria uma cópia do estado atual
@@ -180,28 +164,12 @@ export default function Triagem() {
         setSelectedRespostas(newRespostas); // Atualiza o estado com a nova array de respostas
     };
 
-
-
-
-    const handleChangeRa = (index, value) => {
-        const newRespostas = [...selectedOption]; // Cria uma cópia do estado atual
-        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
-        setSelectedOption(newRespostas); // Atualiza o estado com a nova array de respostas
+    const handleChange = (event) => {
+        setSelectedOption(event.target.value);
     };
 
-    const handleChangeChec = (index, event) => {
-        const newRespostas = [...selectedOptions]; // Cria uma cópia do estado atual
-        const value = event.target.value;
-        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
-        setSelectedOptions(newRespostas);
-    };
-
-
-    const handleChangeS = (index, value) => {
-        console.log("ppppppp33", value )
-        const newRespostas = [...selectedOptionSel]; // Cria uma cópia do estado atual
-        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
-        setSelectedOptionSel(newRespostas); // Atualiza o estado com a nova array de respostas
+    const handleChangeS = (event) => {
+        setSelectedOptionSel(event.target.value);
     };
 
     const handleChangeC = (event) => {
@@ -211,16 +179,35 @@ export default function Triagem() {
         );
     };
 
+    const handleSaveClick = () => {
+
+console.log("selectedOption",selectedOption )
+console.log("selectedOptions",selectedOptions )
+console.log("selectedRespostas", selectedRespostas)
+console.log("height", height)
+console.log("peso", peso)
+console.log("startDate", startDate)
+console.log("startDateH",startDateH )
+console.log("cpf", cpf)
+console.log("rg", rg)
+      };
+
+      async function voltar() {
+        despacho(seguirTriagem(false))
+        despacho(seguirPacliente(false))
+        despacho(seguirCliente(true))
+    }
+
     return (
         <div>
-              < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+            < Button className="voltar-consultorio" onClick={e => { voltar() }}>
                                     <i className="fas fa-arrow-circle-left fsi"  ></i>
                                     <h3 className="voltar-titulo">
                                         VOLTAR
                                     </h3>
                                 </Button>
-                                <h2 className='nomePacliente'>{nomePaclientee}</h2>
-            {questions.map((question, indexQ) => {
+            <h2 className='nomePacliente'>{nomePaclientee}</h2>
+            {questions.map((question) => {
                 const { id, title, text, options, type } = question;
 
                 return (
@@ -243,99 +230,96 @@ export default function Triagem() {
                             <h3>{"RG"}</h3>
                         )}
                         {/* Exibe o texto da pergunta */}
-                        {/* <p>{text}</p> */}
+                        <p>{text}</p>
                         {/* Renderiza opções com base no tipo */}
                         {type === 'dataHora' && (
                             <div className="date-picker-container" key={"dddd"}>
-
-                                <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
-                                    {text}
-                                    <DatePicker
-                                        showTimeSelect
-                                        selected={startDateH[indexQ]}
-                                        onChange={event => handleChangeDH(indexQ, event)}
-                                        onInputChange={handleInputChange}
-                                        dateFormat="Pp"
-                                        placeholderText="Selecione ou digite uma data"
-                                        locale={ptBR}
-                                        className="date-picker-input"
-                                    // popperClassName="custom-datepicker"
-                                    />
-                                    {error && <span className="error-message">{error}</span>}
-                                </label>
-
+                                {options.map((option, index) => (
+                                    <label htmlFor={`date-picker-${index}`} className="height-label-data" key={index}>
+                                        {option}
+                                        <DatePicker
+                                            showTimeSelect
+                                            selected={startDateH[index]}
+                                            onChange={event => handleChangeDH(index, event)}
+                                            onInputChange={handleInputChange}
+                                            dateFormat="Pp"
+                                            placeholderText="Selecione ou digite uma data"
+                                            locale={ptBR}
+                                            className="date-picker-input"
+                                        // popperClassName="custom-datepicker"
+                                        />
+                                        {error && <span className="error-message">{error}</span>}
+                                    </label>
+                                ))}
 
                             </div>
                         )}
                         {type === 'data' && (
                             <div className="date-picker-container" key={"ddd"}>
-
-                                <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
-                                    {text}
-                                    <DatePicker
-                                        selected={startDate[indexQ]}
-                                        onChange={event => handleChangeD(indexQ, event)}
-                                        onInputChange={handleInputChange}
-                                        dateFormat="dd/MM/yyyy"
-                                        placeholderText="Selecione ou digite uma data"
-                                        locale={ptBR}
-                                        className="date-picker-input"
-                                    // popperClassName="custom-datepicker"
-                                    />
-                                    {error && <span className="error-message">{error}</span>}
-                                </label>
-
+                                {options.map((option, index) => (
+                                    <label htmlFor={`date-picker-${index}`} className="height-label-data" key={index}>
+                                        {option}
+                                        <DatePicker
+                                            selected={startDate[index]}
+                                            onChange={event => handleChangeD(index, event)}
+                                            onInputChange={handleInputChange}
+                                            dateFormat="dd/MM/yyyy"
+                                            placeholderText="Selecione ou digite uma data"
+                                            locale={ptBR}
+                                            className="date-picker-input"
+                                        // popperClassName="custom-datepicker"
+                                        />
+                                        {error && <span className="error-message">{error}</span>}
+                                    </label>
+                                ))}
 
                             </div>
                         )}
                         {type === 'altura' && (
                             <div className="height-input-container" key={"dd"}>
-
-                                <label htmlFor="height" className="height-label" key={"dd"}>
-                                    {text}
-                                    <input
-                                        type="range"
-                                        id="height"
-                                        min="50"
-                                        max="250"
-                                        value={height[indexQ]}
-                                        onChange={event => handleHeightChange(indexQ, event.target.value)}
-                                        className="height-range"
-                                        key={"dd"}
-                                    />
-                                    <div className="height-display" key={"dd"}>{height[indexQ]} cm</div>
-                                </label>
-
+                                {options.map((option, index) => (
+                                    <label htmlFor="height" className="height-label" key={"dd"}>
+                                        {option}
+                                        <input
+                                            type="range"
+                                            id="height"
+                                            min="50"
+                                            max="250"
+                                            value={height[index]}
+                                            onChange={event => handleHeightChange(index, event.target.value)}
+                                            className="height-range"
+                                            key={"dd"}
+                                        />
+                                        <div className="height-display" key={"dd"}>{height[index]} cm</div>
+                                    </label>
+                                ))}
 
                             </div>
                         )}
-                 
                         {type === 'peso' && (
                             <div className="height-input-container" key={"pp"}>
-
-                                <label htmlFor="height" className="height-label" key={"pp"}>
-                                    {text}
-                                    <input
-                                        type="range"
-                                        id="height"
-                                        min="1"
-                                        max="200"
-                                        value={peso[indexQ]}
-                                        onChange={event => handlePesoChange(indexQ, event.target.value)}
-                                        className="height-range"
-                                        key={"dd"}
-                                    />
-                                    <div className="height-display" key={"pp"}>{peso[indexQ]} kg</div>
-                                </label>
-
+                                {options.map((option, index) => (
+                                    <label htmlFor="height" className="height-label" key={"pp"}>
+                                        {option}
+                                        <input
+                                            type="range"
+                                            id="height"
+                                            min="1"
+                                            max="200"
+                                            value={peso[index]}
+                                            onChange={event => handlePesoChange(index, event.target.value)}
+                                            className="height-range"
+                                            key={"dd"}
+                                        />
+                                        <div className="height-display" key={"pp"}>{peso[index]} kg</div>
+                                    </label>
+                                ))}
 
                             </div>
                         )}
                         {type === 'select' && (
                             <div className="select-container">
-                                <p className="question">{text}</p>
-                                <select className="custom-select" value={selectedOptionSel[indexQ]} onChange={event => handleChangeS(indexQ, event.target.value)}>
-                                
+                                <select className="custom-select" value={selectedOptionSel} onChange={handleChangeS}>
                                     <option value="" disabled>
                                         Selecione uma opção
                                     </option>
@@ -350,19 +334,19 @@ export default function Triagem() {
                         )}
                         {type === 'text' && (
                             <div>
-
-                                <Form.Group key={indexQ} className="form-group">
-                                    <Form.Label className="form-label">{text}</Form.Label>
-                                    <Form.Control
-                                        className='tipresp form-control'
-                                        type='text'
-                                        placeholder='Digite a sua resposta'
-                                        name={`desc-${indexQ}`}
-                                        value={selectedRespostas[indexQ] || ''} // Acesso às respostas se estiver usando um array
-                                        onChange={event => handleResposta(indexQ, event.target.value)}
-                                    />
-                                </Form.Group>
-
+                                {options.map((option, index) => (
+                                    <Form.Group key={index} className="form-group">
+                                        <Form.Label className="form-label">{option}</Form.Label>
+                                        <Form.Control
+                                            className='tipresp form-control'
+                                            type='text'
+                                            placeholder='Digite a sua resposta'
+                                            name={`desc-${index}`}
+                                            value={selectedRespostas[index] || ''} // Acesso às respostas se estiver usando um array
+                                            onChange={event => handleResposta(index, event.target.value)}
+                                        />
+                                    </Form.Group>
+                                ))}
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -372,21 +356,21 @@ export default function Triagem() {
                         )}
                         {type === 'cpf' && (
                             <div key={"bb"}>
-
-                                <form onSubmit={handleSubmit} key={indexQ} className='form-group-cpf'>
-                                    <label className='label-cpf'>
-                                        {text}
-                                        <input
-                                            type="text"
-                                            value={cpf[indexQ]}
-                                            onChange={event => handleChangeCpf(indexQ, event.target)}
-                                            maxLength="14" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
-                                            placeholder="000.000.000-00"
-                                            className='input-cpf'
-                                        />
-                                    </label>
-                                </form>
-
+                                {options.map((option, index) => (
+                                    <form onSubmit={handleSubmit} key={index} className='form-group-cpf'>
+                                        <label className='label-cpf'>
+                                            {option}
+                                            <input
+                                                type="text"
+                                                value={cpf[index]}
+                                                onChange={event => handleChangeCpf(index, event.target)}
+                                                maxLength="14" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
+                                                placeholder="000.000.000-00"
+                                                className='input-cpf'
+                                            />
+                                        </label>
+                                    </form>
+                                ))}
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -396,22 +380,22 @@ export default function Triagem() {
                         )}
                         {type === 'rg' && (
                             <div key={"rr"}>
-
-                                <form key={indexQ} className='form-group-cpf'>
-                                    <label htmlFor="rg" className='label-cpf' key={indexQ}>
-                                        {text}
-                                        <input
-                                            type="text"
-                                            id="rg"
-                                            value={rg[indexQ]}
-                                            onChange={event => handleChangeRg(indexQ, event)}
-                                            maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
-                                            placeholder="00.000.000-0"
-                                            className='input-cpf'
-                                        />
-                                    </label>
-                                </form>
-
+                                {options.map((option, index) => (
+                                    <form key={index} className='form-group-cpf'>
+                                        <label htmlFor="rg" className='label-cpf' key={index}>
+                                            {option}
+                                            <input
+                                                type="text"
+                                                id="rg"
+                                                value={rg[index]}
+                                                onChange={event => handleChangeRg(index, event)}
+                                                maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
+                                                placeholder="00.000.000-0"
+                                                className='input-cpf'
+                                            />
+                                        </label>
+                                    </form>
+                                ))}
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -420,37 +404,27 @@ export default function Triagem() {
                             </div>
                         )}
                         {type === 'radio' && (
+
                             <div className="radio-group">
-                                <p className="question">{text}</p>
-                                <div className="options-container">
-                                    {options.map((option, index) => (
-                                        <label key={index} className="radio-label">
-                                            <input
-                                                type="radio"
-                                                name={title}
-                                                value={option}
-                                                checked={selectedOption[indexQ] === option}
-                                                onChange={event => handleChangeRa(indexQ, event.target.value)}
-                                            />
-                                            {option}
-                                        </label>
-                                    ))}
-                                </div>
+                                {options.map((option, index) => (
+                                    <label key={index} className="radio-label">
+                                        <input type="radio" name={title} value={option}
+                                            checked={selectedOption === option}
+                                            onChange={handleChange} />
+                                        {option}
+
+                                    </label>
+                                ))}
                             </div>
                         )}
                         {type === 'checkbox' && (
                             <div>
-                                <p className="question">{text}</p>
-           
-                               
                                 {options.map((option, index) => (
-                                    
                                     <label key={index} className="checkbox-label">
-                                 
                                         <input
                                             type="checkbox"
-                                            value={`${option}-${indexQ}`}
-                                            checked={selectedOptions.includes(`${option}-${indexQ}`)}
+                                            value={option}
+                                            checked={selectedOptions.includes(option)}
                                             onChange={handleChangeC}
                                         />
                                         {option}
@@ -458,11 +432,12 @@ export default function Triagem() {
                                 ))}
                             </div>
                         )}
+                      
                     </div>
+                    
                 );
             })}
-            
-            {
+              {
                             <button onClick={handleSaveClick} className='buttQ'>Salvar</button>
                         }
         </div>

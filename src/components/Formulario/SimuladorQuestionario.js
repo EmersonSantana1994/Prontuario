@@ -10,7 +10,7 @@ const SimuladorQuestionComponent = ({ questions }) => {
     const [selectedOption, setSelectedOption] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedResposta, setSelectedResposta] = useState('');
-    const [selectedOptionSel, setSelectedOptionSel] = useState('');
+    const [selectedOptionSel, setSelectedOptionSel] = useState([]);
     const [selectedRespostas, setSelectedRespostas] = useState(Array(questions.length).fill(''));
     const [height, setHeight] = useState([170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170, 170]); // Altura inicial em cm
     const [peso, setPeso] = useState([50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]);
@@ -23,34 +23,34 @@ const SimuladorQuestionComponent = ({ questions }) => {
     const handleChangeRg = (index, event) => {
         const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
         if (value.length <= 9) {
-          const formattedRg = formatRG(value);
-          const newRespostas = [...rg]; // Cria uma cópia do estado atual
-          newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
-          setRg(newRespostas);
+            const formattedRg = formatRG(value);
+            const newRespostas = [...rg]; // Cria uma cópia do estado atual
+            newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
+            setRg(newRespostas);
         }
-      };
+    };
 
-      const formatRG = (value) => {
+    const formatRG = (value) => {
         let formatted = '';
         if (value.length > 0) {
-          formatted += value.slice(0, 2); // Primeiro bloco: 00
+            formatted += value.slice(0, 2); // Primeiro bloco: 00
         }
         if (value.length > 2) {
-          formatted += '.' + value.slice(2, 5); // Segundo bloco: 000
+            formatted += '.' + value.slice(2, 5); // Segundo bloco: 000
         }
         if (value.length > 5) {
-          formatted += '.' + value.slice(5, 8); // Terceiro bloco: 000
+            formatted += '.' + value.slice(5, 8); // Terceiro bloco: 000
         }
         if (value.length > 8) {
-          formatted += '-' + value.slice(8, 9); // Dígito verificador: 0
+            formatted += '-' + value.slice(8, 9); // Dígito verificador: 0
         }
         return formatted;
-      };
+    };
 
-     
+
 
     const handleChangeCpf = (index, dado) => {
-        const  {value}  = dado;
+        const { value } = dado;
         // Remove tudo que não é número
         const onlyNumbers = value.replace(/\D/g, '');
 
@@ -60,9 +60,9 @@ const SimuladorQuestionComponent = ({ questions }) => {
             .replace(/(\d{3})(\d)/, '$1.$2')
             .replace(/(\d{3})(\d{2})$/, '$1-$2');
 
-            const newRespostas = [...cpf]; // Cria uma cópia do estado atual
-            newRespostas[index] = formattedCpf; // Atualiza a resposta para o índice correspondente
-            setCpf(newRespostas);
+        const newRespostas = [...cpf]; // Cria uma cópia do estado atual
+        newRespostas[index] = formattedCpf; // Atualiza a resposta para o índice correspondente
+        setCpf(newRespostas);
     };
 
     const validateCPF = (cpf) => {
@@ -127,8 +127,8 @@ const SimuladorQuestionComponent = ({ questions }) => {
         setSelectedRespostas(newRespostas); // Atualiza o estado com a nova array de respostas
     };
 
-    console.log("selectedRespostas", selectedRespostas )
-    
+    console.log("selectedRespostas", selectedRespostas)
+
 
     const handleChangeRa = (index, value) => {
         const newRespostas = [...selectedOption]; // Cria uma cópia do estado atual
@@ -137,8 +137,10 @@ const SimuladorQuestionComponent = ({ questions }) => {
     };
 
 
-    const handleChangeS = (event) => {
-        setSelectedOptionSel(event.target.value);
+    const handleChangeS = (index, value) => {
+        const newRespostas = [...selectedOptionSel]; // Cria uma cópia do estado atual
+        newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        setSelectedOptionSel(newRespostas); // Atualiza o estado com a nova array de respostas
     };
 
     const handleChangeC = (event) => {
@@ -150,6 +152,7 @@ const SimuladorQuestionComponent = ({ questions }) => {
 
     return (
         <div>
+            {console.log("lllllll", questions)}
             {questions.map((question, indexQ) => {
                 const { id, title, text, options, type } = question;
 
@@ -157,7 +160,7 @@ const SimuladorQuestionComponent = ({ questions }) => {
                     <div key={id} style={{ marginBottom: '20px' }}>
 
                         {/* Exibe o título da pergunta */}
-                        {type !== 'altura' && type !== 'peso' && type !== 'cpf' && type !== 'rg' &&(
+                        {type !== 'altura' && type !== 'peso' && type !== 'cpf' && type !== 'rg' && (
                             <h3>{title}</h3>
                         )}
                         {type === 'altura' && (
@@ -166,103 +169,104 @@ const SimuladorQuestionComponent = ({ questions }) => {
                         {type === 'peso' && (
                             <h3>{"Peso"}</h3>
                         )}
-                         {type === 'cpf' && (
+                        {type === 'cpf' && (
                             <h3>{"CPF"}</h3>
                         )}
                         {type === 'rg' && (
                             <h3>{"RG"}</h3>
                         )}
                         {/* Exibe o texto da pergunta */}
-                        <p>{text}</p>
+                        {/* <p>{text}</p> */}
                         {/* Renderiza opções com base no tipo */}
                         {type === 'dataHora' && (
                             <div className="date-picker-container" key={"dddd"}>
-                                {options.map((option, index) => (
-                                    <label htmlFor={`date-picker-${index}`} className="height-label-data" key={index}>
-                                        {option}
-                                        <DatePicker
-                                            showTimeSelect
-                                            selected={startDateH[index]}
-                                            onChange={event => handleChangeDH(index, event)}
-                                            onInputChange={handleInputChange}
-                                            dateFormat="Pp"
-                                            placeholderText="Selecione ou digite uma data"
-                                            locale={ptBR}
-                                            className="date-picker-input"
-                                        // popperClassName="custom-datepicker"
-                                        />
-                                        {error && <span className="error-message">{error}</span>}
-                                    </label>
-                                ))}
+
+                                <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
+                                    {text}
+                                    <DatePicker
+                                        showTimeSelect
+                                        selected={startDateH[indexQ]}
+                                        onChange={event => handleChangeDH(indexQ, event)}
+                                        onInputChange={handleInputChange}
+                                        dateFormat="Pp"
+                                        placeholderText="Selecione ou digite uma data"
+                                        locale={ptBR}
+                                        className="date-picker-input"
+                                    // popperClassName="custom-datepicker"
+                                    />
+                                    {error && <span className="error-message">{error}</span>}
+                                </label>
+
 
                             </div>
                         )}
                         {type === 'data' && (
                             <div className="date-picker-container" key={"ddd"}>
-                                {options.map((option, index) => (
-                                    <label htmlFor={`date-picker-${index}`} className="height-label-data" key={index}>
-                                        {option}
-                                        <DatePicker
-                                            selected={startDate[index]}
-                                            onChange={event => handleChangeD(index, event)}
-                                            onInputChange={handleInputChange}
-                                            dateFormat="dd/MM/yyyy"
-                                            placeholderText="Selecione ou digite uma data"
-                                            locale={ptBR}
-                                            className="date-picker-input"
-                                        // popperClassName="custom-datepicker"
-                                        />
-                                        {error && <span className="error-message">{error}</span>}
-                                    </label>
-                                ))}
+
+                                <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
+                                    {text}
+                                    <DatePicker
+                                        selected={startDate[indexQ]}
+                                        onChange={event => handleChangeD(indexQ, event)}
+                                        onInputChange={handleInputChange}
+                                        dateFormat="dd/MM/yyyy"
+                                        placeholderText="Selecione ou digite uma data"
+                                        locale={ptBR}
+                                        className="date-picker-input"
+                                    // popperClassName="custom-datepicker"
+                                    />
+                                    {error && <span className="error-message">{error}</span>}
+                                </label>
+
 
                             </div>
                         )}
                         {type === 'altura' && (
                             <div className="height-input-container" key={"dd"}>
-                                {options.map((option, index) => (
-                                    <label htmlFor="height" className="height-label" key={"dd"}>
-                                        {option}
-                                        <input
-                                            type="range"
-                                            id="height"
-                                            min="50"
-                                            max="250"
-                                            value={height[index]}
-                                            onChange={event => handleHeightChange(index, event.target.value)}
-                                            className="height-range"
-                                            key={"dd"}
-                                        />
-                                        <div className="height-display" key={"dd"}>{height[index]} cm</div>
-                                    </label>
-                                ))}
+
+                                <label htmlFor="height" className="height-label" key={"dd"}>
+                                    {text}
+                                    <input
+                                        type="range"
+                                        id="height"
+                                        min="50"
+                                        max="250"
+                                        value={height[indexQ]}
+                                        onChange={event => handleHeightChange(indexQ, event.target.value)}
+                                        className="height-range"
+                                        key={"dd"}
+                                    />
+                                    <div className="height-display" key={"dd"}>{height[indexQ]} cm</div>
+                                </label>
+
 
                             </div>
                         )}
                         {type === 'peso' && (
                             <div className="height-input-container" key={"pp"}>
-                                {options.map((option, index) => (
-                                    <label htmlFor="height" className="height-label" key={"pp"}>
-                                        {option}
-                                        <input
-                                            type="range"
-                                            id="height"
-                                            min="1"
-                                            max="200"
-                                            value={peso[index]}
-                                            onChange={event => handlePesoChange(index, event.target.value)}
-                                            className="height-range"
-                                            key={"dd"}
-                                        />
-                                        <div className="height-display" key={"pp"}>{peso[index]} kg</div>
-                                    </label>
-                                ))}
+
+                                <label htmlFor="height" className="height-label" key={"pp"}>
+                                    {text}
+                                    <input
+                                        type="range"
+                                        id="height"
+                                        min="1"
+                                        max="200"
+                                        value={peso[indexQ]}
+                                        onChange={event => handlePesoChange(indexQ, event.target.value)}
+                                        className="height-range"
+                                        key={"dd"}
+                                    />
+                                    <div className="height-display" key={"pp"}>{peso[indexQ]} kg</div>
+                                </label>
+
 
                             </div>
                         )}
                         {type === 'select' && (
                             <div className="select-container">
-                                <select className="custom-select" value={selectedOptionSel} onChange={handleChangeS}>
+                                <p className="question">{text}</p>
+                                <select className="custom-select" value={selectedOptionSel[indexQ]} onChange={handleChangeS}>
                                     <option value="" disabled>
                                         Selecione uma opção
                                     </option>
@@ -277,19 +281,19 @@ const SimuladorQuestionComponent = ({ questions }) => {
                         )}
                         {type === 'text' && (
                             <div>
-                                {options.map((option, index) => (
-                                    <Form.Group key={index} className="form-group">
-                                        <Form.Label className="form-label">{option}</Form.Label>
-                                        <Form.Control
-                                            className='tipresp form-control'
-                                            type='text'
-                                            placeholder='Digite a sua resposta'
-                                            name={`desc-${indexQ}`}
-                                            value={selectedRespostas[indexQ] || ''} // Acesso às respostas se estiver usando um array
-                                            onChange={event => handleResposta(indexQ, event.target.value)}
-                                        />
-                                    </Form.Group>
-                                ))}
+
+                                <Form.Group key={indexQ} className="form-group">
+                                    <Form.Label className="form-label">{text}</Form.Label>
+                                    <Form.Control
+                                        className='tipresp form-control'
+                                        type='text'
+                                        placeholder='Digite a sua resposta'
+                                        name={`desc-${indexQ}`}
+                                        value={selectedRespostas[indexQ] || ''} // Acesso às respostas se estiver usando um array
+                                        onChange={event => handleResposta(indexQ, event.target.value)}
+                                    />
+                                </Form.Group>
+
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -299,21 +303,21 @@ const SimuladorQuestionComponent = ({ questions }) => {
                         )}
                         {type === 'cpf' && (
                             <div key={"bb"}>
-                                {options.map((option, index) => (
-                                    <form onSubmit={handleSubmit} key={index} className='form-group-cpf'>
-                                        <label className='label-cpf'>
-                                            {option}
-                                            <input
-                                                type="text"
-                                                value={cpf[index]}
-                                                onChange={event => handleChangeCpf(index, event.target)}
-                                                maxLength="14" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
-                                                placeholder="000.000.000-00"
-                                                className='input-cpf'
-                                            />
-                                        </label>
-                                    </form>
-                                ))}
+
+                                <form onSubmit={handleSubmit} key={indexQ} className='form-group-cpf'>
+                                    <label className='label-cpf'>
+                                        {text}
+                                        <input
+                                            type="text"
+                                            value={cpf[indexQ]}
+                                            onChange={event => handleChangeCpf(indexQ, event.target)}
+                                            maxLength="14" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
+                                            placeholder="000.000.000-00"
+                                            className='input-cpf'
+                                        />
+                                    </label>
+                                </form>
+
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -321,24 +325,24 @@ const SimuladorQuestionComponent = ({ questions }) => {
                                 ))} */}
                             </div>
                         )}
-                          {type === 'rg' && (
+                        {type === 'rg' && (
                             <div key={"rr"}>
-                                {options.map((option, index) => (
-                                   <form key={index} className='form-group-cpf'>
-                                        <label htmlFor="rg" className='label-cpf' key={index}>
-                                            {option}
-                                            <input
-                                                 type="text"
-                                                 id="rg"
-                                                 value={rg[index]}
-                                                onChange={event => handleChangeRg(index, event)}
-                                                maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
-                                                placeholder="00.000.000-0"
-                                                className='input-cpf'
-                                            />
-                                        </label>
-                                   </form>
-                                ))}
+
+                                <form key={indexQ} className='form-group-cpf'>
+                                    <label htmlFor="rg" className='label-cpf' key={indexQ}>
+                                        {text}
+                                        <input
+                                            type="text"
+                                            id="rg"
+                                            value={rg[indexQ]}
+                                            onChange={event => handleChangeRg(indexQ, event)}
+                                            maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
+                                            placeholder="00.000.000-0"
+                                            className='input-cpf'
+                                        />
+                                    </label>
+                                </form>
+
                                 {/* {options.map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -348,18 +352,26 @@ const SimuladorQuestionComponent = ({ questions }) => {
                         )}
                         {type === 'radio' && (
                             <div className="radio-group">
-                                {options.map((option, index) => (
-                                    <label key={index} className="radio-label">
-                                        <input type="radio" name={title} value={option}
-                                            // checked={selectedOption[index] === option}
-                                            onChange={event => handleChangeRa(indexQ, event.target.value)} />
-                                        {option}
-                                    </label>
-                                ))}
+                                <p className="question">{text}</p>
+                                <div className="options-container">
+                                    {options.map((option, index) => (
+                                        <label key={index} className="radio-label">
+                                            <input
+                                                type="radio"
+                                                name={title}
+                                                value={option}
+                                                checked={selectedOption[indexQ] === option}
+                                                onChange={event => handleChangeRa(indexQ, event.target.value)}
+                                            />
+                                            {option}
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
                         )}
                         {type === 'checkbox' && (
                             <div>
+                                <p className="question">{text}</p>
                                 {options.map((option, index) => (
                                     <label key={index} className="checkbox-label">
                                         <input
