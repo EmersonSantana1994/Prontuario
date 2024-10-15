@@ -38,7 +38,7 @@ export default function Pacliente() {
     const cpf = useSelector(state => state.reduxH.cpfRedux);
     const rg = useSelector(state => state.reduxH.rgRedux);
     const nome = useSelector(state => state.reduxH.nomeRedux);
-    const idQuestionarioo = useSelector(state => state.reduxH.idPacliente);
+    
 
 
 

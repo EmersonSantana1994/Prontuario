@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiC } from "../../conexoes/api";
 import PropTypes from 'prop-types';
@@ -7,7 +7,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './../Formulario/formulario.css'; // Importando seu CSS
 import { ptBR } from 'date-fns/locale';
-import {seguirCliente, seguirPacliente, seguirTriagem } from '../../actions/actions';
+import { seguirCliente, seguirPacliente, seguirTriagem } from '../../actions/actions';
+import { format, parseISO } from 'date-fns';
 
 export default function Triagem() {
     const [questions, setQuestions] = useState([]);
@@ -17,29 +18,44 @@ export default function Triagem() {
     const [selectedResposta, setSelectedResposta] = useState('');
     const [selectedOptionSel, setSelectedOptionSel] = useState([]);
     const [selectedRespostas, setSelectedRespostas] = useState([]);
-    const [height, setHeight] = useState([170]); // Altura inicial em cm
-    const [peso, setPeso] = useState([50]);
+    const [height, setHeight] = useState([]); // Altura inicial em cm
+    const [peso, setPeso] = useState([]);
     const [startDate, setStartDate] = useState([]);
     const [startDateH, setStartDateH] = useState([]);
     const [error, setError] = useState('');
     const [cpf, setCpf] = useState([]);
     const [rg, setRg] = useState([]);
-    
+
+    const [selectedOptionId, setSelectedOptionId] = useState([]);
+    const [selectedOptionsId, setSelectedOptionsId] = useState([]);
+    const [selectedOptionSelId, setSelectedOptionSelId] = useState([]);
+    const [selectedRespostasId, setSelectedRespostasId] = useState([]);
+    const [heightId, setHeightId] = useState([]); // Altura inicial em cm
+    const [pesoId, setPesoId] = useState([]);
+    const [startDateId, setStartDateId] = useState([]);
+    const [startDateHId, setStartDateHId] = useState([]);
+    const [cpfId, setCpfId] = useState([]);
+    const [rgId, setRgId] = useState([]);
 
     const idQuestionarioo = useSelector(state => state.reduxH.idQuestionario);
     const nomePaclientee = useSelector(state => state.reduxH.nomePacliente);
+    const idPaclientee = useSelector(state => state.reduxH.idPacliente);
 
-    const handleChangeRg = (index, event) => {
+
+    const handleChangeRg = (index, event, id) => {
         const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
         if (value.length <= 9) {
             const formattedRg = formatRG(value);
             const newRespostas = [...rg]; // Cria uma cópia do estado atual
+            const newRespostasId = [...rgId]; // Cria uma cópia do estado atual
             newRespostas[index] = formattedRg; // Atualiza a resposta para o índice correspondente
+            newRespostasId[index] = id; // Cria uma cópia do estado atual
             setRg(newRespostas);
+            setRgId(newRespostasId);
         }
     };
 
-    
+
     useEffect(() => {
         async function listar(e) {
             await apiC.post("/quationario/buscarPerguntas", {
@@ -83,7 +99,7 @@ export default function Triagem() {
 
 
 
-    const handleChangeCpf = (index, dado) => {
+    const handleChangeCpf = (index, dado, id) => {
         const { value } = dado;
         // Remove tudo que não é número
         const onlyNumbers = value.replace(/\D/g, '');
@@ -95,8 +111,11 @@ export default function Triagem() {
             .replace(/(\d{3})(\d{2})$/, '$1-$2');
 
         const newRespostas = [...cpf]; // Cria uma cópia do estado atual
+        const newRespostasId = [...cpfId]; // Cria uma cópia do estado atual
         newRespostas[index] = formattedCpf; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setCpf(newRespostas);
+        setCpfId(newRespostasId);
     };
 
     const validateCPF = (cpf) => {
@@ -114,19 +133,25 @@ export default function Triagem() {
         }
     };
 
-    const handleChangeD = (index, date) => {
+    const handleChangeD = (index, date, id) => {
         if (date) {
             const newRespostas = [...startDate]; // Cria uma cópia do estado atual
+            const newRespostasId = [...startDateId]; // Cria uma cópia do estado atual
             newRespostas[index] = date; // Atualiza a resposta para o índice correspondente
+            newRespostasId[index] = id; // Cria uma cópia do estado atual
             setStartDate(newRespostas);
+            setStartDateId(newRespostasId);
             setError(''); // Limpa o erro se a data é válida
         }
     };
-    const handleChangeDH = (index, date) => {
+    const handleChangeDH = (index, date, id) => {
         if (date) {
             const newRespostas = [...startDateH]; // Cria uma cópia do estado atual
+            const newRespostasId = [...startDateHId]; // Cria uma cópia do estado atual
             newRespostas[index] = date; // Atualiza a resposta para o índice correspondente
+            newRespostasId[index] = id; // Cria uma cópia do estado atual
             setStartDateH(newRespostas);
+            setStartDateHId(newRespostasId);
             setError(''); // Limpa o erro se a data é válida
         }
     };
@@ -142,86 +167,341 @@ export default function Triagem() {
         }
     };
 
-    const handleSaveClick = () => {
+    function converterDataHoraISOParaMySQL(dataISO) {
+        console.log("vvvvvv", dataISO)
+        const jsDate = new Date(dataISO);
+        return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
+    }
 
-        console.log("selectedOption",selectedOption )
-        console.log("selectedOptions",selectedOptions )
-        console.log("selectedOptionSel",selectedOptionSel )
-        console.log("selectedRespostas", selectedRespostas)
-        console.log("height", height)
-        console.log("peso", peso)
-        console.log("startDate", startDate)
-        console.log("startDateH",startDateH )
-        console.log("cpf", cpf)
-        console.log("rg", rg)
-              };
+    function converterDataISOParaMySQL(dataISO) {
+        console.log("vvvvvv", dataISO)
+        const jsDate = new Date(dataISO);
+        return format(jsDate, 'yyyy-MM-dd');
+    }
 
-              async function voltar() {
-                despacho(seguirTriagem(false))
-                despacho(seguirPacliente(false))
-                despacho(seguirCliente(true))
+    async function formatArrayData(array) {
+        let newArray = [];
+        let newArrayFormat = [];
+
+        if (array.some(value => value !== undefined)) {
+            newArray = array
+                .filter(value => value !== undefined) // Remove os valores undefined
+        }
+
+        if (newArray.length > 0) {
+            for (let j = 0; j < newArray.length; j++) {
+                newArrayFormat.push(converterDataISOParaMySQL(newArray[j]))
             }
+            return newArrayFormat
+        } else {
+            return newArray
+        }
 
-    const handleHeightChange = (index, value) => {
+    }
+
+    async function formatArrayDataHora(array) {
+        let newArray = [];
+        let newArrayFormat = [];
+
+        if (array.some(value => value !== undefined)) {
+            newArray = array
+                .filter(value => value !== undefined) // Remove os valores undefined
+        }
+
+        if (newArray.length > 0) {
+            for (let j = 0; j < newArray.length; j++) {
+                newArrayFormat.push(converterDataHoraISOParaMySQL(newArray[j]))
+            }
+            return newArrayFormat
+        } else {
+            return newArray
+        }
+
+    }
+
+    async function formatArray(array) {
+        let newArray = [];
+
+        if (array.some(value => value !== undefined)) {
+            newArray = array
+                .filter(value => value !== undefined) // Remove os valores undefined
+        }
+
+        return newArray
+
+
+    }
+
+    async function formatArrayMult(array) {
+
+        let newArray = []
+        console.log("uuuuu2222", array )
+        if (array.length > 0) {
+            // Remover o valor na posição 0
+            const modifiedArray  = array.slice(1);
+
+            // Objeto para armazenar arrays por posição
+            const result = [];
+
+            // Iterar pelos itens restantes
+            modifiedArray.forEach(item => {
+                const position = item.split('-')[1]; // Pega a posição após o '-'
+                
+                // Verifica se a posição é um número, caso contrário, ignora
+                if (!isNaN(position)) {
+                    if (!result[position]) {
+                        result[position] = []; // Se não existir, cria um novo subarray
+                    }
+                    
+                    // Adiciona o item ao subarray correspondente
+                    result[position].push(item);
+                }
+            });
+
+            // Exibir resultados
+            newArray =  result 
+        }
+     
+        return newArray;
+
+    }
+
+    async function formatArrayAltura(array) {
+
+        let newArray = [];
+
+        if (array.some(value => value !== undefined)) {
+            newArray = array
+                .filter(value => value !== undefined) // Remove os valores undefined
+                .map(value => `${value} cm`); // Adiciona "cm" aos valores restantes
+        }
+        return newArray
+    }
+
+    async function formatArrayPeso(array) {
+
+        let newArray = [];
+
+        if (array.some(value => value !== undefined)) {
+            newArray = array
+                .filter(value => value !== undefined) // Remove os valores undefined
+                .map(value => `${value} km`); // Adiciona "cm" aos valores restantes
+        }
+
+
+        return newArray
+    }
+
+    async function handleSaveClick () {
+
+        let formatSelectedOption = [];
+        let formatSelectedOptionIdPergunta = [];
+        formatSelectedOption = await formatArray(selectedOption);
+        formatSelectedOptionIdPergunta = await formatArray(selectedOptionId);
+
+        let formatSelectedOptions = [];
+        let formatSelectedOptionsIdPergunta = [];
+        formatSelectedOptions = await formatArrayMult(selectedOptions);
+        formatSelectedOptionsIdPergunta = await formatArray(selectedOptionsId);
+
+        let formatSelectedOptionSel = [];
+        let formatSelectedOptionSelIdPergunta = [];
+        formatSelectedOptionSel = await formatArray(selectedOptionSel);
+        formatSelectedOptionSelIdPergunta = await formatArray(selectedOptionSelId);
+
+        let formatSelectedRespostas = [];
+        let formatSelectedRespostasIdPergunta = [];
+        formatSelectedRespostas = await formatArray(selectedRespostas);
+        formatSelectedRespostasIdPergunta = await formatArray(selectedRespostasId);
+
+        let formatHeight = [];
+        let formatHeightIdPergunta = [];
+        formatHeight = await formatArrayAltura(height);
+        formatHeightIdPergunta = await formatArray(heightId);
+
+        let formatPeso = [];
+        let formatPesoIdPergunta = [];
+        formatPeso = await formatArrayPeso(peso);
+        formatPesoIdPergunta = await formatArray(pesoId);
+
+        let formatStartDate = [];
+        let formatStartDateIdPergunta = [];
+        formatStartDate = await formatArrayData(startDate);
+        formatStartDateIdPergunta = await formatArray(startDateId);
+
+        let formatStartDateH = [];
+        let formatStartDateHIdPergunta = [];
+        formatStartDateH = await formatArrayDataHora(startDateH);
+        formatStartDateHIdPergunta = await formatArray(startDateHId);
+
+        let formatCpf = [];
+        let formatCpfIdPergunta = [];
+        formatCpf = await formatArray(cpf);
+        formatCpfIdPergunta = await formatArray(cpfId);
+
+        let formatRg = [];
+        let formatRgIdPergunta = [];
+        formatRg = await formatArray(rg);
+        formatRgIdPergunta = await formatArray(rgId);
+
+        // console.log("formatSelectedOption", formatSelectedOption);
+        // console.log("formatSelectedOptionIdPergunta", formatSelectedOptionIdPergunta);
+
+        console.log("formatSelectedOptions", formatSelectedOptions);
+        console.log("formatSelectedOptionsIdPergunta", formatSelectedOptionsIdPergunta);
+       
+
+
+        console.log("formatSelectedOptionSel", formatSelectedOptionSel);
+        console.log("formatSelectedOptionSelIdPergunta", formatSelectedOptionSelIdPergunta);
+
+        console.log("formatSelectedRespostas", formatSelectedRespostas);
+        console.log("formatSelectedRespostasIdPergunta", formatSelectedRespostasIdPergunta);
+
+        console.log("formatHeight", formatHeight);
+        console.log("formatHeightIdPergunta", formatHeightIdPergunta);
+
+        console.log("formatPeso", formatPeso);
+        console.log("formatPesoIdPergunta", formatPesoIdPergunta);
+
+        console.log("formatStartDate", formatStartDate);
+        console.log("formatStartDateIdPergunta", formatStartDateIdPergunta);
+
+        console.log("formatStartDateH", formatStartDateH);
+        console.log("formatStartDateHIdPergunta", formatStartDateHIdPergunta);
+
+        console.log("formatCpf", formatCpf);
+        console.log("formatCpfIdPergunta", formatCpfIdPergunta);
+
+        console.log("formatRg", formatRg);
+        console.log("formatRgIdPergunta", formatRgIdPergunta);
+
+
+        apiC.post("/quationario/respostas", {
+            "formatSelectedOption": formatSelectedOption,
+            "formatSelectedOptionIdPergunta": formatSelectedOptionIdPergunta,
+            "formatSelectedOptions": formatSelectedOptions,
+            "formatSelectedOptionsIdPergunta": formatSelectedOptionsIdPergunta,
+            "formatSelectedOptionSel": formatSelectedOptionSel,
+            "formatSelectedOptionSelIdPergunta": formatSelectedOptionSelIdPergunta,
+            "formatSelectedRespostas": formatSelectedRespostas,
+            "formatSelectedRespostasIdPergunta": formatSelectedRespostasIdPergunta,
+            "formatHeight": formatHeight,
+            "formatHeightIdPergunta": formatHeightIdPergunta,
+            "formatPeso": formatPeso,
+            "formatPesoIdPergunta": formatPesoIdPergunta,
+            "formatStartDate": formatStartDate,
+            "formatStartDateIdPergunta": formatStartDateIdPergunta,
+            "formatStartDateH": formatStartDateH,
+            "formatStartDateHIdPergunta": formatStartDateHIdPergunta,
+            "formatCpf": formatCpf,
+            "formatCpfIdPergunta": formatCpfIdPergunta,
+            "formatCpf": formatRg,
+            "formatCpfIdPergunta": formatRgIdPergunta,
+            "idPacliente": idPaclientee
+        })
+            .then(response => {
+                if (response.status === 200) {
+
+
+                }
+            })
+            .catch((error) => {
+
+                alert(error.response.data)
+
+            });
+
+
+    };
+
+    async function voltar() {
+        despacho(seguirTriagem(false))
+        despacho(seguirPacliente(false))
+        despacho(seguirCliente(true))
+    }
+
+    const handleHeightChange = (index, value, id) => {
         const newRespostas = [...height]; // Cria uma cópia do estado atual
+        const newRespostasId = [...heightId]; // Cria uma cópia do estado atual
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setHeight(newRespostas);
+        setHeightId(newRespostasId);
     };
 
-    const handlePesoChange = (index, value) => {
+    const handlePesoChange = (index, value, id) => {
         const newRespostas = [...peso]; // Cria uma cópia do estado atual
+        const newRespostasId = [...pesoId]; // Cria uma cópia do estado atual
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setPeso(newRespostas);
+        setPesoId(newRespostasId);
     };
 
-    const handleResposta = (index, value) => {
+    const handleResposta = (index, value, id) => {
         const newRespostas = [...selectedRespostas]; // Cria uma cópia do estado atual
+        const newRespostasId = [...selectedRespostasId]; // Cria uma cópia do estado atual
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setSelectedRespostas(newRespostas); // Atualiza o estado com a nova array de respostas
+        setSelectedRespostasId(newRespostasId); // Atualiza o estado com a nova array de respostas
     };
 
 
 
 
-    const handleChangeRa = (index, value) => {
+    const handleChangeRa = (index, value, id) => {
         const newRespostas = [...selectedOption]; // Cria uma cópia do estado atual
+        const newRespostasId = [...selectedOptionId]; // Cria uma cópia do estado atual
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setSelectedOption(newRespostas); // Atualiza o estado com a nova array de respostas
+        setSelectedOptionId(newRespostasId); // Atualiza o estado com a nova array de respostas
     };
 
-    const handleChangeChec = (index, event) => {
+    const handleChangeChec = (index, event, id) => {
         const newRespostas = [...selectedOptions]; // Cria uma cópia do estado atual
+        const newRespostasId = [...selectedOptionsId]; // Cria uma cópia do estado atual
         const value = event.target.value;
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setSelectedOptions(newRespostas);
+        setSelectedOptionsId(newRespostasId); // Atualiza o estado com a nova array de respostas
     };
 
 
-    const handleChangeS = (index, value) => {
-        console.log("ppppppp33", value )
+    const handleChangeS = (index, value, id) => {
         const newRespostas = [...selectedOptionSel]; // Cria uma cópia do estado atual
+        const newRespostasId = [...selectedOptionSelId]; // Cria uma cópia do estado atual
         newRespostas[index] = value; // Atualiza a resposta para o índice correspondente
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setSelectedOptionSel(newRespostas); // Atualiza o estado com a nova array de respostas
+        setSelectedOptionSelId(newRespostasId); // Atualiza o estado com a nova array de respostas
     };
 
-    const handleChangeC = (event) => {
+    const handleChangeC = (event, index, id) => {
         const value = event.target.value;
+        const newRespostasId = [...selectedOptionsId]; // Cria uma cópia do estado atual
+        newRespostasId[index] = id; // Cria uma cópia do estado atual
         setSelectedOptions((prev) =>
             prev.includes(value) ? prev.filter(option => option !== value) : [...prev, value]
         );
+        setSelectedOptionsId(newRespostasId); // Atualiza o estado com a nova array de respostas
     };
 
     return (
         <div>
-              < Button className="voltar-consultorio" onClick={e => { voltar() }}>
-                                    <i className="fas fa-arrow-circle-left fsi"  ></i>
-                                    <h3 className="voltar-titulo">
-                                        VOLTAR
-                                    </h3>
-                                </Button>
-                                <h2 className='nomePacliente'>{nomePaclientee}</h2>
+            < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+                <i className="fas fa-arrow-circle-left fsi"  ></i>
+                <h3 className="voltar-titulo">
+                    VOLTAR
+                </h3>
+            </Button>
+            <h2 className='nomePacliente'>{nomePaclientee}</h2>
+
             {questions.map((question, indexQ) => {
-                const { id, title, text, options, type } = question;
+                const { id, id_questao, title, text, options, type } = question;
 
                 return (
                     <div key={id} style={{ marginBottom: '20px' }}>
@@ -253,7 +533,7 @@ export default function Triagem() {
                                     <DatePicker
                                         showTimeSelect
                                         selected={startDateH[indexQ]}
-                                        onChange={event => handleChangeDH(indexQ, event)}
+                                        onChange={event => handleChangeDH(indexQ, event, id_questao)}
                                         onInputChange={handleInputChange}
                                         dateFormat="Pp"
                                         placeholderText="Selecione ou digite uma data"
@@ -274,7 +554,7 @@ export default function Triagem() {
                                     {text}
                                     <DatePicker
                                         selected={startDate[indexQ]}
-                                        onChange={event => handleChangeD(indexQ, event)}
+                                        onChange={event => handleChangeD(indexQ, event, id_questao)}
                                         onInputChange={handleInputChange}
                                         dateFormat="dd/MM/yyyy"
                                         placeholderText="Selecione ou digite uma data"
@@ -299,7 +579,7 @@ export default function Triagem() {
                                         min="50"
                                         max="250"
                                         value={height[indexQ]}
-                                        onChange={event => handleHeightChange(indexQ, event.target.value)}
+                                        onChange={event => handleHeightChange(indexQ, event.target.value, id_questao)}
                                         className="height-range"
                                         key={"dd"}
                                     />
@@ -309,7 +589,7 @@ export default function Triagem() {
 
                             </div>
                         )}
-                 
+
                         {type === 'peso' && (
                             <div className="height-input-container" key={"pp"}>
 
@@ -321,7 +601,7 @@ export default function Triagem() {
                                         min="1"
                                         max="200"
                                         value={peso[indexQ]}
-                                        onChange={event => handlePesoChange(indexQ, event.target.value)}
+                                        onChange={event => handlePesoChange(indexQ, event.target.value, id_questao)}
                                         className="height-range"
                                         key={"dd"}
                                     />
@@ -334,8 +614,9 @@ export default function Triagem() {
                         {type === 'select' && (
                             <div className="select-container">
                                 <p className="question">{text}</p>
-                                <select className="custom-select" value={selectedOptionSel[indexQ]} onChange={event => handleChangeS(indexQ, event.target.value)}>
-                                
+                                <select className="custom-select" value={selectedOptionSel[indexQ]}
+                                    onChange={event => handleChangeS(indexQ, event.target.value, id_questao)}>
+
                                     <option value="" disabled>
                                         Selecione uma opção
                                     </option>
@@ -359,7 +640,7 @@ export default function Triagem() {
                                         placeholder='Digite a sua resposta'
                                         name={`desc-${indexQ}`}
                                         value={selectedRespostas[indexQ] || ''} // Acesso às respostas se estiver usando um array
-                                        onChange={event => handleResposta(indexQ, event.target.value)}
+                                        onChange={event => handleResposta(indexQ, event.target.value, id_questao)}
                                     />
                                 </Form.Group>
 
@@ -379,7 +660,7 @@ export default function Triagem() {
                                         <input
                                             type="text"
                                             value={cpf[indexQ]}
-                                            onChange={event => handleChangeCpf(indexQ, event.target)}
+                                            onChange={event => handleChangeCpf(indexQ, event.target, id_questao)}
                                             maxLength="14" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
                                             placeholder="000.000.000-00"
                                             className='input-cpf'
@@ -404,7 +685,7 @@ export default function Triagem() {
                                             type="text"
                                             id="rg"
                                             value={rg[indexQ]}
-                                            onChange={event => handleChangeRg(indexQ, event)}
+                                            onChange={event => handleChangeRg(indexQ, event, id_questao)}
                                             maxLength="12" // Limita o número de caracteres no formato XXX.XXX.XXX-XX
                                             placeholder="00.000.000-0"
                                             className='input-cpf'
@@ -430,7 +711,7 @@ export default function Triagem() {
                                                 name={title}
                                                 value={option}
                                                 checked={selectedOption[indexQ] === option}
-                                                onChange={event => handleChangeRa(indexQ, event.target.value)}
+                                                onChange={event => handleChangeRa(indexQ, event.target.value, id_questao)}
                                             />
                                             {option}
                                         </label>
@@ -441,17 +722,17 @@ export default function Triagem() {
                         {type === 'checkbox' && (
                             <div>
                                 <p className="question">{text}</p>
-           
-                               
+
+
                                 {options.map((option, index) => (
-                                    
+
                                     <label key={index} className="checkbox-label">
-                                 
+
                                         <input
                                             type="checkbox"
                                             value={`${option}-${indexQ}`}
                                             checked={selectedOptions.includes(`${option}-${indexQ}`)}
-                                            onChange={handleChangeC}
+                                            onChange={event => handleChangeC(event, indexQ, id_questao)}
                                         />
                                         {option}
                                     </label>
@@ -461,10 +742,11 @@ export default function Triagem() {
                     </div>
                 );
             })}
-            
+
             {
-                            <button onClick={handleSaveClick} className='buttQ'>Salvar</button>
-                        }
+                
+                <button  onClick={(e) => (handleSaveClick())} className='buttQ'>Salvar</button>
+            }
         </div>
     );
 };
