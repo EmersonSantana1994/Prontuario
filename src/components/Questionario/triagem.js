@@ -396,8 +396,8 @@ export default function Triagem() {
             "formatStartDateHIdPergunta": formatStartDateHIdPergunta,
             "formatCpf": formatCpf,
             "formatCpfIdPergunta": formatCpfIdPergunta,
-            "formatCpf": formatRg,
-            "formatCpfIdPergunta": formatRgIdPergunta,
+            "formatRg": formatRg,
+            "formatRgIdPergunta": formatRgIdPergunta,
             "idPacliente": idPaclientee
         })
             .then(response => {
