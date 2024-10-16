@@ -9,6 +9,8 @@ import './../Formulario/formulario.css'; // Importando seu CSS
 import { ptBR } from 'date-fns/locale';
 import { seguirCliente, seguirPacliente, seguirTriagem } from '../../actions/actions';
 import { format, parseISO } from 'date-fns';
+import Modal from 'react-modal';
+import { FaTimes } from 'react-icons/fa'; // Ícone de X
 
 export default function Triagem() {
     const [questions, setQuestions] = useState([]);
@@ -36,6 +38,9 @@ export default function Triagem() {
     const [startDateHId, setStartDateHId] = useState([]);
     const [cpfId, setCpfId] = useState([]);
     const [rgId, setRgId] = useState([]);
+
+    const [isSucess, setIsSucess] = useState(false);
+    const [isFalhou, setIsFalhou] = useState(false);
 
     const idQuestionarioo = useSelector(state => state.reduxH.idQuestionario);
     const nomePaclientee = useSelector(state => state.reduxH.nomePacliente);
@@ -235,10 +240,10 @@ export default function Triagem() {
     async function formatArrayMult(array) {
 
         let newArray = []
-        console.log("uuuuu2222", array )
+
         if (array.length > 0) {
             // Remover o valor na posição 0
-            const modifiedArray  = array.slice(1);
+            const modifiedArray = array.slice(1);
 
             // Objeto para armazenar arrays por posição
             const result = [];
@@ -246,22 +251,22 @@ export default function Triagem() {
             // Iterar pelos itens restantes
             modifiedArray.forEach(item => {
                 const position = item.split('-')[1]; // Pega a posição após o '-'
-                
+
                 // Verifica se a posição é um número, caso contrário, ignora
                 if (!isNaN(position)) {
                     if (!result[position]) {
                         result[position] = []; // Se não existir, cria um novo subarray
                     }
-                    
+
                     // Adiciona o item ao subarray correspondente
                     result[position].push(item);
                 }
             });
 
             // Exibir resultados
-            newArray =  result 
+            newArray = result
         }
-     
+
         return newArray;
 
     }
@@ -292,7 +297,7 @@ export default function Triagem() {
         return newArray
     }
 
-    async function handleSaveClick () {
+    async function handleSaveClick() {
 
         let formatSelectedOption = [];
         let formatSelectedOptionIdPergunta = [];
@@ -344,40 +349,8 @@ export default function Triagem() {
         formatRg = await formatArray(rg);
         formatRgIdPergunta = await formatArray(rgId);
 
-        // console.log("formatSelectedOption", formatSelectedOption);
-        // console.log("formatSelectedOptionIdPergunta", formatSelectedOptionIdPergunta);
 
-        console.log("formatSelectedOptions", formatSelectedOptions);
-        console.log("formatSelectedOptionsIdPergunta", formatSelectedOptionsIdPergunta);
-       
-
-
-        console.log("formatSelectedOptionSel", formatSelectedOptionSel);
-        console.log("formatSelectedOptionSelIdPergunta", formatSelectedOptionSelIdPergunta);
-
-        console.log("formatSelectedRespostas", formatSelectedRespostas);
-        console.log("formatSelectedRespostasIdPergunta", formatSelectedRespostasIdPergunta);
-
-        console.log("formatHeight", formatHeight);
-        console.log("formatHeightIdPergunta", formatHeightIdPergunta);
-
-        console.log("formatPeso", formatPeso);
-        console.log("formatPesoIdPergunta", formatPesoIdPergunta);
-
-        console.log("formatStartDate", formatStartDate);
-        console.log("formatStartDateIdPergunta", formatStartDateIdPergunta);
-
-        console.log("formatStartDateH", formatStartDateH);
-        console.log("formatStartDateHIdPergunta", formatStartDateHIdPergunta);
-
-        console.log("formatCpf", formatCpf);
-        console.log("formatCpfIdPergunta", formatCpfIdPergunta);
-
-        console.log("formatRg", formatRg);
-        console.log("formatRgIdPergunta", formatRgIdPergunta);
-
-
-        apiC.post("/quationario/respostas", {
+        await apiC.post("/quationario/respostas", {
             "formatSelectedOption": formatSelectedOption,
             "formatSelectedOptionIdPergunta": formatSelectedOptionIdPergunta,
             "formatSelectedOptions": formatSelectedOptions,
@@ -402,13 +375,63 @@ export default function Triagem() {
         })
             .then(response => {
                 if (response.status === 200) {
+                    formatSelectedOption = [];
+                    formatSelectedOptionIdPergunta = [];
+                    formatSelectedOptions = [];
+                    formatSelectedOptionsIdPergunta = [];
+                    formatSelectedOptionSel = [];
+                    formatSelectedOptionSelIdPergunta = [];
+                    formatSelectedRespostas = [];
+                    formatSelectedRespostasIdPergunta = [];
+                    formatHeight = [];
+                    formatHeightIdPergunta = [];
+                    formatPeso = [];
+                    formatPesoIdPergunta = [];
+                    formatStartDate = [];
+                    formatStartDateIdPergunta = [];
+                    formatStartDateH = [];
+                    formatStartDateHIdPergunta = [];
+                    formatCpf = [];
+                    formatCpfIdPergunta = [];
+                    formatRg = [];
+                    formatRgIdPergunta = [];
 
-
+                    setQuestions([]);
+                    setSelectedOption([]);
+                    setSelectedOptions(['']);
+                    setSelectedResposta('');
+                    setSelectedOptionSel([]);
+                    setSelectedRespostas([]);
+                    setHeight([]);
+                    setPeso([]);
+                    setStartDate([]);
+                    setStartDateH([]);
+                    setRg([]);
+                    setSelectedOptionId([]);
+                    setSelectedOptionsId([]);
+                    setSelectedOptionSelId([]);
+                    setSelectedRespostasId([]);
+                    setHeightId([]);
+                    setPesoId([]);
+                    setStartDateId([]);
+                    setStartDateHId([]);
+                    setCpfId([]);
+                    setRgId([]);
+                    despacho(seguirTriagem(false))
+                    despacho(seguirPacliente(false))
+                    despacho(seguirCliente(false))
+                    setIsSucess(true)
+                    setIsModalOpen(false)
+                    setIsFalhou(false)
                 }
             })
             .catch((error) => {
 
-                alert(error.response.data)
+                // alert(error.response.data)
+                alert('erro questionario não salvo')
+                setIsFalhou(true)
+                setIsModalOpen(false)
+                setIsSucess(false)
 
             });
 
@@ -744,10 +767,58 @@ export default function Triagem() {
             })}
 
             {
-                
-                <button  onClick={(e) => (handleSaveClick())} className='buttQ'>Salvar</button>
+
+                <button onClick={(e) => (handleSaveClick())} className='buttQ'>Salvar</button>
             }
+             <Modal isOpen={isSucess} onRequestClose={() => setIsSucess(false)} className='modal'>
+      <div className='posicion'>
+            <FaTimes
+              onClick={() => setIsSucess(false)}
+              className='fechar'
+            />
+          </div>
+        <div className='modal-pos-sucess'>
+         
+          <div className='posiItem'>
+
+            <h2 className='posText'>
+              <i className="fa fa-check-circle" aria-hidden="true" 
+              style={{ fontSize: '52px', color: 'green' }}></i>
+            </h2>
+
+          </div>
+          <p className='msg'>Questionário salvo!</p>
+          <h1 className='msg2'>A consulta foi aberta para o pacliente!</h1>
+
         </div>
+      </Modal>
+
+      <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
+      <div className='posicion'>
+            <FaTimes
+              onClick={() => setIsFalhou(false)}
+               className='fechar'
+            />
+          </div>
+          <div className='modal-pos-sucess'>
+          
+          <div className='posiItem'>
+
+          <h2 className='posText'>
+              <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
+            </h2>
+
+          </div>
+          <p className='msg'>Erro ao salvar!</p>
+          <h1 className='msg2'>Contate a equipe de suporte!</h1>
+
+
+  
+        </div>
+      </Modal>
+        </div>
+
+        
     );
 };
 

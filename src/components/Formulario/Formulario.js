@@ -117,7 +117,7 @@ const Questionnaire = () => {
 
   async function salvar() {
 
-    console.log("zzzzzzzzz", questionarioNome)
+
     apiC.post("quationario/salvar", {
       "questionario": questions,
       "id_usuario": 1,
@@ -127,7 +127,7 @@ const Questionnaire = () => {
 
         if (response.status === 200) {
 
-          alert('questionario salvo')
+
           setIsSucess(true)
           setIsModalOpen(false)
           setIsFalhou(false)
@@ -162,7 +162,6 @@ const Questionnaire = () => {
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p>
       <p>- Clique em Adicionar pergunta para inserir uma nova pergunta ao questionario</p> */}
 
-      {console.log("wwwwwwwwwww", questions)}
 
       {!simula ?
         <DragDropContext onDragEnd={onDragEnd}>
