@@ -52,6 +52,16 @@ export const seguirPacliente = (data) => ({
   payload: data,
 });
 
+export const seguirRespostas = (data) => ({
+  type: "SEGUIR_RESPOSTAS",
+  payload: data,
+});
+
+export const seguirConsulta = (data) => ({
+  type: "SEGUIR_CONSULTA",
+  payload: data,
+});
+
 export const cpfRedux = (data) => ({
   type: "CPF",
   payload: data,

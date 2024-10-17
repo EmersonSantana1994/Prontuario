@@ -45,7 +45,7 @@ export default function Triagem() {
     const idQuestionarioo = useSelector(state => state.reduxH.idQuestionario);
     const nomePaclientee = useSelector(state => state.reduxH.nomePacliente);
     const idPaclientee = useSelector(state => state.reduxH.idPacliente);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleChangeRg = (index, event, id) => {
         const value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
@@ -309,10 +309,13 @@ export default function Triagem() {
         formatSelectedOptions = await formatArrayMult(selectedOptions);
         formatSelectedOptionsIdPergunta = await formatArray(selectedOptionsId);
 
+
         let formatSelectedOptionSel = [];
         let formatSelectedOptionSelIdPergunta = [];
         formatSelectedOptionSel = await formatArray(selectedOptionSel);
         formatSelectedOptionSelIdPergunta = await formatArray(selectedOptionSelId);
+
+
 
         let formatSelectedRespostas = [];
         let formatSelectedRespostasIdPergunta = [];
@@ -640,9 +643,16 @@ export default function Triagem() {
                                 <select className="custom-select" value={selectedOptionSel[indexQ]}
                                     onChange={event => handleChangeS(indexQ, event.target.value, id_questao)}>
 
-                                    <option value="" disabled>
+                                    { selectedOptionSel.length > 0 ?
+                                        <option value="" disabled>
                                         Selecione uma opção
                                     </option>
+                                    :
+                                    <option value="">
+                                    Selecione uma opção
+                                </option>
+                                    }
+                                    
                                     {options.map((option) => (
                                         <option key={option} value={option}>
                                             {option}
@@ -770,55 +780,55 @@ export default function Triagem() {
 
                 <button onClick={(e) => (handleSaveClick())} className='buttQ'>Salvar</button>
             }
-             <Modal isOpen={isSucess} onRequestClose={() => setIsSucess(false)} className='modal'>
-      <div className='posicion'>
-            <FaTimes
-              onClick={() => setIsSucess(false)}
-              className='fechar'
-            />
-          </div>
-        <div className='modal-pos-sucess'>
-         
-          <div className='posiItem'>
+            <Modal isOpen={isSucess} onRequestClose={() => setIsSucess(false)} className='modal'>
+                <div className='posicion'>
+                    <FaTimes
+                        onClick={() => setIsSucess(false)}
+                        className='fechar'
+                    />
+                </div>
+                <div className='modal-pos-sucess'>
 
-            <h2 className='posText'>
-              <i className="fa fa-check-circle" aria-hidden="true" 
-              style={{ fontSize: '52px', color: 'green' }}></i>
-            </h2>
+                    <div className='posiItem'>
 
-          </div>
-          <p className='msg'>Questionário salvo!</p>
-          <h1 className='msg2'>A consulta foi aberta para o pacliente!</h1>
+                        <h2 className='posText'>
+                            <i className="fa fa-check-circle" aria-hidden="true"
+                                style={{ fontSize: '52px', color: 'green' }}></i>
+                        </h2>
 
+                    </div>
+                    <p className='msg'>Questionário salvo!</p>
+                    <h1 className='msg2'>A consulta foi aberta para o pacliente!</h1>
+
+                </div>
+            </Modal>
+
+            <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
+                <div className='posicion'>
+                    <FaTimes
+                        onClick={() => setIsFalhou(false)}
+                        className='fechar'
+                    />
+                </div>
+                <div className='modal-pos-sucess'>
+
+                    <div className='posiItem'>
+
+                        <h2 className='posText'>
+                            <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
+                        </h2>
+
+                    </div>
+                    <p className='msg'>Erro ao salvar!</p>
+                    <h1 className='msg2'>Contate a equipe de suporte!</h1>
+
+
+
+                </div>
+            </Modal>
         </div>
-      </Modal>
-
-      <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
-      <div className='posicion'>
-            <FaTimes
-              onClick={() => setIsFalhou(false)}
-               className='fechar'
-            />
-          </div>
-          <div className='modal-pos-sucess'>
-          
-          <div className='posiItem'>
-
-          <h2 className='posText'>
-              <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
-            </h2>
-
-          </div>
-          <p className='msg'>Erro ao salvar!</p>
-          <h1 className='msg2'>Contate a equipe de suporte!</h1>
 
 
-  
-        </div>
-      </Modal>
-        </div>
-
-        
     );
 };
 

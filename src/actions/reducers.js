@@ -1,6 +1,6 @@
 // reducers/exampleReducer.js
 
-import { idPacliente, idQuestionario, nomePacliente, seguirPacliente, voltarProntuario } from './actions';
+import { idPacliente, idQuestionario, nomePacliente, seguirConsulta, seguirPacliente, seguirRespostas, voltarProntuario } from './actions';
 
 const initialState = {
   expandirNavegacao: true,
@@ -32,6 +32,8 @@ const initialState = {
   seguirTriagem:false,
   nomePacliente:false,
   arrayText:[''],
+  seguirRespostas:false,
+  seguirConsulta:false,
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -58,6 +60,18 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             seguirPacliente: action.payload
+        }
+    } 
+    else if (action.type === 'SEGUIR_RESPOSTAS') {
+        return {
+            ...state, 
+            seguirRespostas: action.payload
+        }
+    } 
+    else if (action.type === 'SEGUIR_CONSULTA') {
+        return {
+            ...state, 
+            seguirConsulta: action.payload
         }
     } 
     else if (action.type === 'RG') {

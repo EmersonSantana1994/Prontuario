@@ -1,0 +1,145 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* .item::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #090909; /* Cor da linha */
+    /* margin-top: 10px; Espaço acima da linha */
+  /* } */ 
+  
+  .h1c {
+    text-align: center;
+  }
+  
+  .pc {
+    margin: 5px 0;
+  }
+
+  .open-button {
+  
+    padding: 10px 20px;
+    background-color: #007bff; /* Cor do botão */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 13vw;
+  }
+  
+  .open-button:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+  }
+
+  .p-lado{
+    margin-top: -60px;
+  }
+  
+  .form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .form-group:nth-child(1),
+  .form-group:nth-child(2) {
+    display: inline-block;
+    width: 48%; /* Ajuste conforme necessário */
+    margin-right: 4%;
+  }
+  
+  .form-group:nth-child(2) {
+    margin-right: 0;
+  }
+  
+  .label {
+    margin-bottom: 5px;
+    display: block;
+    color: #555;
+  }
+  
+  .input {
+    width: 75%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 10vw;
+  }
+  
+  .checkbox-group {
+    margin: 10px 0;
+  }
+  
+  .record-button, .recording-button {
+    /* margin-top: 15px; */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    /* background-color: #5cb85c; */
+    /* color: white; */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 30px;
+}
+  
+  .record-button:hover, .recording-button:hover {
+    background-color: #616561;
+  }
+  
+  .recording-status {
+    margin-top: 10px;
+    display: -webkit-inline-box;
+    margin: 10px;
+}
+  
+  @media (max-width: 600px) {
+    .form-container {
+      padding: 15px;
+    }
+  }
+
+  @media (max-width: 770px) {
+    .p-lado {
+        margin-top: -38px;
+    }
+  }
+
+  .input-error {
+    border: 1px solid red;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
