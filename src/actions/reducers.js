@@ -34,6 +34,9 @@ const initialState = {
   arrayText:[''],
   seguirRespostas:false,
   seguirConsulta:false,
+  idConsulta:false,
+  seguirAnotacao:false,
+  visualizarRespostas:false,
 };
 
 export const reduxH = (state = initialState, action) => {
@@ -56,6 +59,12 @@ export const reduxH = (state = initialState, action) => {
             seguirTriagem: action.payload
         }
     } 
+    else if (action.type === 'SEGUIR_ANOTACAO') {
+        return {
+            ...state, 
+            seguirAnotacao: action.payload
+        }
+    } 
     else if (action.type === 'SEGUIR_PACLIENTE') {
         return {
             ...state, 
@@ -66,6 +75,12 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             seguirRespostas: action.payload
+        }
+    } 
+    else if (action.type === 'VISUALIZAR_RESPOSTAS') {
+        return {
+            ...state, 
+            visualizarRespostas: action.payload
         }
     } 
     else if (action.type === 'SEGUIR_CONSULTA') {
@@ -130,6 +145,12 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             idPacliente: action.payload
+        }
+    }
+    else if (action.type === 'ID_CONSULTA') {
+        return {
+            ...state, 
+            idConsulta: action.payload
         }
     }
     else if (action.type === 'NOME_PACLIENTE') {

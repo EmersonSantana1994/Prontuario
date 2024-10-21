@@ -8,17 +8,17 @@ import BootstrapTable from 'react-bootstrap-table-next';
 // import { Buffer } from 'buffer';
 import { useSelector, useDispatch } from 'react-redux';
 // import ModalAdicionar from './modalAdicionar';
-import { nome, voltarProntuario } from '../../actions/actions';
+import { nome, visualizarRespostas, voltarProntuario } from '../../actions/actions';
 // import { modalAberta } from '../../actions/actions';
 // import { editarProntuario } from '../../actions/actions';
 import { idPacliente, nomePacliente } from '../../actions/actions';
-import { seguirRespostas, seguirConsulta, idConsulta } from '../../actions/actions';
-import { iconeExpandir } from '../../assets/alterarIcones';
+import { seguirRespostas, seguirConsulta, idConsulta, seguirAnotacao } from '../../actions/actions';
+import { iconeExpandir, iconeRespostas } from '../../assets/alterarIcones';
 // import { atualizarTabela, propsEditar } from '../../actions/actions';
 // import SearchIcon from '@mui/icons-material/Search';
 
 
-export default function Pacliente() {
+export default function ConsultaFechada() {
 
     // window.Buffer = Buffer;
     const [itens, setItens] = useState([]);
@@ -39,7 +39,7 @@ export default function Pacliente() {
     const cpf = useSelector(state => state.reduxH.cpfRedux);
     const rg = useSelector(state => state.reduxH.rgRedux);
     const nome = useSelector(state => state.reduxH.nomeRedux);
-  
+
 
 
 
@@ -47,7 +47,7 @@ export default function Pacliente() {
 
     useEffect(() => {
         async function listar(e) {
-            await apiC.post("/consulta/buscarConsultaAberta", {
+            await apiC.post("/consulta/buscarConsultaFechada", {
             })
                 .then(response => {
                     if (response.status === 200) {
@@ -126,8 +126,8 @@ export default function Pacliente() {
                 return <Button className='iconeExpandiButton'
                     onClick={(e) => {
 
-                        despacho(idPacliente(row.id_pacliente)); despacho(idConsulta(row.id_consulta));
-                        despacho(nomePacliente(row.nome)); despacho(seguirRespostas(true));
+                        despacho(idPacliente(row.id_pacliente));
+                        despacho(seguirAnotacao(true));
                     }}>
 
                     <img className="iconeExpandi-2" src={iconeExpandir()} />
@@ -152,7 +152,7 @@ export default function Pacliente() {
             dataField: 'dataAbertura',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoColuna'>
+            text: <p className='corpadraoColunaConsulta'>
                 Data de abertura
             </p>,
             formatter: (cell, row) => {
@@ -161,7 +161,62 @@ export default function Pacliente() {
                 return <p className='corpadrãoTabela'>{dt === null ? '-' : dt}</p>;
             },
         },
+        {
+            dataField: 'dataEncerrada',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaConsulta'>
+                Data de encerramento
+            </p>,
+            formatter: (cell, row) => {
+                const formData = new Date(cell)
+                let dt = formData.toLocaleString('pt-BR')
+                return <p className='corpadrãoTabela'>{dt === null ? '-' : dt}</p>;
+            },
+        },
+        {
+            dataField: 'dataRetorno',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaConsulta'>
+                Data de retorno
+            </p>,
+            formatter: (cell, row) => {
+                const formData = new Date(cell)
+                let dt = formData.toLocaleString('pt-BR')
+                return <p className='corpadrãoTabela'>{dt === null ? '-' : dt}</p>;
+            },
+        },
+        {
+            dataField: 'cpf',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadrãoTabela'>
+                CPF
+            </p>,
+            formatter: (cell, row) => {
+                return <p className='corpadrãoTabela'>{cell === null ? '-' : cell}</p>;
+            },
+        },
+        {
+            dataField: 'nome',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadrãoTabela'>
+                Triagem
+            </p>,
+            formatter: (cell, row) => {
+                return <Button className='iconeExpandiButton'
+                    onClick={(e) => {
 
+                        despacho(idPacliente(row.id_pacliente)); despacho(idConsulta(row.id_consulta));
+                        despacho(nomePacliente(row.nome));  despacho(visualizarRespostas(true));
+                    }}>
+
+                    <img className="iconeExpandi-2" src={iconeRespostas()} />
+                </Button>
+            },
+        },
     ]
 
     function limitarCaracteres(str, limite) {
@@ -245,11 +300,51 @@ export default function Pacliente() {
 
     }
 
+    async function limpar(parametro) {
+        itensVar = []
+        setItens([])
+        if (parametro !== "1") {
+            atualizar()
+        }
+
+    }
+
+    async function pesquisa() {
+        await limpar("1")
+        await apiC.post("/tabela/busqueProntuario", {
+            "pesquisa": pesquisar,
+        })
+            .then(response => {
+                inserirData(response.data)
+            })
+            .catch((error) => {
+                alert("erro ao pesquisar")
+            })
+
+    }
 
     return (
         <>
 
+            <Form.Group>
 
+                <Form.Control
+                    onChange={e => { setPesquisar(e.target.value) }}
+                    value={pesquisar}
+                    className='campodepesquisa'
+                    onKeyDown={handleKeyPress}
+                    placeholder="Pesquise por nome..."
+                />
+
+                {/* <SearchIcon className="iconeBuscaModal" /> */}
+
+                <Button className='botaoBuscar' onClick={(e) => pesquisa()}>
+                    <div>Pesquisar</div>
+                </Button>
+                <Button className='botaoBuscar' onClick={(e) => limpar()}>
+                    <div>Limpar</div>
+                </Button>
+            </Form.Group>
             <BootstrapTable // TABELA
                 classes={"tabela"}
                 condensed={true}

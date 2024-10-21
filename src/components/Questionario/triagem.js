@@ -420,12 +420,12 @@ export default function Triagem() {
                     setStartDateHId([]);
                     setCpfId([]);
                     setRgId([]);
-                    despacho(seguirTriagem(false))
-                    despacho(seguirPacliente(false))
-                    despacho(seguirCliente(false))
                     setIsSucess(true)
                     setIsModalOpen(false)
                     setIsFalhou(false)
+                    setTimeout(() => {
+                        window.location.href = '/questionario'; // Substitua '/outra-pagina' pela sua rota
+                    }, 3000);
                 }
             })
             .catch((error) => {

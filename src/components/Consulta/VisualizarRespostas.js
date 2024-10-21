@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';/*eslint-disable*/
 import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import { apiC } from "../../conexoes/api";
-import './../Questionario/questionario.css';
+import './../Consulta/consulta.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 // import { useNavigate } from 'react-router-dom';
 // import Dropzone from "react-dropzone";
@@ -12,13 +12,13 @@ import { nome, voltarProntuario } from '../../actions/actions';
 // import { modalAberta } from '../../actions/actions';
 // import { editarProntuario } from '../../actions/actions';
 import { idPacliente, nomePacliente } from '../../actions/actions';
-import { seguirRespostas, seguirConsulta, idConsulta } from '../../actions/actions';
+import { seguirRespostas, seguirConsulta } from '../../actions/actions';
 import { iconeExpandir } from '../../assets/alterarIcones';
 // import { atualizarTabela, propsEditar } from '../../actions/actions';
 // import SearchIcon from '@mui/icons-material/Search';
 
 
-export default function Pacliente() {
+export default function Respostas() {
 
     // window.Buffer = Buffer;
     const [itens, setItens] = useState([]);
@@ -39,7 +39,11 @@ export default function Pacliente() {
     const cpf = useSelector(state => state.reduxH.cpfRedux);
     const rg = useSelector(state => state.reduxH.rgRedux);
     const nome = useSelector(state => state.reduxH.nomeRedux);
-  
+    const idPaclientee = useSelector(state => state.reduxH.idPacliente);
+
+    const [dados, setDados] = useState([]);
+
+    const [dadosValida, setDadosValida] = useState([]);
 
 
 
@@ -47,11 +51,14 @@ export default function Pacliente() {
 
     useEffect(() => {
         async function listar(e) {
-            await apiC.post("/consulta/buscarConsultaAberta", {
+            await apiC.post("/consulta/buscarRespostas", {
+                "idPacliente": idPaclientee,
             })
                 .then(response => {
                     if (response.status === 200) {
-                        inserirData(response.data)
+                        console.log("ggggggg", response)
+                        agruparCheckbox(response.data)
+                        setDadosValida(response.data)
                         // if (response.data.result.length == 0) {
                         // } else {
                         // }
@@ -114,55 +121,7 @@ export default function Pacliente() {
 
 
 
-    const colunas = [
-        {
-            dataField: 'nome',
-            headerClasses: 'nao-selecionavel',
-            sort: true,
-            text: <p className='corpadraoColuna'>
 
-            </p>,
-            formatter: (cell, row) => {
-                return <Button className='iconeExpandiButton'
-                    onClick={(e) => {
-
-                        despacho(idPacliente(row.id_pacliente)); despacho(idConsulta(row.id_consulta));
-                        despacho(nomePacliente(row.nome)); despacho(seguirRespostas(true));
-                    }}>
-
-                    <img className="iconeExpandi-2" src={iconeExpandir()} />
-                </Button>
-            },
-        },
-        {
-            dataField: 'nome',
-            headerClasses: 'nao-selecionavel',
-            sort: true,
-            text: <p className='corpadrãoTabela'>
-                Nome
-            </p>,
-            formatter: (cell, row) => {
-                let textoOriginal = cell
-                let textoLimitado = limitarCaracteres(textoOriginal, 35);
-                return <p className='corpadrãoTabela'>{cell === null ? '-' : textoLimitado}</p>;
-            },
-        },
-
-        {
-            dataField: 'dataAbertura',
-            headerClasses: 'nao-selecionavel',
-            sort: true,
-            text: <p className='corpadraoColuna'>
-                Data de abertura
-            </p>,
-            formatter: (cell, row) => {
-                const formData = new Date(cell)
-                let dt = formData.toLocaleString('pt-BR')
-                return <p className='corpadrãoTabela'>{dt === null ? '-' : dt}</p>;
-            },
-        },
-
-    ]
 
     function limitarCaracteres(str, limite) {
         return str.substring(0, limite);
@@ -203,38 +162,7 @@ export default function Pacliente() {
         }
     };
 
-    const itemExpandido = {
-        className: 'fundo-cor-1',
-        renderer: (row, rowIndex) => (
 
-            <div></div>
-        ),
-        expandHeaderColumnRenderer: (row, rowIndex) => (
-            <div className="cabecalho-linha-expandida">
-            </div>
-        ),
-        expandColumnRenderer: (rowKey) => {
-            return (
-
-                <div></div>
-
-            );
-        },
-        showExpandColumn: true,
-        expandByColumnOnly: true,
-        headerClasses: 'tabela-coluna-primeira-header',
-    };
-
-
-    function fecharTela() {
-        setAbrirAdicionar(!abrirAdicionar)
-    }
-
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            pesquisa();
-        }
-    };
 
     async function limpar(parametro) {
         itensVar = []
@@ -245,43 +173,52 @@ export default function Pacliente() {
 
     }
 
+    const formatarData = (dataStr) => {
+        const [ano, mes, dia] = dataStr.split('-');
+        return `${dia}/${mes}/${ano}`;
+    };
+
+    const agruparCheckbox = (dados) => {
+        const agrupados = {};
+
+        dados.forEach((item) => {
+            if (item.type === 'checkbox') {
+                if (!agrupados[item.text]) {
+                    agrupados[item.text] = [];
+                }
+                agrupados[item.text].push(item.resposta);
+            } else {
+                agrupados[item.text] = item.resposta;
+            }
+        });
+
+        setDados(agrupados);
+    };
+
+    async function realizarConsulta(params) {
+        despacho(seguirRespostas(false))
+        despacho(seguirConsulta(true))
+    }
+
 
     return (
-        <>
+        <div className="container">
 
+            {dadosValida.length > 0 ?
+                <h2 className='h1c'>Questionário de {dadosValida[0].nome}</h2>
+                :
+                <h2 className='h1c'>Questionário respondido</h2>
+            }
 
-            <BootstrapTable // TABELA
-                classes={"tabela"}
-                condensed={true}
-                keyField='id_consulta'
-                data={itens}
-                columns={colunas}
-                // rowEvents={eventosLinhas}
-                // selectRow={selecaoLinhas}
-                expandRow={itemExpandido}
-                bootstrap4={true}
-                bordered={false}
-            // noDataIndication={!spinAtivo && "Nenhum item encontrado"}
-            // {...paginationTableProps}
-            />
-
-
-
-
-
-
-
-
-
-
-
-
-            {/* //  <ModalAdicionar></ModalAdicionar> : */}
-
-
-
-
-        </>
+            <ul>
+                {Object.entries(dados).map(([pergunta, resposta], index) => (
+                    <li key={index} className="item">
+                        <p>{pergunta}</p>
+                        <p><strong>Resposta:</strong> {Array.isArray(resposta) ? resposta.join(', ') : resposta}</p>
+                    </li>
+                ))}
+            </ul>
+        </div>
     )
 }
 

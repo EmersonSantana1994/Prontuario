@@ -148,7 +148,7 @@ const Questionnaire = () => {
         <h1>Criador de questionário</h1>
       }
       {!simula &&
-        <h6>Araste as perguntas para as posições que deseja</h6>
+        <h6>Arraste as perguntas para as posições que deseja</h6>
       }
       {simula &&
         <h4 className='tituSimu'>Veja abaixo como seu questionario esta ficando antes de salvar</h4>

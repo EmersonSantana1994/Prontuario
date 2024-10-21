@@ -27,6 +27,11 @@ export const idPacliente = (data) => ({
   payload: data,
 });
 
+export const idConsulta = (data) => ({
+  type: "ID_CONSULTA",
+  payload: data,
+});
+
 export const nomePacliente = (data) => ({
   type: "NOME_PACLIENTE",
   payload: data,
@@ -47,6 +52,11 @@ export const seguirTriagem = (data) => ({
   payload: data,
 });
 
+export const seguirAnotacao = (data) => ({
+  type: "SEGUIR_ANOTACAO",
+  payload: data,
+});
+
 export const seguirPacliente = (data) => ({
   type: "SEGUIR_PACLIENTE",
   payload: data,
@@ -54,6 +64,11 @@ export const seguirPacliente = (data) => ({
 
 export const seguirRespostas = (data) => ({
   type: "SEGUIR_RESPOSTAS",
+  payload: data,
+});
+
+export const visualizarRespostas = (data) => ({
+  type: "VISUALIZAR_RESPOSTAS",
   payload: data,
 });
 

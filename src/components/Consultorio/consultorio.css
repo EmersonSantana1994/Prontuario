@@ -17,6 +17,7 @@
   width: 120px;
   height: 36px;
   border-radius: 26px;
+  position: relative;
 }
 .fsi{
   font-size: 19px;

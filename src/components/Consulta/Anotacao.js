@@ -27,9 +27,9 @@ import ContagemRegre from './contagemRegre';
 
 
 
-export default function Consulta(props) {
+export default function Anotacao(props) {
 
- 
+
     const idUsuario = useSelector(state => state.reduxH.idUsuario);
     const [transcription, setTranscription] = useState('');
     const [isRecording, setIsRecording] = useState(false);
@@ -122,7 +122,7 @@ export default function Consulta(props) {
 
     const [isSucess, setIsSucess] = useState(false);
     const [isFalhou, setIsFalhou] = useState(false);
-    
+
     // CAIXA DE AVISO
 
     const ConfirmationModal = ({ isOpen, message, rota }) => {
@@ -330,6 +330,46 @@ export default function Consulta(props) {
 
     }, [])
 
+
+
+    useEffect(() => {
+        console.log("lllllll")
+        async function listar(e) {
+            console.log("lllllll 222")
+            await apiC.post("consulta/buscarAnotacao", {
+                "idPacliente": idPacliente,
+            })
+                .then(response => {
+
+                    const formData = new Date(response.data[0].dataProcedimento)
+                    let dt = formData.toLocaleString('pt-BR')
+                    const [dataParte] = dt.split(','); // Pega apenas a parte da data
+                    const [dia, mes, ano] = dataParte.split('/'); // Divide a parte da data
+            
+                    // Juntar novamente no formato desejado
+                    const dataFormatada = `${dia}/${mes}/${ano}`;
+                    setNovaData(dataFormatada)
+
+                    const formDataRetun = new Date(response.data[0].dataRetorno)
+                    let dtRetun = formDataRetun.toLocaleString('pt-BR')
+                    const [dataParteRetun] = dt.split(','); // Pega apenas a parte da data
+                    const [diaRetun, mesRetun, anoRetun] = dataParteRetun.split('/'); // Divide a parte da data
+            
+                    // Juntar novamente no formato desejado
+                    const dataFormatadaRetun = `${diaRetun}/${mesRetun}/${anoRetun}`;
+                    setReturnDate(dataFormatadaRetun)
+
+                    setEditableTranscript(response.data[0].anotacao)
+                })
+                .catch((error) => {
+
+                });
+        }
+        listar()
+    }, [])
+
+
+
     let contagem = 0
 
     // useEffect(() => {
@@ -346,9 +386,24 @@ export default function Consulta(props) {
     //     setTimeout(autenticar, 5000);
     // }, [])
 
-    useEffect(() => {
-        setText(JSON.parse(localStorage.getItem('idioma')))
-    }, [])
+    // useEffect(() => {
+    //     setText(JSON.parse(localStorage.getItem('idioma')))
+    // }, [])
+
+    // useEffect(() => {
+    //     async function autenticar(e) {
+    //         await apiC.post("autenticacao/autenticar")
+    //             .then(response => {
+    //                 console.log("esta autenticado")
+    //             })
+    //             .catch((error) => {
+    //                 if (error.response.data === 'não autenticado') {
+    //                     navigate('/')
+    //                 }
+    //             });
+    //     }
+    //     autenticar()
+    // }, [])
 
     // useEffect(() => {
     //     function tipArquivoEditar() {
@@ -368,7 +423,7 @@ export default function Consulta(props) {
     //     tipArquivoEditar()
     // }, [])
 
-  
+
 
     async function cadastrarTime() {
 
@@ -524,12 +579,12 @@ export default function Consulta(props) {
             .then(response => {
                 if (response.status === 200) {
                     alert('Arquivo cadastrado')
-                  
+
                     // despacho(voltarProntuario(false))
                 }
             })
             .catch((error) => {
-               
+
             });
 
 
@@ -801,9 +856,9 @@ export default function Consulta(props) {
                     setIsSucess(true)
                     setIsModalOpen(false)
                     setIsFalhou(false)
-                  setTimeout(() => {
-                    window.location.href = '/consultasAbertas'; // Substitua '/outra-pagina' pela sua rota
-                }, 3000);
+                    setTimeout(() => {
+                        window.location.href = '/consultasAbertas'; // Substitua '/outra-pagina' pela sua rota
+                    }, 3000);
                 }
             })
             .catch((error) => {
@@ -1071,9 +1126,17 @@ export default function Consulta(props) {
                 <div className='form-container'>
                     <div className='form-group'>
                         <label className='label'>Data do procedimento</label>
-                        <DatePicker
+                        <input
+                            type="text"
+                            id="dataInput"
+                            value={novaData}
+                            placeholder="DD/MM/AAAA"
+                            className={`input`}
+                        // onChange={(date) => { setNovaData(date); }}
+                        />
+                        {/* <DatePicker
 
-                            onChange={(date) => { setNovaData(date); }}
+                            // onChange={(date) => { setNovaData(date); }}
                             selected={novaData}
                             // showTimeSelect
                             className={`input`}
@@ -1081,19 +1144,26 @@ export default function Consulta(props) {
                             placeholderText="DD/MM/YYYY"
                             locale={ptBR}
                             minDate={dataMax}
-                        // useWeekdaysShort={true}
-                        dateFormat="dd/MM/yyyy"
+                            // useWeekdaysShort={true}
+                            dateFormat="dd/MM/yyyy"
                         //minDate={new Date()}
-                        />
+                        /> */}
                         {/* {!isValidProcedureDate && <p className='error-message'>Data inválida. Formato: DD/MM/YYYY</p>} */}
                     </div>
 
                     <div className='form-group'>
                         <label className='label'>Data de Retorno</label>
 
+                        <input
+                            type="text"
+                            id="dataInput"
+                            value={novaData}
+                            placeholder="DD/MM/AAAA"
+                            className={`input`}
+                        // onChange={(date) => { setNovaData(date); }}
+                        />
 
-
-                        <DatePicker
+                        {/* <DatePicker
 
                             onChange={(date) => { setReturnDate(date); }}
                             selected={returnDate}
@@ -1103,11 +1173,11 @@ export default function Consulta(props) {
                             placeholderText="DD/MM/YYYY"
                             locale={ptBR}
                             minDate={dataMax}
-                            dateFormat="dd/MM/yyyy"
-                        // useWeekdaysShort={true}
+                            dateFormat="dd/MM/yyyy" */}
+                        {/* // useWeekdaysShort={true}
                         // dateFormat="Pp"
-                        //minDate={new Date()}
-                        />
+                        //minDate={new Date()} */}
+                        {/* /> */}
                         {/* {!isValidProcedureDate && <p className='error-message'>Data inválida. Formato: DD/MM/YYYY</p>} */}
 
                     </div>
@@ -1126,7 +1196,7 @@ export default function Consulta(props) {
                         />
                     </div>
 
-                    <div className='button-group'>
+                    {/* <div className='button-group'>
                         {!isRecording ? (
                             <button className='record-button' onClick={startRecording}>
                                 <MicIcon style={{ fontSize: 42 }} />
@@ -1145,8 +1215,8 @@ export default function Consulta(props) {
                             Salvar
                         </button>
 
-                    </div>
-               
+                    </div> */}
+
 
                     {inforAnotacao && inforDataProc && inforDataRetor &&
                         <p className='aviso'>Informe a data do procedimento, data de retorno e anotação</p>
@@ -1173,51 +1243,51 @@ export default function Consulta(props) {
 
 
                 <Modal isOpen={isSucess} onRequestClose={() => setIsSucess(false)} className='modal'>
-                <div className='posicion'>
-                    <FaTimes
-                        onClick={() => setIsSucess(false)}
-                        className='fechar'
-                    />
-                </div>
-                <div className='modal-pos-sucess'>
+                    <div className='posicion'>
+                        <FaTimes
+                            onClick={() => setIsSucess(false)}
+                            className='fechar'
+                        />
+                    </div>
+                    <div className='modal-pos-sucess'>
 
-                    <div className='posiItem'>
+                        <div className='posiItem'>
 
-                        <h2 className='posText'>
-                            <i className="fa fa-check-circle" aria-hidden="true"
-                                style={{ fontSize: '52px', color: 'green' }}></i>
-                        </h2>
+                            <h2 className='posText'>
+                                <i className="fa fa-check-circle" aria-hidden="true"
+                                    style={{ fontSize: '52px', color: 'green' }}></i>
+                            </h2>
+
+                        </div>
+                        <p className='msg'>Consulta salva!</p>
+                        <h1 className='msg2'>A consulta foi encerrada para o pacliente!</h1>
 
                     </div>
-                    <p className='msg'>Consulta salva!</p>
-                    <h1 className='msg2'>A consulta foi encerrada para o pacliente!</h1>
+                </Modal>
 
-                </div>
-            </Modal>
+                <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
+                    <div className='posicion'>
+                        <FaTimes
+                            onClick={() => setIsFalhou(false)}
+                            className='fechar'
+                        />
+                    </div>
+                    <div className='modal-pos-sucess'>
 
-            <Modal isOpen={isFalhou} onRequestClose={() => setIsFalhou(false)} className='modal'>
-                <div className='posicion'>
-                    <FaTimes
-                        onClick={() => setIsFalhou(false)}
-                        className='fechar'
-                    />
-                </div>
-                <div className='modal-pos-sucess'>
+                        <div className='posiItem'>
 
-                    <div className='posiItem'>
+                            <h2 className='posText'>
+                                <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
+                            </h2>
 
-                        <h2 className='posText'>
-                            <i className="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
-                        </h2>
+                        </div>
+                        <p className='msg'>Erro ao salvar!</p>
+                        <h1 className='msg2'>Contate a equipe de suporte!</h1>
+
+
 
                     </div>
-                    <p className='msg'>Erro ao salvar!</p>
-                    <h1 className='msg2'>Contate a equipe de suporte!</h1>
-
-
-
-                </div>
-            </Modal>
+                </Modal>
 
 
             </div >

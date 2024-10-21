@@ -47,6 +47,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import ConsultaAberta from "layouts/consulta";
+import ConsultaFechada from "layouts/consultaFechada";
 
 // Soft UI Dashboard React icons
 import Shop from "examples/Icons/Shop";
@@ -77,6 +78,15 @@ const routes = [
     route: "/consultasAbertas",
     icon: <CustomerSupport size="12px" />,
     component: <ConsultaAberta />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Consultas fechadas",
+    key: "profile",
+    route: "/consultasFechadas",
+    icon: <CustomerSupport size="12px" />,
+    component: <ConsultaFechada />,
     noCollapse: true,
   },
   // {
