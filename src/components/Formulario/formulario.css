@@ -565,6 +565,7 @@ input[type="checkbox"] {
   height: 16vw;
   width: 35vw;
   display: grid;
+  z-index: '9999'
 }
 
 .fecharModal {
@@ -687,6 +688,7 @@ color: 'red'
     font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
   }
   .modal {
+     z-index: '9999';
     position: inherit;
     inset: 0vw;
     border: 1px solid rgb(204, 204, 204);
@@ -781,6 +783,7 @@ color: 'red'
     font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
   }
   .modal {
+     z-index: '9999';
     position: inherit;
     inset: 0vw;
     border: 1px solid rgb(204, 204, 204);
@@ -873,6 +876,7 @@ color: 'red'
     font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
   }
   .modal {
+     z-index: '9999';
     position: inherit;
     inset: 0vw;
     border: 1px solid rgb(204, 204, 204);
@@ -960,6 +964,7 @@ color: 'red'
     font-size: 2.7vw; /* Tamanho menor em dispositivos móveis */
   }
   .modal {
+     z-index: '9999';
     position: inherit;
     inset: 0vw;
     border: 1px solid rgb(204, 204, 204);

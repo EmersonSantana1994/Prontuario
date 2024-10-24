@@ -117,7 +117,6 @@ const Questionnaire = () => {
 
   async function salvar() {
 
-
     apiC.post("quationario/salvar", {
       "questionario": questions,
       "id_usuario": 1,

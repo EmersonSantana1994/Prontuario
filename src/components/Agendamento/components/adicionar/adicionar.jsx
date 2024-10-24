@@ -549,6 +549,7 @@ function Adicionar({ onAdicionar }) {
                     style={{
                         overlay: {
                             backgroundColor: 'rgb(0 0 0 / 17%)',
+                            zIndex: '9999'
                         },
                         content: {
                             color: 'black',

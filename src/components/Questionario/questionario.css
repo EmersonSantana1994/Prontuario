@@ -223,6 +223,7 @@ table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
   }
   
   .modal-contentRegr {
+     z-index: '9999';
     background-color: white;
     width: 200px;
     padding: 20px;

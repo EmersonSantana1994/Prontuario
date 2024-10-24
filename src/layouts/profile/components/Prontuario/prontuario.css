@@ -135,4 +135,5 @@ table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
     transform: translate(-50%, -50%);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: '9999';
   }

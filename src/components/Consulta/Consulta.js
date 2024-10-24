@@ -745,7 +745,7 @@ export default function Consulta(props) {
     };
 
     async function salvar(params) {
-        console.log("editableTranscript", editableTranscript)
+        
 
         if (!novaData && !returnDate && !editableTranscript) {
             setInforAnotacao(true)

@@ -33,10 +33,38 @@ function Calendario() {
     // const [eventosFiltrados, setEventosFiltrados] = useState(eventosPadrao);
     const [eventosFiltrados, setEventosFiltrados] = useState([]);
     const [isModalOpenSucesso, setIsModalOpenSucesso] = useState(false);
+    const [isModalOpenSucessoAviso, setIsModalOpenSucessoAviso] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [dados, setDados] = useState([]); // Para armazenar os dados do banco
     let contador = 0
     let itensVar = []
     let array = []
+
+    useEffect(() => {
+        // Simulação de fetch dos dados do banco
+        const fetchData = async () => {
+            let contador = 0
+            let itensVar = []
+            // Substitua pela sua chamada real à API
+            const response = await apiC.post('agenda/especialidade');
+            for (let i = 0; i < response.data.length; i++) {
+
+
+                if (contador == i) {
+                    let k = i
+                    for (let j = 0; j < response.data.length; j++) {
+                        itensVar[k] = response.data[j]
+                        k++
+                    }
+                }
+                setDados(JSON.parse(JSON.stringify(itensVar)))
+
+
+            }
+        };
+
+        fetchData();
+    }, []);
 
     useEffect(() => {
 
@@ -94,7 +122,6 @@ function Calendario() {
 
             if (response.status === 200) {
 
-
                 for (let i = 0; i < response.data.length; i++) {
 
 
@@ -127,11 +154,53 @@ function Calendario() {
             });
 
     }
-    
+
+
+    const handleAtualiza = () => {
+        const novoEventoPadrao = []
+        apiC.post("agenda/buscartudo", {
+            "id_consultorio": idConsultorio,
+            "id_medico": 1
+        }).then(response => {
+
+            if (response.status === 200) {
+
+                for (let i = 0; i < response.data.length; i++) {
+
+
+                    if (contador == i) {
+                        let k = i
+                        for (let j = 0; j < response.data.length; j++) {
+                            itensVar[k] = response.data[j]
+                            k++
+                        }
+                    }
+                    array = JSON.parse(JSON.stringify(itensVar))
+
+                    array.forEach(obj => {
+                        obj.start = new Date(obj.start);
+                        obj.end = new Date(obj.end);
+                    });
+                }
+
+
+                setEventos(array)
+                setEventosFiltrados(array)
+
+            }
+        })
+            .catch((error) => {
+
+                alert("erro ao adicionar data", error)
+                console.log("error", error)
+
+            });
+    };
+
 
     function converterDataISOParaMySQL(dataISO) {
         const jsDate = new Date(dataISO);
-return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
+        return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     }
 
     const eventStyle = (event) => ({
@@ -139,6 +208,8 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
             backgroundColor: event.color,
         },
     });
+
+
 
     const moverEventos = (data) => {
         const { start, end } = data;
@@ -158,6 +229,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     const handleEventClick = (evento) => {
         SeteventoSelecionado(evento);
     };
+
 
     const handleEventClose = () => {
         SeteventoSelecionado(null);
@@ -200,13 +272,13 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     }
     const handleAdicionar = (novoEvento) => {
 
-        if(novoEvento.repetir){
-            
+        if (novoEvento.repetir) {
+
             let startArray = []
             let endArray = []
             for (let j = 0; j < novoEvento.start.length; j++) {
-                startArray.push(converterDataISOParaMySQL(novoEvento.start[j])) 
-                endArray.push(converterDataISOParaMySQL(novoEvento.end[j])) 
+                startArray.push(converterDataISOParaMySQL(novoEvento.start[j]))
+                endArray.push(converterDataISOParaMySQL(novoEvento.end[j]))
             }
 
             apiC.post("agenda/repetir", {
@@ -223,31 +295,31 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                 "fim": novoEvento.fim,
             })
                 .then(response => {
-    
+
                     if (response.status === 200) {
                         setIsModalOpenSucesso(true)
-                        
+
                         getAgendamentoAtualizar()
-                        
+
                     }
                 })
                 .catch((error) => {
                     if (error.response.data) {
-                        if(error.response.data == '112'){
+                        if (error.response.data == '112') {
                             setIsModalOpen(true)
                         }
-                        
-                      
-                        
+
+
+
                     }
-    
+
                 });
 
-        }else{
+        } else {
 
             const start = converterDataISOParaMySQL(novoEvento.start);
             const end = converterDataISOParaMySQL(novoEvento.end);
-    
+
             apiC.post("agenda/reservarAgendaMedica", {
                 "title": novoEvento.especialidade,
                 "start": start,
@@ -257,10 +329,10 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                 "tipo": novoEvento.tipo,
                 "id_consultorio": idConsultorio,
                 "id_medico": 1,
-                "repetir":6
+                "repetir": 6
             })
                 .then(response => {
-    
+
                     if (response.status === 200) {
                         setIsModalOpenSucesso(true)
                         setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
@@ -268,14 +340,14 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                 })
                 .catch((error) => {
                     if (error.response.data) {
-                        if(error.response.data == '112'){
+                        if (error.response.data == '112') {
                             setIsModalOpen(true)
                         }
-                        
-                      
-                        
+
+
+
                     }
-    
+
                 });
         }
 
@@ -295,6 +367,7 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
     const closeModalSucesso = () => setIsModalOpenSucesso(false);
     return (
         <div className='tela ' >
+         
             <div className='toolbar p-4' style={{ maxHeight: '100vh', overflowY: 'auto' }}>
                 <Adicionar onAdicionar={handleAdicionar} />
 
@@ -320,93 +393,95 @@ return format(jsDate, 'yyyy-MM-dd HH:mm:ss');
                 />
             </div>
             {eventoSelecionado && (
-                <EventModal evento={eventoSelecionado} onClose={handleEventClose} onDelete={handleEventDelete} onUpdate={handleEventUpdate}></EventModal>
+                <EventModal dados={dados} evento={eventoSelecionado} onClose={handleEventClose} onDelete={handleEventDelete} onUpdate={handleEventUpdate} atualiza={handleAtualiza} ></EventModal>
             )}
-           
+
             {isModalOpen &&
-                  <Modal
-                  isOpen={isModalOpen}
-                  onRequestClose={closeModal}
-                  contentLabel="Mensagem de Aviso"
-                  style={{
-                    overlay: {
-                      backgroundColor: 'rgb(0 0 0 / 17%)',
-                    },
-                    content: {
-                      color: 'black',
-                      padding: '20px',
-                      borderRadius: '10px',
-                      maxWidth: '500px',
-                      margin: 'auto',
-                      position: 'relative',
-                    },
-                  }}
+                <Modal
+                    isOpen={isModalOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Mensagem de Aviso"
+                    style={{
+                        overlay: {
+                            backgroundColor: 'rgb(0 0 0 / 17%)',
+                            zIndex: '9999'
+                        },
+                        content: {
+                            color: 'black',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            maxWidth: '500px',
+                            margin: 'auto',
+                            position: 'relative',
+                        },
+                    }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', marginLeft: '435px' }}>
-                    <FaTimes
-                      onClick={closeModal}
-                      style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    
+                        <FaTimes
+                            onClick={closeModal}
+                            style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        <h2 style={{ flex: 1, textAlign: 'center' }}>
+                            <i class="fa fa-times-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'red' }}></i>
+                        </h2>
+
+                    </div>
                     <h2 style={{ flex: 1, textAlign: 'center' }}>
-                    <i class="fa fa-times-circle" aria-hidden="true" style={{ fontSize:'52px', color: 'red' }}></i>
+                        Não foi possível enviar
                     </h2>
-                    
-                  </div>
-                  <h2 style={{ flex: 1, textAlign: 'center' }}>
-                    Não foi possível enviar
-                    </h2>
-                  <p style={{ textAlign: 'center' }}>
-                    A data e hora selecionadas já estão registradas na agenda.
-                  </p>
+                    <p style={{ textAlign: 'center' }}>
+                        A data e hora selecionadas já estão registradas na agenda.
+                    </p>
                 </Modal>
             }
 
 
-           
+
             {isModalOpenSucesso &&
-            
-                  <Modal
-                  isOpen={isModalOpenSucesso}
-                  onRequestClose={closeModalSucesso}
-                  contentLabel="Mensagem de Aviso"
-                  style={{
-                    overlay: {
-                      backgroundColor: 'rgb(0 0 0 / 17%)',
-                    },
-                    content: {
-                      color: 'black',
-                      padding: '20px',
-                      borderRadius: '10px',
-                      maxWidth: '500px',
-                      margin: 'auto',
-                      position: 'relative',
-                    },
-                  }}
+
+                <Modal
+                    isOpen={isModalOpenSucesso}
+                    onRequestClose={closeModalSucesso}
+                    contentLabel="Mensagem de Aviso"
+                    style={{
+                        overlay: {
+                            backgroundColor: 'rgb(0 0 0 / 17%)',
+                            zIndex: '9999'
+                        },
+                        content: {
+                            color: 'black',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            maxWidth: '500px',
+                            margin: 'auto',
+                            position: 'relative',
+                        },
+                    }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', marginLeft: '435px' }}>
-                    <FaTimes
-                      onClick={closeModalSucesso}
-                      style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    
+                        <FaTimes
+                            onClick={closeModalSucesso}
+                            style={{ cursor: 'pointer', fontSize: '24px', color: 'red' }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        <h2 style={{ flex: 1, textAlign: 'center' }}>
+                            <i class="fa fa-check-circle" aria-hidden="true" style={{ fontSize: '52px', color: 'green' }}></i>
+                        </h2>
+
+                    </div>
                     <h2 style={{ flex: 1, textAlign: 'center' }}>
-                    <i class="fa fa-check-circle" aria-hidden="true" style={{ fontSize:'52px', color: 'green' }}></i>
+                        Disponibilidade adicionada com Sucesso!
                     </h2>
-                    
-                  </div>
-                  <h2 style={{ flex: 1, textAlign: 'center' }}>
-                  Disponibilidade adicionada com Sucesso!
-                    </h2>
-                 
+
                 </Modal>
             }
         </div>
-        
+
     );
 }
 

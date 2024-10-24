@@ -205,7 +205,7 @@ const SimuladorQuestionComponent = ({ questions }) => {
 
                                 <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
                                     {text}
-                                    <DatePicker
+                                    {/* <DatePicker
                                         selected={startDate[indexQ]}
                                         onChange={event => handleChangeD(indexQ, event)}
                                         onInputChange={handleInputChange}
@@ -214,7 +214,16 @@ const SimuladorQuestionComponent = ({ questions }) => {
                                         locale={ptBR}
                                         className="date-picker-input"
                                     // popperClassName="custom-datepicker"
-                                    />
+                                    /> */}
+                                     <input
+                                    type="date"
+                                    value={startDate[indexQ]}
+                                    onChange={event => handleChangeD(indexQ, event)}
+                                    // dateFormat="dd/MM/yyyy"
+                                    // locale={ptBR}
+                                    required
+                                     className="date-picker-input"
+                                />
                                     {error && <span className="error-message">{error}</span>}
                                 </label>
 

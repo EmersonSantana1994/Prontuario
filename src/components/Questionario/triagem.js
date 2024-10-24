@@ -139,10 +139,11 @@ export default function Triagem() {
     };
 
     const handleChangeD = (index, date, id) => {
-        if (date) {
+
+        if (date.target.value) {
             const newRespostas = [...startDate]; // Cria uma cópia do estado atual
             const newRespostasId = [...startDateId]; // Cria uma cópia do estado atual
-            newRespostas[index] = date; // Atualiza a resposta para o índice correspondente
+            newRespostas[index] = date.target.value; // Atualiza a resposta para o índice correspondente
             newRespostasId[index] = id; // Cria uma cópia do estado atual
             setStartDate(newRespostas);
             setStartDateId(newRespostasId);
@@ -578,7 +579,7 @@ export default function Triagem() {
 
                                 <label htmlFor={`date-picker-${indexQ}`} className="height-label-data" key={indexQ}>
                                     {text}
-                                    <DatePicker
+                                    {/* <DatePicker
                                         selected={startDate[indexQ]}
                                         onChange={event => handleChangeD(indexQ, event, id_questao)}
                                         onInputChange={handleInputChange}
@@ -587,7 +588,18 @@ export default function Triagem() {
                                         locale={ptBR}
                                         className="date-picker-input"
                                     // popperClassName="custom-datepicker"
-                                    />
+                                    /> */}
+                                      <input
+                                    type="date"
+                                    value={startDate[indexQ]}
+                                    onChange={event => handleChangeD(indexQ, event, id_questao)}
+                                    // onInputChange={handleInputChange}
+                                    // dateFormat="dd/MM/yyyy"
+                                    // locale={ptBR}
+                                    required
+                                     className="date-picker-input"
+                                />
+                                   
                                     {error && <span className="error-message">{error}</span>}
                                 </label>
 
