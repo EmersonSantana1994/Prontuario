@@ -30,7 +30,7 @@ import SoftTypography from "components/SoftTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import Prontuario from "../../layouts/profile/components/Prontuario/prontuario";
+import Prontuario from "../profile/components/Prontuario/prontuario";
 // import Agendamento from "../../layouts/profile/components/Agendamento/agendamento";
 import Agendamento from "../../components/Agendamento/agendamento";
 import ConsultaAberta from "../../components/Consulta/ConsultaEmAberto";

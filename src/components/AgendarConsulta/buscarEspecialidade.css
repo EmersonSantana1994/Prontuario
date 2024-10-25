@@ -1,0 +1,66 @@
+/* Estilos para o contêiner principal */
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o título */
+.title {
+    text-align: center;
+    color: #333;
+}
+
+/* Estilos para o campo de entrada */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.input-field:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Estilos para a lista */
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Estilos para os itens da lista */
+.suggestion-item {
+    background: #f8f9fa;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #e2e6ea;
+}
+
+.advance-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.advance-button:hover {
+    background-color: #0056b3;
+}

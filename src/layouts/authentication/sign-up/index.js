@@ -43,14 +43,14 @@ function SignUp() {
 
   return (
     <BasicLayout
-      title="Welcome!"
-      description="Use these awesome forms to login or create new account in your project for free."
+      title="Bem vindo!"
+      description="Faça seu login abaixo ou crie uma nova conta ."
       image={curved6}
     >
       <Card>
         <SoftBox p={3} mb={1} textAlign="center">
           <SoftTypography variant="h5" fontWeight="medium">
-            Register with
+            Registre com
           </SoftTypography>
         </SoftBox>
         <SoftBox mb={2}>
@@ -76,7 +76,7 @@ function SignUp() {
                 onClick={handleSetAgremment}
                 sx={{ cursor: "poiner", userSelect: "none" }}
               >
-                &nbsp;&nbsp;I agree the&nbsp;
+                &nbsp;&nbsp;Eu aceito os&nbsp;
               </SoftTypography>
               <SoftTypography
                 component="a"
@@ -85,17 +85,17 @@ function SignUp() {
                 fontWeight="bold"
                 textGradient
               >
-                Terms and Conditions
+                Termos e Condições
               </SoftTypography>
             </SoftBox>
             <SoftBox mt={4} mb={1}>
               <SoftButton variant="gradient" color="dark" fullWidth>
-                sign up
+                Cadastrar
               </SoftButton>
             </SoftBox>
             <SoftBox mt={3} textAlign="center">
               <SoftTypography variant="button" color="text" fontWeight="regular">
-                Already have an account?&nbsp;
+                Já possui uma conta?&nbsp;
                 <SoftTypography
                   component={Link}
                   to="/authentication/sign-in"

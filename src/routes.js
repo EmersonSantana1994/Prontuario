@@ -46,8 +46,12 @@ import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import ConsultaAberta from "layouts/consulta";
+import ConsultaAberta from "layouts/consultaAberta";
 import ConsultaFechada from "layouts/consultaFechada";
+import AgendarConsulta from "layouts/agendarConsulta";
+import EscolherDia from "components/AgendarConsulta/EscolherDia";
+import EscolherMedico from "components/AgendarConsulta/EscolherMedico";
+import BuscaEspecialidade from "components/AgendarConsulta/BuscaEspecialidade";
 
 // Soft UI Dashboard React icons
 import Shop from "examples/Icons/Shop";
@@ -73,9 +77,36 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Agendar consulta",
+    key: "sign-up",
+    route: "/agendar/consulta",
+    icon: <Document size="12px" />,
+    component: <AgendarConsulta/>,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Criar questionario",
+    key: "quest",
+    route: "/criar/questionario",
+    icon: <Document size="12px" />,
+    component: <CriarQuestionario />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Triagem",
+    key: "quest",
+    route: "/triagem",
+    icon: <Document size="12px" />,
+    component: <Questionario/>,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
     name: "Consultas abertas",
     key: "profile",
-    route: "/consultasAbertas",
+    route: "/consultas/abertas",
     icon: <CustomerSupport size="12px" />,
     component: <ConsultaAberta />,
     noCollapse: true,
@@ -84,7 +115,7 @@ const routes = [
     type: "collapse",
     name: "Consultas fechadas",
     key: "profile",
-    route: "/consultasFechadas",
+    route: "/consultas/fechadas",
     icon: <CustomerSupport size="12px" />,
     component: <ConsultaFechada />,
     noCollapse: true,
@@ -134,33 +165,23 @@ const routes = [
     component: <RTL />,
     noCollapse: true,
   },
+ 
+  
+  
   {
-    type: "collapse",
-    name: "Questionario",
-    key: "quest",
-    route: "/questionario",
-    icon: <Document size="12px" />,
-    component: <Questionario/>,
-    noCollapse: true,
+    route: "/agendar/consulta/dia",
+    component: <EscolherDia/>,
   },
   {
-    type: "collapse",
-    name: "Consulta",
-    key: "sign-up",
-    route: "/authentication/sign-up",
-    icon: <Document size="12px" />,
-    // component: <SignUp />,
-    noCollapse: true,
+    route: "/agendar/consulta/medico",
+    component: <EscolherMedico/>,
   },
   {
-    type: "collapse",
-    name: "Criar questionario",
-    key: "quest",
-    route: "/criarQuestionario",
-    icon: <Document size="12px" />,
-    component: <CriarQuestionario />,
-    noCollapse: true,
+    route: "/agendar/consulta/especialidade",
+    component: <BuscaEspecialidade/>,
   },
+  
+
   { type: "title", title: "Account Pages", key: "account-pages" },
   
   {

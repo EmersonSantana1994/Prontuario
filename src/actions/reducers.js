@@ -24,6 +24,7 @@ const initialState = {
   nomeConsultorio:false,
   seguirCliente:false,
   seguirPacliente:false,
+  seguirAgenda:false,
   cpfRedux:false,
   rgRedux:false,
   nomeRedux:false,
@@ -69,6 +70,12 @@ export const reduxH = (state = initialState, action) => {
         return {
             ...state, 
             seguirPacliente: action.payload
+        }
+    } 
+    else if (action.type === 'SEGUIR_AGENDA') {
+        return {
+            ...state, 
+            seguirAgenda: action.payload
         }
     } 
     else if (action.type === 'SEGUIR_RESPOSTAS') {

@@ -57,8 +57,15 @@ export const seguirAnotacao = (data) => ({
   payload: data,
 });
 
+
+
 export const seguirPacliente = (data) => ({
   type: "SEGUIR_PACLIENTE",
+  payload: data,
+});
+
+export const seguirAgenda = (data) => ({
+  type: "SEGUIR_AGENDA",
   payload: data,
 });
 
