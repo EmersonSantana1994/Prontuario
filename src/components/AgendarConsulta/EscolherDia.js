@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';/*eslint-disable*/
 import moment from 'moment';
 import './buscarEspecialidade.css';
+import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -34,6 +35,15 @@ function EscolherDia() {
     const eventosFuturos = eventos.filter(evento => new Date(evento.start) > hoje);
 
     useEffect(() => {
+     
+        if (!localStorage.hasOwnProperty("idPacliente") && !localStorage.hasOwnProperty("nomePacliente") &&
+         !localStorage.hasOwnProperty("keyIdEspecialidade")) {
+            window.location.href = '/agendar/consulta'
+         }
+
+    }, [])
+
+    useEffect(() => {
         async function listar() {
 
             await apiC.post("consultarAgenda/buscarDia", {
@@ -60,16 +70,24 @@ function EscolherDia() {
     };
 
     const handleAvancar = () => {
-        console.log('ID selecionado:', idSelecionado);
+
             localStorage.setItem('keyIdEvento', idSelecionado);
              window.location.href = '/agendar/consulta/medico'
         // Aqui você pode fazer o que precisar com o ID selecionado
     };
 
-
+    const voltar = () => {
+        window.location.href = '/agendar/consulta/especialidade'     
+};
 
     return (
         <div className="container">
+                    < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+                        <i className="fas fa-arrow-circle-left fsi"  ></i>
+                        <h3 className="voltar-titulo">
+                            VOLTAR
+                        </h3>
+                    </Button>
             <h1 className="title">Selecione abaixo o dia</h1>
             {eventosFuturos.length > 0 ? (
                 eventosFuturos.map((evento) => (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';/*eslint-disable*/
 import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import { apiC } from "../../conexoes/api";
-import './consulta.css';
+import './consultaAgendada.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 // import { useNavigate } from 'react-router-dom';
 // import Dropzone from "react-dropzone";
@@ -18,7 +18,7 @@ import { iconeExpandir } from '../../assets/alterarIcones';
 // import SearchIcon from '@mui/icons-material/Search';
 
 
-export default function Pacliente() {
+export default function ConsultaAgendada() {
 
     // window.Buffer = Buffer;
     const [itens, setItens] = useState([]);
@@ -39,7 +39,7 @@ export default function Pacliente() {
     const cpf = useSelector(state => state.reduxH.cpfRedux);
     const rg = useSelector(state => state.reduxH.rgRedux);
     const nome = useSelector(state => state.reduxH.nomeRedux);
-  
+
 
 
 
@@ -47,7 +47,8 @@ export default function Pacliente() {
 
     useEffect(() => {
         async function listar(e) {
-            await apiC.post("/consulta/buscarConsultaAberta", {
+            await apiC.post("/consultarAgenda/buscarConsultas", {
+                "id_medico": 1,
             })
                 .then(response => {
                     if (response.status === 200) {
@@ -116,11 +117,11 @@ export default function Pacliente() {
 
     const colunas = [
         {
-            dataField: 'nome',
+            dataField: 'nomedd',
             headerClasses: 'nao-selecionavel',
             sort: true,
             text: <p className='corpadraoColunaAgendar'>
-
+                Editar
             </p>,
             formatter: (cell, row) => {
                 return <Button className='iconeExpandiButton'
@@ -134,31 +135,79 @@ export default function Pacliente() {
                 </Button>
             },
         },
+
         {
             dataField: 'nome',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoColunaAgendarA'>
+            text: <p className='corpadraoColunaAgendar'>
                 Nome
             </p>,
             formatter: (cell, row) => {
-                let textoOriginal = cell
-                let textoLimitado = limitarCaracteres(textoOriginal, 35);
-                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : textoLimitado}</p>;
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : cell}</p>;
+            },
+        },
+        {
+            dataField: 'cpf',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaAgendar'>
+                CPF
+            </p>,
+            formatter: (cell, row) => {
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : cell}</p>;
             },
         },
 
         {
-            dataField: 'dataAbertura',
+            dataField: 'nomeMedico',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoColunaAgendarB'>
-                Data de abertura
+            text: <p className='corpadraoColunaAgendar'>
+                Medico
+            </p>,
+            formatter: (cell, row) => {
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : cell}</p>;
+            },
+        },
+        {
+            dataField: 'horario',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaAgendar'>
+                Horário
+            </p>,
+            formatter: (cell, row) => {
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : cell}</p>;
+            },
+        },
+        {
+            dataField: 'dataAgendada',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaAgendar'>
+                Data
             </p>,
             formatter: (cell, row) => {
                 const formData = new Date(cell)
-                let dt = formData.toLocaleString('pt-BR')
-                return <p className='corpadraoColunaAgendar'>{dt === null ? '-' : dt}</p>;
+                let dtY = formData.getFullYear().toString()
+                let dtM = (formData.getMonth() + 1).toString()
+                let mesFormatado = dtM < 10 ? '0' + dtM : dtM;
+                let dtD = formData.getDate().toString()
+                let diaFormatado = dtD < 10 ? '0' + dtD : dtD;
+                let dta = diaFormatado + "/" + mesFormatado + "/" + dtY
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : dta}</p>;
+            },
+        },
+        {
+            dataField: 'especialidade',
+            headerClasses: 'nao-selecionavel',
+            sort: true,
+            text: <p className='corpadraoColunaAgendar'>
+                Especialidade
+            </p>,
+            formatter: (cell, row) => {
+                return <p className='corpadraoColunaAgendar'>{cell === null ? '-' : cell}</p>;
             },
         },
 
@@ -248,12 +297,24 @@ export default function Pacliente() {
 
     return (
         <>
-
+            <Form.Control
+                onChange={e => { setPesquisar(e.target.value) }}
+                value={pesquisar}
+                className='campodepesquisa'
+                onKeyDown={handleKeyPress}
+                placeholder="Pesquise por nome..."
+            />
+            <Button className='botaoBuscar' onClick={(e) => pesquisa()}>
+                <div>Pesquisar</div>
+            </Button>
+            <Button className='botaoBuscar' onClick={(e) => limpar()}>
+                <div>Limpar</div>
+            </Button>
 
             <BootstrapTable // TABELA
                 classes={"tabela"}
                 condensed={true}
-                keyField='id_consulta'
+                keyField='id_consultaAgendada'
                 data={itens}
                 columns={colunas}
                 // rowEvents={eventosLinhas}

@@ -178,6 +178,101 @@
 }
 
 .corpadraoColunaConsulta {
-  color: #000;
-  font-size: 16px;
+  color: #000 !important;
+  font-size: 16px !important;
 }
+
+
+.corpadraoColuna{
+  color: #000 !important;
+  font-size: 16px !important;
+}
+
+.corpadrãoTabela{
+  color: #000 !important;
+  font-size: 14px !important;
+
+}
+
+
+  /******************** TABELAS ********************/
+  table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
+    border: 0!important;
+    border-collapse: separate!important;
+    border-spacing:0 0!important;
+  }
+  
+  td{/* REMOVE A BORDA BRANCA DO CORPO DAS TABELAS */
+    border: 0!important;
+  }
+  
+  th{/* REMOVE A BORDA BRANCA DO CABECALHO DAS TABELAS */
+    border: 0!important;
+  }
+  
+  .react-bootstrap-table thead tr th:first-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO SUPERIOR ESQUERDO DAS TABELAS */
+    border-top-left-radius: 0.4375em!important;
+  }
+  
+  .react-bootstrap-table thead tr th:last-child {/* CLASSE/ PADRAO PARA ARREDONDAR CANTO SUPERIOR DIREITO DAS TABELAS */
+    border-top-right-radius: 0.4375em!important;
+  }
+  
+  .react-bootstrap-table tr:last-child td:first-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO INFERIOR ESQUERDO DAS TABELAS */
+    border-bottom-left-radius: 0.4375em!important; 
+    border-style: solid!important;
+  }
+  
+  .react-bootstrap-table tr:last-child td:last-child {/* CLASSE PADRAO PARA ARREDONDAR CANTO INFERIOR DIREITO DAS TABELAS */
+    border-bottom-right-radius: 0.4375em!important; 
+    border-style: solid!important;
+  }
+  
+  .tabela-coluna-primeira-header{/* CLASSE PADRAO PARA A PRIMEIRA COLUNA DAS TABELAS */
+    margin-left: 0.625em!important;
+  }
+  
+  .tabela-coluna-ultima-header .btn-toolbar{/* CLASSE PADRAO PARA A ULTIMA COLUNA DAS TABELAS */
+    display: flex!important;
+    justify-content: center!important;
+  }
+  
+  .table {
+    border-collapse: collapse !important;
+    width: 30% !important;
+    margin-bottom: 0em !important;
+}
+  
+  .tabela tr:nth-child(2n+1) {
+    background-color: rgb(243, 243, 243) !important;
+  }
+  
+  .react-bootstrap-table tr{/* REMOVE O ESPACO EM BRANCO QUE CERCA AS TABELAS */
+    white-space: nowrap!important;
+  }
+  
+  .react-bootstrap-table td{/* CLASS PADRAO PARA FORMATAR O ESPACO INTERNO DAS ROWS DAS TABELAS */
+    /* padding-top: -0.875em !important;
+    padding-left: -0.375em !important; */
+    vertical-align: middle !important;
+    text-align: initial !important;
+  }
+  
+  .react-bootstrap-table{/* REMOVE O ESPACO EM BRANCO QUE CERCA AS TABELAS */
+      overflow: scroll;
+      /* height: 396px; */
+      height: 80vh !important; 
+  }
+
+  .corpadraoColunaAgendarA {
+    font-size: 13px;
+    /* float: left; */
+    width: 68px;
+  }
+
+  .corpadraoColunaAgendarB {
+    font-size: 13px;
+    /* float: left; */
+    width: 68px;
+    margin-left: 11px;
+  }

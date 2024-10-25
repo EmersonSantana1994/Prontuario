@@ -182,7 +182,7 @@ table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
   
   .table {
     border-collapse: collapse !important;
-    width: 34% !important;
+    width: 60% !important;
     margin-bottom: 0em !important;
 }
   
@@ -204,7 +204,7 @@ table{/* REMOVE ESPACAMENTO FORCADO ENTRE ROWS DAS TABELAS */
   .react-bootstrap-table{/* REMOVE O ESPACO EM BRANCO QUE CERCA AS TABELAS */
       overflow: scroll;
       /* height: 396px; */
-      /* height: 99%!important; */
+      height: 80vh !important; 
   }
 
   .nomePacliente{

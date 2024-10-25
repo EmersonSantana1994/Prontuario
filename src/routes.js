@@ -47,6 +47,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import ConsultaAberta from "layouts/consultaAberta";
+import ConsultaAgendada from "layouts/consultaAgendada";
 import ConsultaFechada from "layouts/consultaFechada";
 import AgendarConsulta from "layouts/agendarConsulta";
 import EscolherDia from "components/AgendarConsulta/EscolherDia";
@@ -79,9 +80,18 @@ const routes = [
     type: "collapse",
     name: "Agendar consulta",
     key: "sign-up",
-    route: "/agendar/consulta",
+    route: "/agendar/consulta/agendada",
     icon: <Document size="12px" />,
     component: <AgendarConsulta/>,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Consulta agendada",
+    key: "quest",
+    route: "/criar/consulta",
+    icon: <Document size="12px" />,
+    component: <ConsultaAgendada />,
     noCollapse: true,
   },
   {

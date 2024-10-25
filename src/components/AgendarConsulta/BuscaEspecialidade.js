@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';/*eslint-disable*/
+import { Button, Image, Form, InputGroup, FormControl, Col, Carousel, Alert } from 'react-bootstrap';
 import moment from 'moment';
 import './buscarEspecialidade.css';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -27,6 +28,14 @@ function BuscaEspecialidade() {
     let contador = 0
     let itensVar = []
     let array = []
+
+    useEffect(() => {
+     
+        if (!localStorage.hasOwnProperty("idPacliente") && !localStorage.hasOwnProperty("nomePacliente")) {
+            window.location.href = '/agendar/consulta'
+         }
+
+    }, [])
 
     const handleChange = async (event) => {
         const value = event.target.value;
@@ -62,10 +71,18 @@ function BuscaEspecialidade() {
              window.location.href = '/agendar/consulta/dia'
         }
     };
- 
+    const voltar = () => {
+             window.location.href = '/agendar/consulta'     
+    };
 
     return (
         <div className="container">
+             < Button className="voltar-consultorio" onClick={e => { voltar() }}>
+                        <i className="fas fa-arrow-circle-left fsi"  ></i>
+                        <h3 className="voltar-titulo">
+                            VOLTAR
+                        </h3>
+                    </Button>
             <h1 className="title">Qual especialidade você precisa?</h1>
             <input
                 type="text"
