@@ -91,10 +91,19 @@
     margin-left: -121px;
 }
 
-.corpadraoData {
+.corpadraoNomeTriagem {
     color: #000;
     font-size: 16px;
-    margin-left: -1px;
+        /* margin-left: -121px; */
+        float: left;
+        margin-left: 6px;
+}
+
+.corpadraoDataTriagem {
+    color: #000;
+    font-size: 16px;
+    /* margin-left: -1px; */
+    float: left;
 }
 
 .botaoBuscar {

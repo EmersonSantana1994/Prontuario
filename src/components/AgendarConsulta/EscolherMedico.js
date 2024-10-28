@@ -26,6 +26,8 @@ function EscolherMedico() {
     const keyIdEvento = localStorage.getItem('keyIdEvento')
     const nomePacliente = localStorage.getItem('nomePacliente')
     const idPacliente = localStorage.getItem('idPacliente')
+    const keyDataEvento = localStorage.getItem('keyDataEvento')
+    const keyIdEspecialidade = localStorage.getItem('keyIdEspecialidade')
     const [aviso, setAviso] = useState(false);
 
 
@@ -43,10 +45,24 @@ function EscolherMedico() {
 
             await apiC.post("consultarAgenda/buscarMedico", {
                 "idEvento": keyIdEvento,
+                "idMedico": 1,
+                "keyDataEvento": keyDataEvento,
+                "keyIdEspecialidade": keyIdEspecialidade,
             })
                 .then(response => {
                     console.log("response", response.data)
-                    setConsulta(response.data[0])
+                    //  apiC.post("consultarAgenda/buscarMedico", {
+                    //     "keyDataEvento": keyDataEvento,
+                    // })
+                    //     .then(response => {
+                    //         console.log("response", response.data)
+                            
+                    //         setConsulta(response.data[0])
+                    //     })
+                    //     .catch((error) => {
+        
+                    //     });
+                    setConsulta(response.data)
                 })
                 .catch((error) => {
 
@@ -55,27 +71,32 @@ function EscolherMedico() {
         listar()
     }, [])
 
-    const generateTimeSlots = () => {
-        const start = new Date(consulta.start);
-        const end = new Date(consulta.end);
-        const slots = [];
+    // const generateTimeSlots = () => {
+    //     const start = new Date(consulta.start);
+    //     const end = new Date(consulta.end);
+    //     const slots = [];
 
-        while (start <= end) {
-            slots.push(start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-            start.setMinutes(start.getMinutes() + 30); // Incrementa 30 minutos
-        }
+    //     while (start <= end) {
+    //         slots.push(start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    //         start.setMinutes(start.getMinutes() + 30); // Incrementa 30 minutos
+    //     }
 
-        return slots;
-    };
+    //     return slots;
+    // };
 
     const handleButtonClick = (time) => {
-        const selectedDate = new Date(consulta.start);
+        const selectedDate = new Date(keyDataEvento);
         const formattedDate = selectedDate.toLocaleDateString(); // Formato DD/MM/AAAA
         setSelectedSlot({ time, date: formattedDate });
     };
 
     function converterDataISOParaMySQL(dataISO) {
-        const jsDate = new Date(dataISO);
+        const [day, month, year] = dataISO.split('/').map(Number);
+    
+        const jsDate = new Date(year, month - 1, day);
+        
+        console.log("jsDate", jsDate);
+
         return format(jsDate, 'yyyy-MM-dd');
     }
 
@@ -88,8 +109,9 @@ function EscolherMedico() {
             "horario": selectedSlot.time,
             "dataAgendada": date,
             "id_pacliente": idPacliente,
-            "id_medico": consulta.id_medico,
-            "especialidade": consulta.especialidade,
+            "id_medico": 1,
+            "especialidade": consulta[0].especialidade,
+            "keyIdEspecialidade": keyIdEspecialidade,
         })
             .then(response => {
 
@@ -127,7 +149,7 @@ function EscolherMedico() {
                             VOLTAR
                         </h3>
                     </Button>
-            {aviso &&
+            {aviso && consulta.length > 0 &&
                 <Modal.Body>
                     <Form>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -143,32 +165,34 @@ function EscolherMedico() {
                     </Form>
                 </Modal.Body>
             }
-            {!aviso &&
+            {!aviso && consulta.length > 0 &&
                 <h2>Selecione um horario abaixo</h2>
             }
-            {!aviso &&
-                <p><strong>Médico:</strong> {consulta.nomeMedico}</p>
+           
+            {!aviso && consulta.length > 0 &&
+                <p><strong>Médico:</strong> {consulta[0].nomeMedico}</p>
             }
-            {!aviso &&
-                <p><strong>CRM:</strong> {consulta.crm}</p>
+            {!aviso && consulta.length > 0 &&
+                <p><strong>CRM:</strong> {consulta[0].crm}</p>
             }
-            {!aviso &&
-                <p><strong>RQE:</strong> {consulta.rqe}</p>
+            {!aviso && consulta.length > 0 &&
+                <p><strong>RQE:</strong> {consulta[0].rqe}</p>
             }
-            {!aviso &&
-                <p><strong>Especialidade:</strong> {consulta.especialidade}</p>
+            {!aviso && consulta.length > 0 &&
+                <p><strong>Especialidade:</strong> {consulta[0].especialidade}</p>
             }
-            {!aviso &&
+            {!aviso && consulta.length > 0 &&
                 <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
                     gap: '10px',
                     marginTop: '20px',
                 }}>
-                    {generateTimeSlots().map((time, index) => (
+                    
+                    {consulta.map((time, index) => (
                         <button
                             key={index}
-                            onClick={() => handleButtonClick(time)}
+                            onClick={() => handleButtonClick(time.slot)}
                             style={{
                                 padding: '10px 20px',
                                 backgroundColor: '#4CAF50',
@@ -182,7 +206,7 @@ function EscolherMedico() {
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#45a049'}
                             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4CAF50'}
                         >
-                            {time}
+                            {time.slot}
                         </button>
                     ))}
                 </div>

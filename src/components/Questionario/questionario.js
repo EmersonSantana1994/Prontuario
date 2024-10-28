@@ -152,7 +152,7 @@ export default function Pronturario() {
             dataField: 'nomeQuestionario',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoNome'>
+            text: <p className='corpadraoNomeTriagem'>
                 Nome
             </p>,
             formatter: (cell, row) => {
@@ -167,7 +167,7 @@ export default function Pronturario() {
             dataField: 'dataDeAdicao',
             headerClasses: 'nao-selecionavel',
             sort: true,
-            text: <p className='corpadraoData'>
+            text: <p className='corpadraoDataTriagem'>
                 Data de adição
             </p>,
             formatter: (cell, row) => {

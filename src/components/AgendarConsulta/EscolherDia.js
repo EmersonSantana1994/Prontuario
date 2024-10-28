@@ -30,6 +30,7 @@ function EscolherDia() {
     let array = []
     const minhaString = localStorage.getItem('keyIdEspecialidade')
     const [idSelecionado, setIdSelecionado] = useState(null);
+    const [dataSelecionada, setDataSelecionada] = useState(null);
     const [eventos, setEventos] = useState([]);
     const hoje = new Date();
     const eventosFuturos = eventos.filter(evento => new Date(evento.start) > hoje);
@@ -65,13 +66,15 @@ function EscolherDia() {
         return new Intl.DateTimeFormat('pt-BR', options).format(new Date(data));
     };
 
-    const handleChange = (id) => {
+    const handleChange = (id, start) => {
         setIdSelecionado(id);
+        setDataSelecionada(start);
     };
 
     const handleAvancar = () => {
 
             localStorage.setItem('keyIdEvento', idSelecionado);
+            localStorage.setItem('keyDataEvento', dataSelecionada);
              window.location.href = '/agendar/consulta/medico'
         // Aqui você pode fazer o que precisar com o ID selecionado
     };
@@ -97,7 +100,7 @@ function EscolherDia() {
                                 type="radio"
                                 name="evento"
                                 value={evento.id}
-                                onChange={() => handleChange(evento.id)}
+                                onChange={() => handleChange(evento.id, evento.start)}
                             />
                             {formatarData(evento.start)}
                         </label>
