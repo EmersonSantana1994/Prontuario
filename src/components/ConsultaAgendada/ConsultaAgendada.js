@@ -61,7 +61,6 @@ export default function ConsultaAgendada() {
                 })
                 .catch((error) => {
 
-                    alert(error.response.data)
 
                 });
         }

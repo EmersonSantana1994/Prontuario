@@ -72,7 +72,7 @@ function MasterCard({ color, number, holder, expires }) {
           <SoftBox display="flex" alignItems="center">
             <SoftBox mr={3} lineHeight={1}>
               <SoftTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Card Holder
+                Nome
               </SoftTypography>
               <SoftTypography
                 variant="h6"
@@ -85,7 +85,7 @@ function MasterCard({ color, number, holder, expires }) {
             </SoftBox>
             <SoftBox lineHeight={1}>
               <SoftTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Expires
+                Vencimento
               </SoftTypography>
               <SoftTypography variant="h6" color="white" fontWeight="medium">
                 {expires}

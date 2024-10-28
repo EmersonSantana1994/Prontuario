@@ -38,11 +38,11 @@ function PaymentMethod() {
     <Card id="delete-account">
       <SoftBox pt={2} px={2} display="flex" justifyContent="space-between" alignItems="center">
         <SoftTypography variant="h6" fontWeight="medium">
-          Payment Method
+          Metodo de pagamento
         </SoftTypography>
         <SoftButton variant="gradient" color="dark">
           <Icon sx={{ fontWeight: "bold" }}>add</Icon>
-          &nbsp;add new card
+          &nbsp;adicionar novo cartão
         </SoftButton>
       </SoftBox>
       <SoftBox p={2}>
@@ -63,7 +63,7 @@ function PaymentMethod() {
               <SoftBox ml="auto" lineHeight={0}>
                 <Tooltip title="Edit Card" placement="top">
                   <Icon sx={{ cursor: "pointer" }} fontSize="small">
-                    edit
+                    editar
                   </Icon>
                 </Tooltip>
               </SoftBox>
@@ -85,7 +85,7 @@ function PaymentMethod() {
               <SoftBox ml="auto" lineHeight={0}>
                 <Tooltip title="Edit Card" placement="top">
                   <Icon sx={{ cursor: "pointer" }} fontSize="small">
-                    edit
+                    edititar
                   </Icon>
                 </Tooltip>
               </SoftBox>

@@ -16,6 +16,7 @@ function Consultorio() {
     const [clicado, setClicado] = useState(false);
     const [nomeSelecionado, setNomeSelecionado] = useState(false);
     const despacho = useDispatch();
+    const [consultorioSelecionado, setConsultorioSelecionado] = useState(null);
     useEffect(() => {
 
         async function getConsultorio() {
@@ -37,10 +38,10 @@ function Consultorio() {
                             }
                         }
                         array = JSON.parse(JSON.stringify(itensVar))
-
+                        
                     }
 
-
+                    console.log("yyyyy", array)
                     setEventos(array)
                     {
                         eventos.map((element) => {
@@ -59,13 +60,17 @@ function Consultorio() {
         getConsultorio()
     }, [])
 
-    async function selecao(params1, params2) {
-        despacho(consultorio(params1))
+    const handleSelect = (evento) => {
+        console.log("consultorio", evento)
+        setConsultorioSelecionado(evento);
+        despacho(consultorio(evento.id_consultorio))
         setSelecionado(true)
-        setNomeSelecionado(params2)
-        setClicado(params1)
-        despacho(nomeConsultorio(params2))
-    }
+        setNomeSelecionado(evento.nomeConsultorio)
+        setClicado(evento.id_consultorio)
+        despacho(nomeConsultorio(evento.nomeConsultorio))
+      };
+
+
 
     async function seguir(){
         despacho(seguirAgendamento(true))
@@ -74,23 +79,16 @@ function Consultorio() {
     return (
         
         <div>
-               
-                    < Button  className={ clicado == "1" ? "botao-consultorio-selecionado": "botao-consultorio"} onClick={(e) => selecao("1", "Consultorio 1" )} >
+               {eventos.map(consultorio => (
+                    < Button  className={ clicado == consultorio.id_consultorio ? "botao-consultorio-selecionado": "botao-consultorio"} 
+                    onClick={() => handleSelect(consultorio)} >
                         <h3 className="vertical-timeline-element-title">
-                            Consultorio 1
+                        {consultorio.nomeConsultorio}
                         </h3>
                     </Button>
-                    < Button  className={ clicado == "2" ? "botao-consultorio-selecionado": "botao-consultorio"} onClick={(e) => selecao("2", "Consultorio 2")} >
-                        <h3 className="vertical-timeline-element-title">
-                            Consultorio 2
-                        </h3>
-                    </Button>
-                    < Button  className={ clicado == "3" ? "botao-consultorio-selecionado": "botao-consultorio"} onClick={(e) => selecao("3", "Consultorio 3")} >
-                        <h3 className="vertical-timeline-element-title">
-                            Consultorio 3
-                        </h3>
-                    </Button>
+                   
                 
+                ))}
 
          
             {selecionado &&

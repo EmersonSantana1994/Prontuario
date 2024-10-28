@@ -27,6 +27,8 @@ const EventModal = ({ dados, evento, onClose, onDelete, onUpdate, atualiza }) =>
     const [aviso, setAviso] = useState(false);
     const [avisoFalil, setAvisoFalil] = useState(false);
 
+    console.log("editedEvent", editedEvent)
+
     const handleDescricao = (e) => {
         setDescricao(e.target.value)
     }

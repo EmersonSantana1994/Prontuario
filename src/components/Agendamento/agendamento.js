@@ -227,6 +227,7 @@ function Calendario() {
     };
 
     const handleEventClick = (evento) => {
+        console.log("oooooo", evento )
         SeteventoSelecionado(evento);
     };
 
@@ -335,7 +336,7 @@ function Calendario() {
 
                     if (response.status === 200) {
                         setIsModalOpenSucesso(true)
-                        setEventos([...eventos, { ...novoEvento, id: eventos.length + 1 }]);
+                        getAgendamentoAtualizar()
                     }
                 })
                 .catch((error) => {
