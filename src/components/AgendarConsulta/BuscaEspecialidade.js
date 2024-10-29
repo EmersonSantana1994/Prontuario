@@ -41,7 +41,7 @@ function BuscaEspecialidade() {
         const value = event.target.value;
         setQuery(value);
 
-        if (value.length > 1) { // A pesquisa começa após 3 caracteres
+        if (value.length > 0) { // A pesquisa começa após 3 caracteres
             const response = await apiC.post('consultarAgenda/especialidade', {
                 "especialidade": value,
             }) .then(response => {
